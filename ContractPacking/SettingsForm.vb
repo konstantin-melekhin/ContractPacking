@@ -141,7 +141,9 @@ Public Class SettingsForm
         'определяем LOTCode и LOTID
         If DG_LOTListPresent.Rows.Count <> 0 Then
             LOTID = DG_LOTListPresent.Item(3, selRowNum).Value
-            'WorkForm.Show()
+            Dim WF As New WorkForm(LOTID, IDApp)
+            'WF.Controllabel.Text = ""
+            WF.Show()
             Me.Close()
         Else
             MsgBox("Список ЛОТов отсутствует!")
