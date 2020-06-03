@@ -144,5 +144,8 @@
   <ItemGroup>
     <None Include="Resources\play.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

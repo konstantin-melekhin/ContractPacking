@@ -73,6 +73,16 @@ Namespace My.Resources
         '''<summary>
         '''  Поиск локализованного ресурса типа System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property close() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("close", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property icons8_стрелка_влево_в_круге_2_64() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("icons8-стрелка-влево-в-круге-2-64", resourceCulture)

@@ -101,7 +101,7 @@ Public Class SettingsForm
         GB_SelectLine.Location = New Point(13, 13)
         GB_SelectLine.Size = New Size(1192, 565)
         'загружаем список линий
-        LoadGridFromDB(DG_LineList, ContractLineList)
+        LoadGridFromDB(DG_LineList, PackLineList)
         'Выводим названия линий FAS в combobox
         If DG_LineList.Rows.Count <> 0 Then
             For J = 0 To DG_LineList.Rows.Count - 1
@@ -142,7 +142,7 @@ Public Class SettingsForm
         If DG_LOTListPresent.Rows.Count <> 0 Then
             LOTID = DG_LOTListPresent.Item(3, selRowNum).Value
             Dim WF As New WorkForm(LOTID, IDApp)
-            'WF.Controllabel.Text = ""
+            WF.Controllabel.Text = ""
             WF.Show()
             Me.Close()
         Else
