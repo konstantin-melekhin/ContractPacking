@@ -147,5 +147,11 @@
   <ItemGroup>
     <None Include="Resources\close.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\package_utilities.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\edittrash.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
