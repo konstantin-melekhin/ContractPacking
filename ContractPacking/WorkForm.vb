@@ -7,6 +7,7 @@ Public Class WorkForm
         Me.LOTID = LOTID
         Me.IDApp = IDApp
     End Sub
+
     Dim LOTID, IDApp, UnitCounter As Integer
     Dim ds As New DataSet
     Dim LenSN_SMT, LenSN_FAS, StartStepID As Integer, PreStepID As Integer, NextStepID As Integer
@@ -14,11 +15,13 @@ Public Class WorkForm
     Dim PCInfo As New ArrayList() 'PCInfo = (App_ID, App_Caption, lineID, LineName, StationName,CT_ScanStep)
     Dim LOTInfo As New ArrayList() 'LOTInfo = (Model,LOT,SMTRangeChecked,SMTStartRange,SMTEndRange,ParseLog)
     Dim ShiftCounterInfo As New ArrayList() 'ShiftCounterInfo = (ShiftCounterID,ShiftCounter,LOTCounter)
-    Dim SNBufer As New ArrayList() 'SNBufer = (BooLSMT (Занят или свободен),SMTSN,BooLFAS (Занят или свободен),FASSN )
+    Dim SNBufer As ArrayList 'SNBufer = (BooLSMT (Занят или свободен),SMTSN,BooLFAS (Занят или свободен),FASSN )
     Dim StepSequence As String()
-
+    Dim PCBID, SNID As Integer
+    Dim SNFormat As ArrayList
 
     Private Sub WorkForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        SNBufer = New ArrayList()
         'получение данных о станции
         LoadGridFromDB(DG_StepList, "USE FAS SELECT [ID],[StepName],[Description] FROM [FAS].[dbo].[Ct_StepScan]")
         PCInfo = GetPCInfo(IDApp)
@@ -194,24 +197,18 @@ Public Class WorkForm
     '________________________________________________________________________________________________________________
 
     Private Sub SerialTextBox_KeyDown(sender As Object, e As KeyEventArgs) Handles SerialTextBox.KeyDown
-        Dim Mess As New ArrayList()
-        If e.KeyCode = Keys.Enter And (SerialTextBox.TextLength = LenSN_SMT Or SerialTextBox.TextLength = LenSN_FAS) Then
-            If CheckCurrentDublicate(SerialTextBox.Text) = True Then
-                Select Case GetSNFormat(LOTInfo(3), LOTInfo(8), SerialTextBox.Text)
-                    Case 1
-                        'SNBufer
 
-                        PrintLabel(Controllabel, "Формат номера " & SerialTextBox.Text & vbCrLf & "соответствует SMT!", 12, 193, Color.Green)
-                    Case 2
+        If e.KeyCode = Keys.Enter Then 'And (SerialTextBox.TextLength = LenSN_SMT Or SerialTextBox.TextLength = LenSN_FAS) Then
 
-                        PrintLabel(Controllabel, "Формат номера " & SerialTextBox.Text & vbCrLf & "соответствует FAS!", 12, 193, Color.Green)
-                    Case 3
-                        PrintLabel(Controllabel, "Формат номера " & SerialTextBox.Text & vbCrLf & "не соответствует выбранному лоту!", 12, 193, Color.Red)
-                        'CurrentLogUpdate(Label_ShiftCounter.Text, SerialTextBox.Text, "Ошибка", "", "Плата имеет не верный номер")
-                        SerialTextBox.Enabled = False
 
-                End Select
-            End If
+            Dim List As New ArrayList() From {GetFTSN(LOTInfo(12)), CheckRange(SNFormat), CheckDublicate(SerialTextBox.Text, GetPcbID(SNFormat))}
+            For Each item In List
+                If item = False Then
+                    MsgBox("Ошибка")
+                    MsgBox(List.IndexOf(item))
+                    Exit For
+                End If
+            Next
             'если введен не верный номер
         ElseIf e.KeyCode = Keys.Enter And (SerialTextBox.TextLength = 1 Or SerialTextBox.TextLength = 1) Then
             PrintLabel(Controllabel, SerialTextBox.Text & " не верный номер", 12, 193, Color.Red)
@@ -222,23 +219,135 @@ Public Class WorkForm
     End Sub
 
 
-    Private Function CheckCurrentDublicate(SN As String) As Boolean
-        'проверка случайного сканирования номера повторно
-        Dim Res As Boolean
-        If DG_Packing.RowCount > 0 Then
-            For j = 0 To DG_Packing.RowCount - 1
-                If SN = DG_Packing.Item(1, j).Value Or SN = DG_Packing.Item(2, j).Value Then
-                    Res = False
-                    PrintLabel(Controllabel, SN & " номер уже был " & vbCrLf & "отсканирован в этой коробке!", 26, 198, Color.Red)
-                    DG_Packing.BackgroundColor = Color.Red
-                    SerialTextBox.Enabled = False
-                    Exit For
-                Else
-                    Res = True
+    '1. Определение формата номера
+    Private Function GetFTSN(SingleSN As Boolean) As Boolean
+        SNFormat = New ArrayList()
+        SNFormat = GetSNFormat(LOTInfo(3), LOTInfo(8), SerialTextBox.Text)
+        'SNFormat(0) ' Результат проверки True/False
+        'SNFormat(1) ' 1 - SMT/ 2 - FAS / 3 - Неопределен
+        'SNFormat(2) ' Переменный номер
+        'SNFormat(3) ' Текст сообщения
+        'SNFormat(4) ' Координата X
+        'SNFormat(5) ' Координата Y
+        'SNFormat(6) ' Color
+        'SNFormat(7) ' SerialTextBox.Enabled  - True/False
+        If SNFormat(0) = True Then
+            If SingleSN = False Then
+                If SNBufer.Count = 0 Then
+                    SNBufer = New ArrayList()
                 End If
-            Next
+            End If
         Else
-            Res = True
+            PrintLabel(Controllabel, SNFormat(3), SNFormat(4), SNFormat(5), SNFormat(6))
+            SerialTextBox.Enabled = SNFormat(7)
+        End If
+        Return SNFormat(0)
+    End Function
+
+
+    '2 проверка диапазона
+    Private Function CheckRange(SNFormat As ArrayList) As Boolean
+        Dim res As Boolean
+        Dim ChekRange As Boolean, StartRange As Integer, EndRange As Integer
+        Select Case SNFormat(1)
+            Case 1
+                ChekRange = LOTInfo(4)
+                StartRange = LOTInfo(5)
+                EndRange = LOTInfo(6)
+            Case 2
+                ChekRange = LOTInfo(9)
+                StartRange = LOTInfo(10)
+                EndRange = LOTInfo(11)
+        End Select
+
+        If ChekRange = True Then
+            If StartRange >= SNFormat(2) And SNFormat(2) <= EndRange Then
+                res = True
+            Else
+                res = False
+                PrintLabel(Controllabel, "Номера " & SerialTextBox.Text & vbCrLf & " вне диапазона выбранного лота!", 12, 193, Color.Red)
+                SerialTextBox.Enabled = False
+            End If
+        Else
+            res = True
+        End If
+        Return res
+    End Function
+
+
+
+    '3 поиск ID PCB в базе гравировщика
+    Private Function GetPcbID(SNFormat As ArrayList) As ArrayList
+        Dim Res As New ArrayList()
+        Select Case SNFormat(1)
+            Case 1
+                PCBID = SelectInt("USE SMDCOMPONETS SELECT [IDLaser] FROM [SMDCOMPONETS].[dbo].[LazerBase] where Content = '" & SerialTextBox.Text & "'")
+                Dim Mess As String = If(PCBID = 0, "Плата не зарегистрирована", "")
+                Res.Add(PCBID <> 0)
+                Res.Add(PCBID)
+                Res.Add(SNFormat(1))
+            Case 2
+                SNID = SelectInt("USE FAS SELECT [ID] FROM [FAS].[dbo].[Ct_FASSN_reg] where SN = '" & SerialTextBox.Text & "'")
+                Dim Mess As String = If(SNID = 0, "Плата не зарегистрирована", "")
+                Res.Add(SNID <> 0)
+                Res.Add(SNID)
+                Res.Add(SNFormat(1))
+        End Select
+        Return Res
+    End Function
+    '4. Проверка предыдущего шага и дубликатов
+    Private Function CheckDublicate(SN As String, GetPCB_SNID As ArrayList) As Boolean
+        Dim Res As Boolean, SQL As String
+        'Проверка предыдущего шага
+        Select Case GetPCB_SNID(2)
+            Case 1
+                Dim PCBStepRes As New ArrayList(SelectListString("USE FAS SELECT [StepID],[TestResult],[ScanDate],[SNID]
+                            FROM [FAS].[dbo].[Ct_StepResult] where [PCBID] = " & GetPCB_SNID(1)))
+                Res = If(PCBStepRes.Count <> 0, (PCBStepRes(0) = PreStepID And PCBStepRes(1) = 2), False)
+            Case 2
+                Res = (SNBufer.Count = 0)
+        End Select
+        'проверка случайного сканирования номера повторно
+        If Res = True Then
+
+            'If DG_Packing.RowCount > 0 Then
+            '    For j = 0 To DG_Packing.RowCount - 1
+            '        If SN = DG_Packing.Item(1, j).Value Or SN = DG_Packing.Item(2, j).Value Then
+            '            Res = False
+            '            PrintLabel(Controllabel, SN & " номер уже был " & vbCrLf & "отсканирован в этой коробке!", 26, 198, Color.Red)
+            '            DG_Packing.BackgroundColor = Color.Red
+            '            SerialTextBox.Enabled = False
+            '            Exit For
+            '        Else
+            '            Res = True
+            '        End If
+            '    Next
+
+            'Else
+            '    Res = True
+            'End If
+            If Res = True Then
+                Select Case GetPCB_SNID(2)
+                    Case 1
+                        SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
+                        FROM [FAS].[dbo].[Ct_PackingTable] as P
+                        left join SMDCOMPONETS.dbo.LazerBase as L On L.IDLaser = P.PCBID
+                        Left join Ct_FASSN_reg as S On S.ID = P.SNID
+                        Left join FAS_Liter as Lit On Lit.ID = P.LiterID
+                        Left join FAS_Users as U On U.UserID = P.UserID
+                        where PCBID = " & GetPCB_SNID(1)
+                        Res = (SelectListString(SQL).Count = 0)
+                    Case 2
+                        SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
+                        FROM [FAS].[dbo].[Ct_PackingTable] as P
+                        left join SMDCOMPONETS.dbo.LazerBase as L On L.IDLaser = P.PCBID
+                        Left join Ct_FASSN_reg as S On S.ID = P.SNID
+                        Left join FAS_Liter as Lit On Lit.ID = P.LiterID
+                        Left join FAS_Users as U On U.UserID = P.UserID
+                        where SNID = " & GetPCB_SNID(1)
+                        Res = (SelectListString(SQL).Count = 0)
+                End Select
+            End If
         End If
         Return Res
     End Function
