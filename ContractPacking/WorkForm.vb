@@ -199,16 +199,11 @@ Public Class WorkForm
     Private Sub SerialTextBox_KeyDown(sender As Object, e As KeyEventArgs) Handles SerialTextBox.KeyDown
 
         If e.KeyCode = Keys.Enter Then 'And (SerialTextBox.TextLength = LenSN_SMT Or SerialTextBox.TextLength = LenSN_FAS) Then
-
-
-            Dim List As New ArrayList() From {GetFTSN(LOTInfo(12)), CheckRange(SNFormat), CheckDublicate(SerialTextBox.Text, GetPcbID(SNFormat))}
-            For Each item In List
-                If item = False Then
-                    MsgBox("Ошибка")
-                    MsgBox(List.IndexOf(item))
-                    Exit For
+            If GetFTSN(LOTInfo(12)) = True Then
+                If CheckRange(SNFormat) = True Then
+                    CheckDublicate(SerialTextBox.Text, GetPcbID(SNFormat))
                 End If
-            Next
+            End If
             'если введен не верный номер
         ElseIf e.KeyCode = Keys.Enter And (SerialTextBox.TextLength = 1 Or SerialTextBox.TextLength = 1) Then
             PrintLabel(Controllabel, SerialTextBox.Text & " не верный номер", 12, 193, Color.Red)
@@ -282,50 +277,66 @@ Public Class WorkForm
         Select Case SNFormat(1)
             Case 1
                 PCBID = SelectInt("USE SMDCOMPONETS SELECT [IDLaser] FROM [SMDCOMPONETS].[dbo].[LazerBase] where Content = '" & SerialTextBox.Text & "'")
-                Dim Mess As String = If(PCBID = 0, "Плата не зарегистрирована", "")
                 Res.Add(PCBID <> 0)
                 Res.Add(PCBID)
                 Res.Add(SNFormat(1))
+                Res.Add(If(PCBID = 0, "Плата " & SerialTextBox.Text & " не зарегистрирована", ""))
+                Res.Add(12)
+                Res.Add(193)
+                Res.Add(Color.Red)
+                Res.Add(False)
             Case 2
                 SNID = SelectInt("USE FAS SELECT [ID] FROM [FAS].[dbo].[Ct_FASSN_reg] where SN = '" & SerialTextBox.Text & "'")
-                Dim Mess As String = If(SNID = 0, "Плата не зарегистрирована", "")
+
                 Res.Add(SNID <> 0)
                 Res.Add(SNID)
                 Res.Add(SNFormat(1))
+                Res.Add(If(SNID = 0, "Плата " & SerialTextBox.Text & " не зарегистрирована", ""))
+                Res.Add(12)
+                Res.Add(193)
+                Res.Add(Color.Red)
+                Res.Add(False)
         End Select
+        PrintLabel(Controllabel, Res(3), Res(4), Res(5), Res(6))
+        SerialTextBox.Enabled = Res(7)
         Return Res
     End Function
     '4. Проверка предыдущего шага и дубликатов
     Private Function CheckDublicate(SN As String, GetPCB_SNID As ArrayList) As Boolean
-        Dim Res As Boolean, SQL As String
+        Dim Res As Boolean, SQL As String, Mess As String, Col As Color
         'Проверка предыдущего шага
         Select Case GetPCB_SNID(2)
             Case 1
                 Dim PCBStepRes As New ArrayList(SelectListString("USE FAS SELECT [StepID],[TestResult],[ScanDate],[SNID]
                             FROM [FAS].[dbo].[Ct_StepResult] where [PCBID] = " & GetPCB_SNID(1)))
                 Res = If(PCBStepRes.Count <> 0, (PCBStepRes(0) = PreStepID And PCBStepRes(1) = 2), False)
+                Mess = If(Res = False, "Плата " & SerialTextBox.Text & " имеет не верный предыдущий шаг!", "")
+
             Case 2
                 Res = (SNBufer.Count = 0)
+                Mess = If(Res = False, "Плата " & SerialTextBox.Text & " имеет не верный предыдущий шаг!", "")
+
         End Select
+
         'проверка случайного сканирования номера повторно
         If Res = True Then
 
-            'If DG_Packing.RowCount > 0 Then
-            '    For j = 0 To DG_Packing.RowCount - 1
-            '        If SN = DG_Packing.Item(1, j).Value Or SN = DG_Packing.Item(2, j).Value Then
-            '            Res = False
-            '            PrintLabel(Controllabel, SN & " номер уже был " & vbCrLf & "отсканирован в этой коробке!", 26, 198, Color.Red)
-            '            DG_Packing.BackgroundColor = Color.Red
-            '            SerialTextBox.Enabled = False
-            '            Exit For
-            '        Else
-            '            Res = True
-            '        End If
-            '    Next
+            If DG_Packing.RowCount > 0 Then
+                For j = 0 To DG_Packing.RowCount - 1
+                    If SN = DG_Packing.Item(1, j).Value Or SN = DG_Packing.Item(2, j).Value Then
+                        Res = False
+                        PrintLabel(Controllabel, SN & " номер уже был " & vbCrLf & "отсканирован в этой коробке!", 26, 198, Color.Red)
+                        DG_Packing.BackgroundColor = Color.Red
+                        SerialTextBox.Enabled = False
+                        Exit For
+                    Else
+                        Res = True
+                    End If
+                Next
 
-            'Else
-            '    Res = True
-            'End If
+            Else
+                Res = True
+            End If
             If Res = True Then
                 Select Case GetPCB_SNID(2)
                     Case 1
@@ -349,6 +360,10 @@ Public Class WorkForm
                 End Select
             End If
         End If
+
+        Col = If(Res = False, Color.Red, Color.Green)
+        PrintLabel(Controllabel, Mess, 12, 193, Col)
+        SerialTextBox.Enabled = Res
         Return Res
     End Function
 
