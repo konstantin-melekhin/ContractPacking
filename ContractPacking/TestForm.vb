@@ -19,13 +19,23 @@
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 
-        Dim var = New Variable
-        Dim var2 = New Variable
 
-        var2.Test = 12
-        'var.Test = 2558
-        MsgBox(var.Test)
-        MsgBox(var2.Test)
+
+
+        TextBox3.Text = TextBox1.Text Mod TextBox2.Text
+        'Dim hexString As String = "ABCDEF"
+        'Dim decValue = CInt("&H" & hexString)
+        'MsgBox(decValue)
+
+
+
+        'Dim var = New Variable
+        'Dim var2 = New Variable
+
+        'var2.Test = 12
+        ''var.Test = 2558
+        'MsgBox(var.Test)
+        'MsgBox(var2.Test)
 
 
         'Dim List As ArrayList = New ArrayList() From {add(3), add1(""), add2()}

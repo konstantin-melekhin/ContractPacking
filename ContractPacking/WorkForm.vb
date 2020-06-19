@@ -8,20 +8,19 @@ Public Class WorkForm
         Me.IDApp = IDApp
     End Sub
 
-    Dim LOTID, IDApp, UnitCounter As Integer
+    Dim LOTID, IDApp, UnitCounter,PCBID, SNID, PalletNumber, BoxNumber As Integer
     Dim ds As New DataSet
-    Dim LenSN_SMT, LenSN_FAS, StartStepID As Integer, PreStepID As Integer, NextStepID As Integer
-    Dim StartStep As String, PreStep As String, NextStep As String
+    Dim LenSN_SMT, LenSN_FAS, StartStepID, PreStepID, NextStepID As Integer
+    Dim StartStep, PreStep, NextStep, Litera As String
     Dim PCInfo As New ArrayList() 'PCInfo = (App_ID, App_Caption, lineID, LineName, StationName,CT_ScanStep)
     Dim LOTInfo As New ArrayList() 'LOTInfo = (Model,LOT,SMTRangeChecked,SMTStartRange,SMTEndRange,ParseLog)
     Dim ShiftCounterInfo As New ArrayList() 'ShiftCounterInfo = (ShiftCounterID,ShiftCounter,LOTCounter)
-    Dim SNBufer As ArrayList 'SNBufer = (BooLSMT (Занят или свободен),SMTSN,BooLFAS (Занят или свободен),FASSN )
+    Dim SNBufer As New ArrayList 'SNBufer = (BooLSMT (Занят или свободен),SMTSN,BooLFAS (Занят или свободен),FASSN )
     Dim StepSequence As String()
-    Dim PCBID, SNID As Integer
     Dim SNFormat As ArrayList
 
     Private Sub WorkForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        SNBufer = New ArrayList()
+
         'получение данных о станции
         LoadGridFromDB(DG_StepList, "USE FAS SELECT [ID],[StepName],[Description] FROM [FAS].[dbo].[Ct_StepScan]")
         PCInfo = GetPCInfo(IDApp)
@@ -60,8 +59,8 @@ Public Class WorkForm
                         "BoxCapacity = " & LOTInfo(15) & vbCrLf &
                         "PalletCapacity = " & LOTInfo(16) & vbCrLf &
                         "LiterIndex = " & LOTInfo(17) & vbCrLf &
-                        "PreRackStage = " & LOTInfo(18)
-
+                        "HexSN = " & LOTInfo(18)
+        Litera = If(LOTInfo(17) = 0, PCInfo(9), (PCInfo(9) & LOTInfo(17)))
         'Определить стартовый шаг, текущий и последующий
         StepSequence = New String(Len(LOTInfo(14)) / 2 - 1) {}
         For i = 0 To Len(LOTInfo(14)) - 1 Step 2
@@ -121,39 +120,36 @@ Public Class WorkForm
             Left join SMDCOMPONETS.dbo.LazerBase as L On L.IDLaser = p.PCBID
             Left join [FAS].[dbo].Ct_FASSN_reg as Sn On Sn.ID = p.SNID
             Left join [FAS].[dbo].FAS_Liter as Lit On Lit.ID = p.LiterID
-            where P.LOTID = 20059 and BoxNum = 5  and LiterID = 9
+            where P.LOTID = " & LOTID & " And BoxNum = " & LastPackCounter(1) & " And LiterID = " & PCInfo(8) & "
             order by UnitNum desc", ds)
+        ElseIf LOTInfo(15) = LastPackCounter(2) Then
+            LoadGridFromDB2(DG_Packing, "use FAS
+            SELECT UnitNum as '№',l.Content AS 'SMT Номер',SN.SN AS 'FAS Номер',(Lit.LiterName + ' ' + cast(LiterIndex as nvarchar (5))) AS 'Литера' 
+            ,PalletNum as 'Паллет', BoxNum as 'Групповая', Format(PackingDate,'dd.MM.yyyy HH:mm:ss') as 'Дата'
+            FROM [FAS].[dbo].[Ct_PackingTable] as P
+            Left join SMDCOMPONETS.dbo.LazerBase as L On L.IDLaser = p.PCBID
+            Left join [FAS].[dbo].Ct_FASSN_reg as Sn On Sn.ID = p.SNID
+            Left join [FAS].[dbo].FAS_Liter as Lit On Lit.ID = p.LiterID
+            where P.LOTID = 0
+            order by UnitNum desc", ds)
+            BoxNum.Text = LastPackCounter(1) + 1
+            NextBoxNum.Text = LastPackCounter(1) + 2
+            UnitCounter = 1
+            If LastPackCounter(1) Mod LOTInfo(16) = 0 Then
+                PalletNum.Text = LastPackCounter(0) + 1
+            End If
         End If
-        'where P.LOTID = " & LOTID & " And BoxNum = " & LastPackCounter(1) & " And LiterID = " & PCInfo(8) & "
-
+        'определение стартовых данных для упаковки
+        PalletNumber = PalletNum.Text
+        BoxNumber = BoxNum.Text
     End Sub
-
-
-    Dim TableColumn As ArrayList = New ArrayList() From {13, "SMT номер", "FAS номер", "Литера", 5, 22, Date.Now}
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim row = ds.Tables(0).NewRow()
-        Dim i = 0
-        For Each item In TableColumn
-            row.Item(i) = item
-            i += 1
-        Next
-        ds.Tables(0).Rows.Add(row)
-        DG_Packing.DataSource = ds
-        DG_Packing.Sort(DG_Packing.Columns(0), System.ComponentModel.ListSortDirection.Descending)
-    End Sub
-
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        ds.Clear()
-    End Sub
-
+    'очистка Серийного номера при ошибке
     Private Sub BT_ClearSN_Click(sender As Object, e As EventArgs) Handles BT_ClearSN.Click
         SerialTextBox.Clear()
         SerialTextBox.Enabled = True
+        SerialTextBox.Focus()
+        SNBufer = New ArrayList()
     End Sub
-
-
-
-
     'Часы в программе
     Private Sub CurrentTimeTimer_Tick(sender As Object, e As EventArgs) Handles CurrentTimeTimer.Tick
         CurrrentTimeLabel.Text = TimeString
@@ -172,6 +168,7 @@ Public Class WorkForm
             TB_RFIDIn.Clear()
         End If
     End Sub 'регистрация пользователя
+
     ' условия для возврата в окно настроек
     Dim OpenSettings As Boolean
     Private Sub Button_Click(sender As Object, e As EventArgs) Handles BT_OpenSettings.Click, BT_LOGInClose.Click
@@ -197,48 +194,87 @@ Public Class WorkForm
     '________________________________________________________________________________________________________________
 
     Private Sub SerialTextBox_KeyDown(sender As Object, e As KeyEventArgs) Handles SerialTextBox.KeyDown
-
         If e.KeyCode = Keys.Enter Then 'And (SerialTextBox.TextLength = LenSN_SMT Or SerialTextBox.TextLength = LenSN_FAS) Then
+            'определение формата номера
             If GetFTSN(LOTInfo(12)) = True Then
+                'проверка диапазона номера
                 If CheckRange(SNFormat) = True Then
-                    CheckDublicate(SerialTextBox.Text, GetPcbID(SNFormat))
+                    'проверка задвоения и наличия номера в базе
+                    If CheckDublicate(SerialTextBox.Text, GetPcbID(SNFormat)) = True Then
+                        Dim Mess As String
+                        If LOTInfo(12) = False Then ' если номер двойной
+                            If SNBufer.Count = 0 Then
+                                Select Case SNFormat(1)
+                                    Case 1 ' запись в буфер СМТ номера
+                                        SNBufer = New ArrayList From {True, SerialTextBox.Text, False, ""}
+                                        Mess = "SMT номер " & SerialTextBox.Text & " определен!" & vbCrLf &
+                                       "Отсканируйте номер FAS!"
+                                    Case 2 'запись в буфер FAS номера
+                                        SNBufer = New ArrayList From {False, "", True, SerialTextBox.Text}
+                                        Mess = "FAS номер " & SerialTextBox.Text & " определен!" & vbCrLf &
+                                       "Отсканируйте номер SMT!"
+                                End Select
+                                'если в буфере имеется СМТ номер
+                            ElseIf SNBufer.Count <> 0 And SNBufer(0) = True And SNBufer(2) = False Then
+                                'Запись в базу
+                                WriteDB(SNBufer(1), SerialTextBox.Text)
+                                Mess = "Номера определены и записаны в базу!"
+                                'если в буфере имеется СМТ номер
+                            ElseIf SNBufer.Count <> 0 And SNBufer(0) = False And SNBufer(2) = True Then
+                                'Запись в базу
+                                WriteDB(SerialTextBox.Text, SNBufer(3))
+                                Mess = "Номера определены и записаны в базу!"
+                            End If
+                        Else LOTInfo(12) = True  'SingleSN
+                            Select Case SNFormat(1)
+                                Case 1 ' одиночный СМТ номер
+                                    SNID = 0
+                                    WriteDB(SerialTextBox.Text, "")
+                                    Mess = "SMT номер " & SerialTextBox.Text & " определен и " & vbCrLf &
+                                    "записан в базу!"
+                                Case 2 ' одиночный ФАС номер
+                                    PCBID = 0
+                                    WriteDB("", SerialTextBox.Text)
+                                    Mess = "FAS номер " & SerialTextBox.Text & " определен и" & vbCrLf &
+                                    "записан в базу!"
+                            End Select
+                        End If
+                        PrintLabel(Controllabel, Mess, 12, 193, Color.Green)
+                        SerialTextBox.Clear()
+                    End If
                 End If
             End If
-            'если введен не верный номер
-        ElseIf e.KeyCode = Keys.Enter And (SerialTextBox.TextLength = 1 Or SerialTextBox.TextLength = 1) Then
-            PrintLabel(Controllabel, SerialTextBox.Text & " не верный номер", 12, 193, Color.Red)
-            'CurrentLogUpdate(Label_ShiftCounter.Text, SerialTextBox.Text, "Ошибка", "", "Плата имеет не верный номер")
-            SerialTextBox.Enabled = False
-            'BT_Pause.Focus()
         End If
     End Sub
 
 
     '1. Определение формата номера
     Private Function GetFTSN(SingleSN As Boolean) As Boolean
+        Dim col As Color, Mess As String, Res As Boolean
         SNFormat = New ArrayList()
-        SNFormat = GetSNFormat(LOTInfo(3), LOTInfo(8), SerialTextBox.Text)
+        SNFormat = GetSNFormat(LOTInfo(3), LOTInfo(8), SerialTextBox.Text, LOTInfo(18))
+        Res = SNFormat(0)
+        Mess = SNFormat(3)
         'SNFormat(0) ' Результат проверки True/False
         'SNFormat(1) ' 1 - SMT/ 2 - FAS / 3 - Неопределен
         'SNFormat(2) ' Переменный номер
         'SNFormat(3) ' Текст сообщения
-        'SNFormat(4) ' Координата X
-        'SNFormat(5) ' Координата Y
-        'SNFormat(6) ' Color
-        'SNFormat(7) ' SerialTextBox.Enabled  - True/False
-        If SNFormat(0) = True Then
+        If Res = True Then
             If SingleSN = False Then
-                If SNBufer.Count = 0 Then
-                    SNBufer = New ArrayList()
+                If SNBufer.Count <> 0 Then
+                    If SNBufer(1) = SerialTextBox.Text Or SNBufer(3) = SerialTextBox.Text Then
+                        Mess = "Этот номер " & SerialTextBox.Text & " уже был отсканирован. " & vbCrLf &
+                        "Сбросьте ошибку и повторите сканирование обоих" & vbCrLf & "номеров платы заново!"
+                        Res = False
+                    End If
                 End If
             End If
-        Else
-            PrintLabel(Controllabel, SNFormat(3), SNFormat(4), SNFormat(5), SNFormat(6))
-            SerialTextBox.Enabled = SNFormat(7)
         End If
-        Return SNFormat(0)
+        col = If(Res = False, Color.Red, Color.Green)
+        PrintLabel(Controllabel, Mess, 12, 193, col)
+        SNTBEnabled(Res)
+        Return Res
     End Function
-
 
     '2 проверка диапазона
     Private Function CheckRange(SNFormat As ArrayList) As Boolean
@@ -256,11 +292,11 @@ Public Class WorkForm
         End Select
 
         If ChekRange = True Then
-            If StartRange >= SNFormat(2) And SNFormat(2) <= EndRange Then
+            If StartRange <= SNFormat(2) And SNFormat(2) <= EndRange Then
                 res = True
             Else
                 res = False
-                PrintLabel(Controllabel, "Номера " & SerialTextBox.Text & vbCrLf & " вне диапазона выбранного лота!", 12, 193, Color.Red)
+                PrintLabel(Controllabel, "Номер " & SerialTextBox.Text & vbCrLf & "вне диапазона выбранного лота!", 12, 193, Color.Red)
                 SerialTextBox.Enabled = False
             End If
         Else
@@ -271,73 +307,46 @@ Public Class WorkForm
 
 
 
-    '3 поиск ID PCB в базе гравировщика
+    '3 поиск ID PCB в базе гравировщика И SNID в базе FASSN_reg
     Private Function GetPcbID(SNFormat As ArrayList) As ArrayList
-        Dim Res As New ArrayList()
+        Dim Res As New ArrayList(), Mess As String, Col As Color
         Select Case SNFormat(1)
             Case 1
-                PCBID = SelectInt("USE SMDCOMPONETS SELECT [IDLaser] FROM [SMDCOMPONETS].[dbo].[LazerBase] where Content = '" & SerialTextBox.Text & "'")
+                PCBID = SelectInt("USE SMDCOMPONETS Select [IDLaser] FROM [SMDCOMPONETS].[dbo].[LazerBase] where Content = '" & SerialTextBox.Text & "'")
                 Res.Add(PCBID <> 0)
                 Res.Add(PCBID)
                 Res.Add(SNFormat(1))
-                Res.Add(If(PCBID = 0, "Плата " & SerialTextBox.Text & " не зарегистрирована", ""))
-                Res.Add(12)
-                Res.Add(193)
-                Res.Add(Color.Red)
-                Res.Add(False)
+                Mess = If(PCBID = 0, "SMT номер " & SerialTextBox.Text & vbCrLf & "не зарегистрирован в базе гравировщика!", "")
             Case 2
                 SNID = SelectInt("USE FAS SELECT [ID] FROM [FAS].[dbo].[Ct_FASSN_reg] where SN = '" & SerialTextBox.Text & "'")
-
                 Res.Add(SNID <> 0)
                 Res.Add(SNID)
                 Res.Add(SNFormat(1))
-                Res.Add(If(SNID = 0, "Плата " & SerialTextBox.Text & " не зарегистрирована", ""))
-                Res.Add(12)
-                Res.Add(193)
-                Res.Add(Color.Red)
-                Res.Add(False)
+                Mess = If(SNID = 0, "FAS номер " & SerialTextBox.Text & vbCrLf & "не зарегистрирован в базе Ct_FASSN_reg!", "")
         End Select
-        PrintLabel(Controllabel, Res(3), Res(4), Res(5), Res(6))
-        SerialTextBox.Enabled = Res(7)
+        Col = If(Res(0) = False, Color.Red, Color.Green)
+        PrintLabel(Controllabel, Mess, 12, 193, Col)
+        SNTBEnabled(Res(0))
         Return Res
     End Function
     '4. Проверка предыдущего шага и дубликатов
     Private Function CheckDublicate(SN As String, GetPCB_SNID As ArrayList) As Boolean
         Dim Res As Boolean, SQL As String, Mess As String, Col As Color
         'Проверка предыдущего шага
-        Select Case GetPCB_SNID(2)
-            Case 1
-                Dim PCBStepRes As New ArrayList(SelectListString("USE FAS SELECT [StepID],[TestResult],[ScanDate],[SNID]
+        If GetPCB_SNID(0) = True Then
+            Select Case GetPCB_SNID(2)
+                Case 1
+                    Dim PCBStepRes As New ArrayList(SelectListString("USE FAS SELECT [StepID],[TestResult],[ScanDate],[SNID]
                             FROM [FAS].[dbo].[Ct_StepResult] where [PCBID] = " & GetPCB_SNID(1)))
-                Res = If(PCBStepRes.Count <> 0, (PCBStepRes(0) = PreStepID And PCBStepRes(1) = 2), False)
-                Mess = If(Res = False, "Плата " & SerialTextBox.Text & " имеет не верный предыдущий шаг!", "")
+                    Res = If(PCBStepRes.Count <> 0, (PCBStepRes(0) = PreStepID And PCBStepRes(1) = 2), False)
+                    Mess = If(Res = False, "Плата " & SerialTextBox.Text & vbCrLf & "имеет не верный предыдущий шаг!", "")
+                Case 2
+                    Res = True
+            End Select
 
-            Case 2
-                Res = (SNBufer.Count = 0)
-                Mess = If(Res = False, "Плата " & SerialTextBox.Text & " имеет не верный предыдущий шаг!", "")
-
-        End Select
-
-        'проверка случайного сканирования номера повторно
-        If Res = True Then
-
-            If DG_Packing.RowCount > 0 Then
-                For j = 0 To DG_Packing.RowCount - 1
-                    If SN = DG_Packing.Item(1, j).Value Or SN = DG_Packing.Item(2, j).Value Then
-                        Res = False
-                        PrintLabel(Controllabel, SN & " номер уже был " & vbCrLf & "отсканирован в этой коробке!", 26, 198, Color.Red)
-                        DG_Packing.BackgroundColor = Color.Red
-                        SerialTextBox.Enabled = False
-                        Exit For
-                    Else
-                        Res = True
-                    End If
-                Next
-
-            Else
-                Res = True
-            End If
+            'проверка задвоения в базе
             If Res = True Then
+                Dim PackedSN As ArrayList
                 Select Case GetPCB_SNID(2)
                     Case 1
                         SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
@@ -347,7 +356,11 @@ Public Class WorkForm
                         Left join FAS_Liter as Lit On Lit.ID = P.LiterID
                         Left join FAS_Users as U On U.UserID = P.UserID
                         where PCBID = " & GetPCB_SNID(1)
-                        Res = (SelectListString(SQL).Count = 0)
+                        PackedSN = New ArrayList(SelectListString(SQL))
+                        Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
+                            "Литера - " & PackedSN(2) & " Паллет - " & PackedSN(3) & " Групповая - " & PackedSN(4) & " № - " & PackedSN(5) & vbCrLf &
+                            "Дата - " & PackedSN(6), "")
+                        Res = (PackedSN.Count = 0)
                     Case 2
                         SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
                         FROM [FAS].[dbo].[Ct_PackingTable] as P
@@ -356,18 +369,81 @@ Public Class WorkForm
                         Left join FAS_Liter as Lit On Lit.ID = P.LiterID
                         Left join FAS_Users as U On U.UserID = P.UserID
                         where SNID = " & GetPCB_SNID(1)
-                        Res = (SelectListString(SQL).Count = 0)
+                        PackedSN = New ArrayList(SelectListString(SQL))
+                        Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
+                            "Литера - " & PackedSN(2) & " Паллет - " & PackedSN(3) & " Групповая - " & PackedSN(4) & " № - " & PackedSN(5) & vbCrLf &
+                            "Дата - " & PackedSN(6), "")
+                        Res = (PackedSN.Count = 0)
                 End Select
             End If
+            Col = If(Res = False, Color.Red, Color.Green)
+            PrintLabel(Controllabel, Mess, 12, 193, Col)
+            SNTBEnabled(Res)
+            Return Res
+        Else
+            Return False
+        End If
+    End Function
+    '5. Запись в базу данных и в Рабочий грид
+    Dim TableColumn As ArrayList
+    Private Sub WriteDB(SMTSN As String, FASSN As String)
+        If UnitCounter = LOTInfo(15) Then
+            ds.Clear() 'если юнит каунтер = емкости коробки, то очищаем грид коробки и увеличиваем счетчик на 1
+            'если текущий номер коробки делится на объем паллета без остатка, то увеличиваем номер паллета
+            PalletNumber = If(BoxNumber Mod LOTInfo(16) = 0, PalletNumber + 1, PalletNumber)
+            BoxNumber += 1
+        End If
+        'юнит каунтер = определяется количеством строк в гриде
+        UnitCounter = DG_Packing.RowCount + 1
+        'список для записи в грид упаковки
+        TableColumn = New ArrayList() From {UnitCounter, SMTSN, FASSN, Litera, PalletNumber, BoxNumber, Date.Now}
+        Dim row = ds.Tables(0).NewRow()
+        Dim i = 0
+        For Each item In TableColumn
+            row.Item(i) = item
+            i += 1
+        Next
+        ds.Tables(0).Rows.Add(row)
+        DG_Packing.DataSource = ds
+        DG_Packing.Sort(DG_Packing.Columns(0), System.ComponentModel.ListSortDirection.Descending)
+        RunCommand(" use FAS
+                insert into [FAS].[dbo].[Ct_PackingTable] (PCBID,SNID,LOTID, LiterID,LiterIndex,PalletNum,BoxNum,UnitNum,PackingDate,UserID)values
+                (" & PCBID & "," & SNID & "," & LOTID & "," & PCInfo(8) & "," & LOTInfo(17) & "," & PalletNumber & "," & BoxNumber & "," & UnitCounter & ",current_timestamp," & UserInfo(0) & ")
+                update [FAS].[dbo].[FAS_PackingCounter] set [PalletCounter] = " & PalletNumber & ",[BoxCounter] = " & BoxNumber & ",[UnitCounter] = " & UnitCounter & " 
+                where [LineID] = " & PCInfo(2) & " and [LOTID] = " & LOTID)
+        SNBufer = New ArrayList
+        ShiftCounter(2)
+
+        If PCBID <> 0 Then
+            RunCommand("USE FAS Update [FAS].[dbo].[Ct_StepResult] 
+                    set StepID = 6, TestResult = 2, ScanDate = CURRENT_TIMESTAMP, SNID = " & SNID & "
+                    where PCBID = " & PCBID)
+            RunCommand("insert into [FAS].[dbo].[Ct_OperLog] ([PCBID],[LOTID],[StepID],[TestResultID],[StepDate],
+                    [StepByID],[LineID],[SNID])values
+                    (" & PCBID & "," & LOTID & ",6,2,CURRENT_TIMESTAMP," & UserInfo(0) & "," & PCInfo(2) & "," & SNID & ")")
         End If
 
-        Col = If(Res = False, Color.Red, Color.Green)
-        PrintLabel(Controllabel, Mess, 12, 193, Col)
+    End Sub
+
+    '6. 'Счетчик продукции
+    Private Sub ShiftCounter(StepRes As Integer)
+        ShiftCounterInfo(1) += 1
+        ShiftCounterInfo(2) += 1
+        If StepRes = 2 Then
+            ShiftCounterInfo(3) += 1
+        Else
+            ShiftCounterInfo(4) += 1
+        End If
+        Label_ShiftCounter.Text = ShiftCounterInfo(1)
+        LB_LOTCounter.Text = ShiftCounterInfo(2)
+        ShiftCounterUpdateCT(PCInfo(4), PCInfo(0), ShiftCounterInfo(0), ShiftCounterInfo(1), ShiftCounterInfo(2),
+                             ShiftCounterInfo(3), ShiftCounterInfo(4))
+    End Sub
+
+    '6. деактивация ввода серийника
+    Private Sub SNTBEnabled(Res As Boolean)
         SerialTextBox.Enabled = Res
-        Return Res
-    End Function
-
-
-
+        BT_Pause.Focus()
+    End Sub
 
 End Class
