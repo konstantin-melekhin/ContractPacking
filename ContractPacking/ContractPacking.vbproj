@@ -106,6 +106,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Variable.vb" />
+    <Compile Include="WF_PackWithOutPrint.Designer.vb">
+      <DependentUpon>WF_PackWithOutPrint.vb</DependentUpon>
+    </Compile>
+    <Compile Include="WF_PackWithOutPrint.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="WorkForm.Designer.vb">
       <DependentUpon>WorkForm.vb</DependentUpon>
     </Compile>
@@ -125,6 +131,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TestForm.resx">
       <DependentUpon>TestForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WF_PackWithOutPrint.resx">
+      <DependentUpon>WF_PackWithOutPrint.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WorkForm.resx">
       <DependentUpon>WorkForm.vb</DependentUpon>

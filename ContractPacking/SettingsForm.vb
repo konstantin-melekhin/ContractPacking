@@ -141,7 +141,8 @@ Public Class SettingsForm
         'определяем LOTCode и LOTID
         If DG_LOTListPresent.Rows.Count <> 0 Then
             LOTID = DG_LOTListPresent.Item(3, selRowNum).Value
-            Dim WF As New WorkForm(LOTID, IDApp)
+            'Dim WF As New WorkForm(LOTID, IDApp)
+            Dim WF As New WF_PackWithOutPrint(LOTID, IDApp)
             WF.Controllabel.Text = ""
             WF.Show()
             Me.Close()
