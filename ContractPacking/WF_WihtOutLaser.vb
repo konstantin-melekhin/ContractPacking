@@ -1,7 +1,7 @@
 ﻿Imports Library3
 
 
-Public Class WF_PackWithOutPrint
+Public Class WF_WihtOutLaser
     Public Sub New(LOTID As Integer, IDApp As Integer)
         InitializeComponent()
         Me.LOTID = LOTID
@@ -18,8 +18,7 @@ Public Class WF_PackWithOutPrint
         Dim SNBufer As New ArrayList 'SNBufer = (BooLSMT (Занят или свободен),SMTSN,BooLFAS (Занят или свободен),FASSN )
         Dim StepSequence As String()
         Dim SNFormat As ArrayList
-
-        Private Sub WF_PackWithOutPrint_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub WF_WihtOutLaser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'получение данных о станции
         LoadGridFromDB(DG_StepList, "USE FAS SELECT [ID],[StepName],[Description] FROM [FAS].[dbo].[Ct_StepScan]")
             PCInfo = GetPCInfo(IDApp)
@@ -255,22 +254,50 @@ Public Class WF_PackWithOutPrint
             SNFormat = GetSNFormat(LOTInfo(3), LOTInfo(8), SerialTextBox.Text, LOTInfo(18))
             Res = SNFormat(0)
             Mess = SNFormat(3)
-            'SNFormat(0) ' Результат проверки True/False
-            'SNFormat(1) ' 1 - SMT/ 2 - FAS / 3 - Неопределен
-            'SNFormat(2) ' Переменный номер
-            'SNFormat(3) ' Текст сообщения
-            If Res = True Then
-                If SingleSN = False Then
-                    If SNBufer.Count <> 0 Then
-                        If SNBufer(1) = SerialTextBox.Text Or SNBufer(3) = SerialTextBox.Text Then
-                            Mess = "Этот номер " & SerialTextBox.Text & " уже был отсканирован. " & vbCrLf &
+        'SNFormat(0) ' Результат проверки True/False
+        'SNFormat(1) ' 1 - SMT/ 2 - FAS / 3 - Неопределен
+        'SNFormat(2) ' Переменный номер
+        'SNFormat(3) ' Текст сообщения
+        If SNFormat(1) = 1 Then
+            Dim Sql As String = "
+            declare @Content as nvarchar(20) = '" & SerialTextBox.Text & "'
+            declare @IdLaz as int = (SELECT [IDLaser]FROM [SMDCOMPONETS].[dbo].[LazerBase]where Content = @Content)
+            if @IdLaz is null
+	            insert into [SMDCOMPONETS].[dbo].[LazerBase] ([ID],[LogDate],[ProductName],[BoardID],[Content],[Marked],[Result],[InsertionDateTime],[PCID])
+	            values (1,CURRENT_TIMESTAMP,'H310SB',0,@Content,0,'Manual',CURRENT_TIMESTAMP,0)
+
+	            declare @IDLazer as int = (SELECT [IDLaser]FROM [SMDCOMPONETS].[dbo].[LazerBase]where Content = @Content)
+
+	            Declare @PCBID as int = (SELECT [PCBID]
+	            FROM [FAS].[dbo].[Ct_StepResult] as st
+	            Left join SMDCOMPONETS.dbo.LazerBase as U On U.IDLaser = St.PCBID
+	            where u.content = @Content)
+
+	            if (@PCBID) is  null
+		            insert into [FAS].[dbo].[Ct_StepResult] ([PCBID],[StepID],[TestResult],[ScanDate])
+		            values (@IDLazer, 1,2,CURRENT_TIMESTAMP)
+	            else 
+		            update [FAS].[dbo].[Ct_StepResult] set [StepID] = 1, [TestResult] = 2, [ScanDate] = CURRENT_TIMESTAMP
+		            where PCBID = @IDLazer
+
+            (SELECT [PCBID] , u.content ,[StepID],[TestResult],[ScanDate]
+            FROM [FAS].[dbo].[Ct_StepResult] as st
+            Left join SMDCOMPONETS.dbo.LazerBase as U On U.IDLaser = St.PCBID
+            where u.content = @Content)"
+            Dim temp As ArrayList = SelectListString(Sql)
+        End If
+        If Res = True Then
+            If SingleSN = False Then
+                If SNBufer.Count <> 0 Then
+                    If SNBufer(1) = SerialTextBox.Text Or SNBufer(3) = SerialTextBox.Text Then
+                        Mess = "Этот номер " & SerialTextBox.Text & " уже был отсканирован. " & vbCrLf &
                             "Сбросьте ошибку и повторите сканирование обоих" & vbCrLf & "номеров платы заново!"
-                            Res = False
-                        End If
+                        Res = False
                     End If
                 End If
             End If
-            col = If(Res = False, Color.Red, Color.Green)
+        End If
+        col = If(Res = False, Color.Red, Color.Green)
             PrintLabel(Controllabel, Mess, 12, 193, col)
             SNTBEnabled(Res)
             Return Res
@@ -342,50 +369,50 @@ Public Class WF_PackWithOutPrint
             Dim Res As Boolean, SQL As String, Mess As String, Col As Color
             'Проверка предыдущего шага
             If GetPCB_SNID(0) = True Then
-            Select Case GetPCB_SNID(2)
-                Case 1
-                    Dim PCBStepRes As New ArrayList(SelectListString("USE FAS SELECT [StepID],[TestResult],[ScanDate],[SNID]
-                            FROM [FAS].[dbo].[Ct_StepResult] where [PCBID] = " & GetPCB_SNID(1)))
-                    Res = If(PCBStepRes.Count <> 0, (PCBStepRes(0) = PreStepID And PCBStepRes(1) = 2), False)
-                    Mess = If(Res = False, "Плата " & SerialTextBox.Text & vbCrLf & "имеет не верный предыдущий шаг!", "")
-                Case 2
-                    Res = True
-            End Select
-
-            'проверка задвоения в базе
-            If Res = True Then
-                Dim PackedSN As ArrayList
                 Select Case GetPCB_SNID(2)
                     Case 1
-                        SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
+                        Dim PCBStepRes As New ArrayList(SelectListString("USE FAS SELECT [StepID],[TestResult],[ScanDate],[SNID]
+                            FROM [FAS].[dbo].[Ct_StepResult] where [PCBID] = " & GetPCB_SNID(1)))
+                        Res = If(PCBStepRes.Count <> 0, (PCBStepRes(0) = PreStepID And PCBStepRes(1) = 2), False)
+                        Mess = If(Res = False, "Плата " & SerialTextBox.Text & vbCrLf & "имеет не верный предыдущий шаг!", "")
+                    Case 2
+                        Res = True
+                End Select
+
+                'проверка задвоения в базе
+                If Res = True Then
+                    Dim PackedSN As ArrayList
+                    Select Case GetPCB_SNID(2)
+                        Case 1
+                            SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
                         FROM [FAS].[dbo].[Ct_PackingTable] as P
                         left join SMDCOMPONETS.dbo.LazerBase as L On L.IDLaser = P.PCBID
                         Left join Ct_FASSN_reg as S On S.ID = P.SNID
                         Left join FAS_Liter as Lit On Lit.ID = P.LiterID
                         Left join FAS_Users as U On U.UserID = P.UserID
                         where PCBID = " & GetPCB_SNID(1)
-                        PackedSN = New ArrayList(SelectListString(SQL))
-                        Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
+                            PackedSN = New ArrayList(SelectListString(SQL))
+                            Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
                             "Литера - " & PackedSN(2) & " Паллет - " & PackedSN(3) & " Групповая - " & PackedSN(4) & " № - " & PackedSN(5) & vbCrLf &
                             "Дата - " & PackedSN(6), "")
-                        Res = (PackedSN.Count = 0)
-                    Case 2
-                        SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
+                            Res = (PackedSN.Count = 0)
+                        Case 2
+                            SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
                         FROM [FAS].[dbo].[Ct_PackingTable] as P
                         left join SMDCOMPONETS.dbo.LazerBase as L On L.IDLaser = P.PCBID
                         Left join Ct_FASSN_reg as S On S.ID = P.SNID
                         Left join FAS_Liter as Lit On Lit.ID = P.LiterID
                         Left join FAS_Users as U On U.UserID = P.UserID
                         where SNID = " & GetPCB_SNID(1)
-                        PackedSN = New ArrayList(SelectListString(SQL))
-                        Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
+                            PackedSN = New ArrayList(SelectListString(SQL))
+                            Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
                             "Литера - " & PackedSN(2) & " Паллет - " & PackedSN(3) & " Групповая - " & PackedSN(4) & " № - " & PackedSN(5) & vbCrLf &
                             "Дата - " & PackedSN(6), "")
-                        Res = (PackedSN.Count = 0)
-                End Select
-            End If
-            Col = If(Res = False, Color.Red, Color.Green)
-            PrintLabel(Controllabel, Mess, 12, 193, Col)
+                            Res = (PackedSN.Count = 0)
+                    End Select
+                End If
+                Col = If(Res = False, Color.Red, Color.Green)
+                PrintLabel(Controllabel, Mess, 12, 193, Col)
                 SNTBEnabled(Res)
                 Return Res
             Else
@@ -426,32 +453,32 @@ Public Class WF_PackWithOutPrint
                 where [LineID] = " & PCInfo(2) & " and [LOTID] = " & LOTID)
             SNBufer = New ArrayList
             ShiftCounter(2)
-        If PCBID <> 0 Then
-            RunCommand("USE FAS Update [FAS].[dbo].[Ct_StepResult] 
+            If PCBID <> 0 Then
+                RunCommand("USE FAS Update [FAS].[dbo].[Ct_StepResult] 
                         set StepID = 6, TestResult = 2, ScanDate = CURRENT_TIMESTAMP, SNID = " & SNID & "
                         where PCBID = " & PCBID)
-            RunCommand("insert into [FAS].[dbo].[Ct_OperLog] ([PCBID],[LOTID],[StepID],[TestResultID],[StepDate],
+                RunCommand("insert into [FAS].[dbo].[Ct_OperLog] ([PCBID],[LOTID],[StepID],[TestResultID],[StepDate],
                     [StepByID],[LineID],[SNID])values
                     (" & PCBID & "," & LOTID & ",6,2,CURRENT_TIMESTAMP," & UserInfo(0) & "," & PCInfo(2) & "," & SNID & ")")
-        End If
+            End If
 
 
 
-    End Sub
+        End Sub
 
         '6. 'Счетчик продукции
         Private Sub ShiftCounter(StepRes As Integer)
             ShiftCounterInfo(1) += 1
             ShiftCounterInfo(2) += 1
-        'If StepRes = 2 Then
-        '    ShiftCounterInfo(3) += 1
-        'Else
-        '    ShiftCounterInfo(4) += 1
-        'End If
-        Label_ShiftCounter.Text = ShiftCounterInfo(1)
+            'If StepRes = 2 Then
+            '    ShiftCounterInfo(3) += 1
+            'Else
+            '    ShiftCounterInfo(4) += 1
+            'End If
+            Label_ShiftCounter.Text = ShiftCounterInfo(1)
             LB_LOTCounter.Text = ShiftCounterInfo(2)
-        ShiftCounterUpdateCT(PCInfo(4), PCInfo(0), ShiftCounterInfo(0), ShiftCounterInfo(1), ShiftCounterInfo(2))
-    End Sub
+            ShiftCounterUpdateCT(PCInfo(4), PCInfo(0), ShiftCounterInfo(0), ShiftCounterInfo(1), ShiftCounterInfo(2))
+        End Sub
 
         '6. деактивация ввода серийника
         Private Sub SNTBEnabled(Res As Boolean)
@@ -460,7 +487,7 @@ Public Class WF_PackWithOutPrint
         End Sub
 
 
-End Class
+    End Class
 
 
 

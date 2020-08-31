@@ -112,6 +112,12 @@
     <Compile Include="WF_PackWithOutPrint.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="WF_WihtOutLaser.Designer.vb">
+      <DependentUpon>WF_WihtOutLaser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="WF_WihtOutLaser.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="WorkForm.Designer.vb">
       <DependentUpon>WorkForm.vb</DependentUpon>
     </Compile>
@@ -134,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="WF_PackWithOutPrint.resx">
       <DependentUpon>WF_PackWithOutPrint.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WF_WihtOutLaser.resx">
+      <DependentUpon>WF_WihtOutLaser.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WorkForm.resx">
       <DependentUpon>WorkForm.vb</DependentUpon>
