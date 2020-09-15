@@ -357,6 +357,7 @@ Public Class WorkForm
                             FROM [FAS].[dbo].[Ct_StepResult] where [PCBID] = " & GetPCB_SNID(1)))
                     Res1 = If(PCBStepRes.Count <> 0, (PCBStepRes(0) = PreStepID And PCBStepRes(1) = 2), False)
                     Mess = If(Res1 = False, "Плата " & SerialTextBox.Text & vbCrLf & "имеет не верный предыдущий шаг!", "")
+                    Res1 = True
                 Case 2
                     Res1 = True
             End Select
@@ -438,7 +439,7 @@ Public Class WorkForm
         ShiftCounter(2)
         'печать групповой этикетки 
         If UnitCounter = LOTInfo(15) Then '
-            SerchBoxForPrint(LOTID, BoxNumber)
+            SerchBoxForPrint(LOTID, BoxNumber, PCInfo(8))
             SNArray = GetSNFromGrid()
             PrintGroupLabel(SNArray)
         End If
@@ -481,16 +482,16 @@ Public Class WorkForm
     '7. печать групповой
     Dim SNArray As New ArrayList
     Dim SQL As String
-    Private Sub SerchBoxForPrint(LotID As Integer, BoxNum As Integer) 'LitName As String,
+    Private Sub SerchBoxForPrint(LotID As Integer, BoxNum As Integer, LiterID As Integer) 'LitName As String,
         SQL = "use fas
                 SELECT  [UnitNum] as '№',l.Content AS 'Серийный номер платы',Lit.LiterName as 'Литера' ,[BoxNum]as 'Номер коробки' 
                 FROM [FAS].[dbo].[Ct_PackingTable] as P
                 left join [SMDCOMPONETS].[dbo].[LazerBase] as L On l.IDLaser = PCBID
                 left join dbo.Ct_FASSN_reg as F On F.ID =P.SNID
                 left join dbo.FAS_Liter as Lit On Lit.ID = P.LiterID
-                where p.lotid =" & LotID & " and BoxNum = " & BoxNum & "order by UnitNum
+                where p.lotid =" & LotID & "and literid = " & LiterID & " and BoxNum = " & BoxNum & "order by UnitNum
                 " 'and LiterName= '" & LitName & "'
-        LoadGridFromDB(DG_SelectedBox, Sql)
+        LoadGridFromDB(DG_SelectedBox, SQL)
     End Sub
 
     Private Function GetSNFromGrid()
@@ -584,7 +585,7 @@ Public Class WorkForm
         If e.KeyCode = Keys.Enter Then
             SearchSNList = SerchSN(TB_ScanSN.Text)
             If SearchSNList.Count <> 0 Then
-                SerchBoxForPrint(SearchSNList(1), SearchSNList(3))
+                SerchBoxForPrint(SearchSNList(1), SearchSNList(3), PCInfo(8))
                 SNArray = GetSNFromGrid()
                 PrintGroupLabel(SNArray)
                 TB_ScanSN.Clear()
@@ -599,7 +600,7 @@ Public Class WorkForm
     Private Sub NumBox_KeyDown(sender As Object, e As KeyEventArgs) Handles NumBox.KeyDown
         If e.KeyCode = Keys.Enter Then
             System.Threading.Thread.Sleep(1000)
-            SerchBoxForPrint(LOTID, NumBox.Value)
+            SerchBoxForPrint(LOTID, NumBox.Value, PCInfo(8))
             SNArray = GetSNFromGrid()
             If SNArray.Count = 21 Then
                 PrintGroupLabel(SNArray)
