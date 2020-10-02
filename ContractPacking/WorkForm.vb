@@ -139,7 +139,7 @@ Public Class WorkForm
             Left join [FAS].[dbo].Ct_FASSN_reg as Sn On Sn.ID = p.SNID
             Left join [FAS].[dbo].FAS_Liter as Lit On Lit.ID = p.LiterID
             where P.LOTID = 0
-            order by UnitNum desc", ds)
+            order by UnitNum desc", ds) '  P.LOTID = 0 - требуется для загрузки пустой таблицы
             BoxNum.Text = LastPackCounter(1) + 1
             NextBoxNum.Text = LastPackCounter(1) + 2
             UnitCounter = 1
@@ -357,7 +357,7 @@ Public Class WorkForm
                             FROM [FAS].[dbo].[Ct_StepResult] where [PCBID] = " & GetPCB_SNID(1)))
                     Res1 = If(PCBStepRes.Count <> 0, (PCBStepRes(0) = PreStepID And PCBStepRes(1) = 2), False)
                     Mess = If(Res1 = False, "Плата " & SerialTextBox.Text & vbCrLf & "имеет не верный предыдущий шаг!", "")
-                    Res1 = True
+                    'Res1 = True
                 Case 2
                     Res1 = True
             End Select
@@ -518,7 +518,7 @@ Public Class WorkForm
 ^LS0
 ^FT192,224^XG000.GRF,1,1^FS
 ^FT302,138^A0N,66,64^FH\^FDAquarius CMP NS220^FS
-^FT897,206^A0N,54,52^FH\^FD" & sn(20) & "^FS
+^FT897,206^A0N,54,52^FH\^FD" & sn(20) & " " & Litera & "^FS
 ^BY3,3,90^FT141,337^BCN,,Y,N
 ^FD>:" & sn(0) & "^FS
 ^BY3,3,90^FT141,491^BCN,,Y,N
