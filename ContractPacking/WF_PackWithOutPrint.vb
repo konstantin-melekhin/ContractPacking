@@ -252,8 +252,8 @@ Public Class WF_PackWithOutPrint
         Private Function GetFTSN(SingleSN As Boolean) As Boolean
             Dim col As Color, Mess As String, Res As Boolean
             SNFormat = New ArrayList()
-            SNFormat = GetSNFormat(LOTInfo(3), LOTInfo(8), SerialTextBox.Text, LOTInfo(18))
-            Res = SNFormat(0)
+        SNFormat = GetSNFormat(LOTInfo(3), LOTInfo(8), SerialTextBox.Text, LOTInfo(18), LOTInfo(2), LOTInfo(2))
+        Res = SNFormat(0)
             Mess = SNFormat(3)
             'SNFormat(0) ' Результат проверки True/False
             'SNFormat(1) ' 1 - SMT/ 2 - FAS / 3 - Неопределен
@@ -344,10 +344,11 @@ Public Class WF_PackWithOutPrint
             If GetPCB_SNID(0) = True Then
             Select Case GetPCB_SNID(2)
                 Case 1
-                    Dim PCBStepRes As New ArrayList(SelectListString("USE FAS SELECT [StepID],[TestResult],[ScanDate],[SNID]
-                            FROM [FAS].[dbo].[Ct_StepResult] where [PCBID] = " & GetPCB_SNID(1)))
-                    Res = If(PCBStepRes.Count <> 0, (PCBStepRes(0) = PreStepID And PCBStepRes(1) = 2), False)
-                    Mess = If(Res = False, "Плата " & SerialTextBox.Text & vbCrLf & "имеет не верный предыдущий шаг!", "")
+                    'Dim PCBStepRes As New ArrayList(SelectListString("USE FAS SELECT [StepID],[TestResult],[ScanDate],[SNID]
+                    '        FROM [FAS].[dbo].[Ct_StepResult] where [PCBID] = " & GetPCB_SNID(1)))
+                    'Res = If(PCBStepRes.Count <> 0, (PCBStepRes(0) = PreStepID And PCBStepRes(1) = 2), False)
+                    'Mess = If(Res = False, "Плата " & SerialTextBox.Text & vbCrLf & "имеет не верный предыдущий шаг!", "")
+                    Res = True
                 Case 2
                     Res = True
             End Select

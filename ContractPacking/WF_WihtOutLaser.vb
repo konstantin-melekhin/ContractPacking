@@ -251,8 +251,8 @@ Public Class WF_WihtOutLaser
         Private Function GetFTSN(SingleSN As Boolean) As Boolean
             Dim col As Color, Mess As String, Res As Boolean
             SNFormat = New ArrayList()
-            SNFormat = GetSNFormat(LOTInfo(3), LOTInfo(8), SerialTextBox.Text, LOTInfo(18))
-            Res = SNFormat(0)
+        SNFormat = GetSNFormat(LOTInfo(3), LOTInfo(8), SerialTextBox.Text, LOTInfo(18), LOTInfo(2), LOTInfo(7))
+        Res = SNFormat(0)
             Mess = SNFormat(3)
         'SNFormat(0) ' Результат проверки True/False
         'SNFormat(1) ' 1 - SMT/ 2 - FAS / 3 - Неопределен

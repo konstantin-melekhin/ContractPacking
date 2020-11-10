@@ -1,12 +1,14 @@
 ﻿Imports Library3
-Public Class WorkForm
+
+
+Public Class WF_Rostelekom
     Public Sub New(LOTID As Integer, IDApp As Integer)
         InitializeComponent()
         Me.LOTID = LOTID
         Me.IDApp = IDApp
     End Sub
 
-    Dim LOTID, IDApp, UnitCounter,PCBID, SNID, PalletNumber, BoxNumber As Integer
+    Dim LOTID, IDApp, UnitCounter, PCBID, SNID, PalletNumber, BoxNumber As Integer
     Dim ds As New DataSet
     Dim LenSN_SMT, LenSN_FAS, StartStepID, PreStepID, NextStepID As Integer
     Dim StartStep, PreStep, NextStep, Litera As String
@@ -16,8 +18,7 @@ Public Class WorkForm
     Dim SNBufer As New ArrayList 'SNBufer = (BooLSMT (Занят или свободен),SMTSN,BooLFAS (Занят или свободен),FASSN )
     Dim StepSequence As String()
     Dim SNFormat As ArrayList
-
-    Private Sub WorkForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub WF_Rostelekom_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Настройка COM порта
         PrintSerialPort.PortName = "com3"
         PrintSerialPort.BaudRate = 115200
@@ -36,38 +37,38 @@ Public Class WorkForm
         Label_StationName.Text = PCInfo(5)
         Lebel_StationLine.Text = PCInfo(3)
         TextBox1.Text = "App_ID = " & PCInfo(0) & vbCrLf &
-                        "App_Caption = " & PCInfo(1) & vbCrLf &
-                        "lineID = " & PCInfo(2) & vbCrLf &
-                        "LineName = " & PCInfo(3) & vbCrLf &
-                        "StationID = " & PCInfo(4) & vbCrLf &
-                        "StationName = " & PCInfo(5) & vbCrLf &
-                        "CT_ScanStepID = " & PCInfo(6) & vbCrLf &
-                        "CT_ScanStep = " & PCInfo(7) & vbCrLf &
-                        "LiterID " & PCInfo(8) & vbCrLf &
-                        "LiterName = " & PCInfo(9)
+                            "App_Caption = " & PCInfo(1) & vbCrLf &
+                            "lineID = " & PCInfo(2) & vbCrLf &
+                            "LineName = " & PCInfo(3) & vbCrLf &
+                            "StationID = " & PCInfo(4) & vbCrLf &
+                            "StationName = " & PCInfo(5) & vbCrLf &
+                            "CT_ScanStepID = " & PCInfo(6) & vbCrLf &
+                            "CT_ScanStep = " & PCInfo(7) & vbCrLf &
+                            "LiterID " & PCInfo(8) & vbCrLf &
+                            "LiterName = " & PCInfo(9)
         'получение данных о текущем лоте
         LOTInfo = GetCurrentContractLot(LOTID)
         LenSN_SMT = If(LOTInfo(2) = True, GetLenSN(LOTInfo(3)), 1)
         LenSN_FAS = If(LOTInfo(7) = True, GetLenSN(LOTInfo(8)), 1)
         TextBox2.Text = "Model = " & LOTInfo(0) & vbCrLf &
-                        "LOT = " & LOTInfo(1) & vbCrLf &
-                        "CheckFormatSN_SMT = " & LOTInfo(2) & vbCrLf &
-                        "SMTNumberFormat = " & LOTInfo(3) & vbCrLf &
-                        "SMTRangeChecked = " & LOTInfo(4) & vbCrLf &
-                        "SMTStartRange = " & LOTInfo(5) & vbCrLf &
-                        "SMTEndRange = " & LOTInfo(6) & vbCrLf &
-                        "CheckFormatSN_FAS = " & LOTInfo(7) & vbCrLf &
-                        "FASNumberFormat = " & LOTInfo(8) & vbCrLf &
-                        "FASRangeChecked = " & LOTInfo(9) & vbCrLf &
-                        "FASStartRange = " & LOTInfo(10) & vbCrLf &
-                        "FASEndRange = " & LOTInfo(11) & vbCrLf &
-                        "SingleSN = " & LOTInfo(12) & vbCrLf &
-                        "ParseLog = " & LOTInfo(13) & vbCrLf &
-                        "StepSequence = " & LOTInfo(14) & vbCrLf &
-                        "BoxCapacity = " & LOTInfo(15) & vbCrLf &
-                        "PalletCapacity = " & LOTInfo(16) & vbCrLf &
-                        "LiterIndex = " & LOTInfo(17) & vbCrLf &
-                        "HexSN = " & LOTInfo(18)
+                            "LOT = " & LOTInfo(1) & vbCrLf &
+                            "CheckFormatSN_SMT = " & LOTInfo(2) & vbCrLf &
+                            "SMTNumberFormat = " & LOTInfo(3) & vbCrLf &
+                            "SMTRangeChecked = " & LOTInfo(4) & vbCrLf &
+                            "SMTStartRange = " & LOTInfo(5) & vbCrLf &
+                            "SMTEndRange = " & LOTInfo(6) & vbCrLf &
+                            "CheckFormatSN_FAS = " & LOTInfo(7) & vbCrLf &
+                            "FASNumberFormat = " & LOTInfo(8) & vbCrLf &
+                            "FASRangeChecked = " & LOTInfo(9) & vbCrLf &
+                            "FASStartRange = " & LOTInfo(10) & vbCrLf &
+                            "FASEndRange = " & LOTInfo(11) & vbCrLf &
+                            "SingleSN = " & LOTInfo(12) & vbCrLf &
+                            "ParseLog = " & LOTInfo(13) & vbCrLf &
+                            "StepSequence = " & LOTInfo(14) & vbCrLf &
+                            "BoxCapacity = " & LOTInfo(15) & vbCrLf &
+                            "PalletCapacity = " & LOTInfo(16) & vbCrLf &
+                            "LiterIndex = " & LOTInfo(17) & vbCrLf &
+                            "HexSN = " & LOTInfo(18)
         Litera = If(LOTInfo(17) = 0, PCInfo(9), (PCInfo(9) & LOTInfo(17)))
         'Определить стартовый шаг, текущий и последующий
         StepSequence = New String(Len(LOTInfo(14)) / 2 - 1) {}
@@ -179,7 +180,7 @@ Public Class WorkForm
 
     ' условия для возврата в окно настроек
     Dim OpenSettings As Boolean
-    Private Sub Button_Click(sender As Object, e As EventArgs) Handles BT_OpenSettings.Click, BT_LOGInClose.Click
+    Private Sub Button_Click(sender As Object, e As EventArgs) Handles BT_OpenSettings.Click, BT_LogInClose.Click
         OpenSettings = True
         Me.Close()
     End Sub
@@ -216,11 +217,11 @@ Public Class WorkForm
                                     Case 1 ' запись в буфер СМТ номера
                                         SNBufer = New ArrayList From {True, SerialTextBox.Text, False, ""}
                                         Mess = "SMT номер " & SerialTextBox.Text & " определен!" & vbCrLf &
-                                       "Отсканируйте номер FAS!"
+                                           "Отсканируйте номер FAS!"
                                     Case 2 'запись в буфер FAS номера
                                         SNBufer = New ArrayList From {False, "", True, SerialTextBox.Text}
                                         Mess = "FAS номер " & SerialTextBox.Text & " определен!" & vbCrLf &
-                                       "Отсканируйте номер SMT!"
+                                           "Отсканируйте номер SMT!"
                                 End Select
                                 'если в буфере имеется СМТ номер
                             ElseIf SNBufer.Count <> 0 And SNBufer(0) = True And SNBufer(2) = False Then
@@ -239,12 +240,12 @@ Public Class WorkForm
                                     SNID = 0
                                     WriteDB(SerialTextBox.Text, "")
                                     Mess = "SMT номер " & SerialTextBox.Text & " определен и " & vbCrLf &
-                                    "записан в базу!"
+                                        "записан в базу!"
                                 Case 2 ' одиночный ФАС номер
                                     PCBID = 0
                                     WriteDB("", SerialTextBox.Text)
                                     Mess = "FAS номер " & SerialTextBox.Text & " определен и" & vbCrLf &
-                                    "записан в базу!"
+                                        "записан в базу!"
                             End Select
                         End If
                         PrintLabel(Controllabel, Mess, 12, 193, Color.Green)
@@ -273,7 +274,7 @@ Public Class WorkForm
                 If SNBufer.Count <> 0 Then
                     If SNBufer(1) = SerialTextBox.Text Or SNBufer(3) = SerialTextBox.Text Then
                         Mess = "Этот номер " & SerialTextBox.Text & " уже был отсканирован. " & vbCrLf &
-                        "Сбросьте ошибку и повторите сканирование обоих" & vbCrLf & "номеров платы заново!"
+                            "Сбросьте ошибку и повторите сканирование обоих" & vbCrLf & "номеров платы заново!"
                         Res = False
                     End If
                 End If
@@ -364,32 +365,32 @@ Public Class WorkForm
             'проверка задвоения в базе
             Dim PackedSN As ArrayList
             Select Case GetPCB_SNID(2)
-                    Case 1
-                        SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
+                Case 1
+                    SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
                         FROM [FAS].[dbo].[Ct_PackingTable] as P
                         left join SMDCOMPONETS.dbo.LazerBase as L On L.IDLaser = P.PCBID
                         Left join Ct_FASSN_reg as S On S.ID = P.SNID
                         Left join FAS_Liter as Lit On Lit.ID = P.LiterID
                         Left join FAS_Users as U On U.UserID = P.UserID
                         where PCBID = " & GetPCB_SNID(1)
-                        PackedSN = New ArrayList(SelectListString(SQL))
+                    PackedSN = New ArrayList(SelectListString(SQL))
                     Res2 = (PackedSN.Count = 0)
                     If Res1 = True And Res2 = False Or Res1 = False And Res2 = False Then
                         Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
-                                                   "Литера - " & PackedSN(2) & " Паллет - " & PackedSN(3) & " Групповая - " & PackedSN(4) & " № - " & PackedSN(5) & vbCrLf &
-                                                   "Дата - " & PackedSN(6), "")
+                                                       "Литера - " & PackedSN(2) & " Паллет - " & PackedSN(3) & " Групповая - " & PackedSN(4) & " № - " & PackedSN(5) & vbCrLf &
+                                                       "Дата - " & PackedSN(6), "")
                     End If
 
                 Case 2
-                        SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
+                    SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
                         FROM [FAS].[dbo].[Ct_PackingTable] as P
                         left join SMDCOMPONETS.dbo.LazerBase as L On L.IDLaser = P.PCBID
                         Left join Ct_FASSN_reg as S On S.ID = P.SNID
                         Left join FAS_Liter as Lit On Lit.ID = P.LiterID
                         Left join FAS_Users as U On U.UserID = P.UserID
                         where SNID = " & GetPCB_SNID(1)
-                        PackedSN = New ArrayList(SelectListString(SQL))
-                        Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
+                    PackedSN = New ArrayList(SelectListString(SQL))
+                    Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
                             "Литера - " & PackedSN(2) & " Паллет - " & PackedSN(3) & " Групповая - " & PackedSN(4) & " № - " & PackedSN(5) & vbCrLf &
                             "Дата - " & PackedSN(6), "")
                     Res2 = (PackedSN.Count = 0)
@@ -469,7 +470,7 @@ Public Class WorkForm
         Label_ShiftCounter.Text = ShiftCounterInfo(1)
         LB_LOTCounter.Text = ShiftCounterInfo(2)
         ShiftCounterUpdateCT(PCInfo(4), PCInfo(0), ShiftCounterInfo(0), ShiftCounterInfo(1), ShiftCounterInfo(2),
-                             ShiftCounterInfo(3), ShiftCounterInfo(4))
+                                 ShiftCounterInfo(3), ShiftCounterInfo(4))
     End Sub
 
     '6. деактивация ввода серийника
@@ -483,8 +484,9 @@ Public Class WorkForm
     Dim SNArray As New ArrayList
     Dim SQL As String
     Private Sub SerchBoxForPrint(LotID As Integer, BoxNum As Integer, LiterID As Integer) 'LitName As String,
+        'SELECT  [UnitNum] as '№',l.Content AS 'Серийный номер платы',Lit.LiterName as 'Литера' ,[BoxNum]as 'Номер коробки'
         SQL = "use fas
-                SELECT  [UnitNum] as '№',l.Content AS 'Серийный номер платы',Lit.LiterName as 'Литера' ,[BoxNum]as 'Номер коробки' 
+                SELECT  [UnitNum] as '№',F.SN AS 'Серийный номер платы',Lit.LiterName as 'Литера' ,[BoxNum]as 'Номер коробки' 
                 FROM [FAS].[dbo].[Ct_PackingTable] as P
                 left join [SMDCOMPONETS].[dbo].[LazerBase] as L On l.IDLaser = PCBID
                 left join dbo.Ct_FASSN_reg as F On F.ID =P.SNID
@@ -494,71 +496,126 @@ Public Class WorkForm
         LoadGridFromDB(DG_SelectedBox, SQL)
     End Sub
 
+    'Private Function GetSNFromGrid()
+    '    Dim SNArrayTemp As New ArrayList
+    '    If DG_SelectedBox.Rows.Count > 0 Then
+    '        For i = 0 To DG_SelectedBox.Rows.Count - 1
+    '            SNArrayTemp.Add(Mid(DG_SelectedBox.Item(1, i).Value, 1, 4) & ">5" & Mid(DG_SelectedBox.Item(1, i).Value, 5))
+    '        Next
+    '        SNArrayTemp.Add(DG_SelectedBox.Item(3, 0).Value)
+    '    Else
+    '        PrintLabel(Controllabel, "Корбка еще не закрыта!", 12, 193, Color.Red)
+    '    End If
+    '    Return SNArrayTemp
+    'End Function
     Private Function GetSNFromGrid()
         Dim SNArrayTemp As New ArrayList
         If DG_SelectedBox.Rows.Count > 0 Then
+            SNArrayTemp.Add(DG_SelectedBox.Item(3, 0).Value & " " & DG_SelectedBox.Item(2, 0).Value)
             For i = 0 To DG_SelectedBox.Rows.Count - 1
-                SNArrayTemp.Add(Mid(DG_SelectedBox.Item(1, i).Value, 1, 4) & ">5" & Mid(DG_SelectedBox.Item(1, i).Value, 5))
+                SNArrayTemp.Add(DG_SelectedBox.Item(1, i).Value)
             Next
-            SNArrayTemp.Add(DG_SelectedBox.Item(3, 0).Value)
+
         Else
             PrintLabel(Controllabel, "Корбка еще не закрыта!", 12, 193, Color.Red)
         End If
         Return SNArrayTemp
     End Function
 
+
     Private Sub PrintGroupLabel(sn As ArrayList)
         Dim Content As String = "
-^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^MD10^JUS^LRN^CI0^XZ
-~DG000.GRF,08448,088,
-,::::::::::::::::::::::::::::::::::::::::kM03C0780gY01FE0,01FF801FF80jV03E0780gW01FHFE0,01FF801FF80jV01E0F80gW07FHFE0,01FF801FF80jV01FHFgX01FIFC0,01FF801FF80jW0HFE0gW03FIFC0,01FF801FF80jW07FC0gW07FIF80,01FF801FF80jW03F80gW07FHFE,01FF801FF80lX0HFC,01FF801FF80lX0HF0,01FF801FF80H0HF80S03FE0K03F0T01F80gK01FF0Q03FE0gI03FE0K03F0J0HF8001FEFF0,01FF801FF8003FHFH01FFC007FF001FHFC007F8FFC0J01FIFC3FC7FE03FF00FFC7FJFC0FKF8007FFE003FIFJ0IFC007FC0FFE0J0HF807F800FHFC007F8FFC0H03FHFH01FIFE003FE01FE0FF81FFC0,01FF801FF800FIF801FFC00FHFH03FHFE007F9FFE0J01FIFC3FCFHF01FF00FF87FJFC0FKF801FIFH03FIFC003FHFE007FC0FFE0J0HF81FF803FHFE007F9FFE0H0JF801FJFH03FE07FE0FF81FFC0,01FF801FF801FIFC01FFE00FHFH07FIF807FBFHFK01FIFC3FDFHF81FF00FF87FJFC0FKF803FIF803FIFE007FIFH07FC1FFE0J0HF83FF807FIFH07FBFHFH01FIFC01FJF803FE0FFE0FF83FFC0,01FLF803FIFE01FFE00FHFH0KF807FJF80I01FIFC3FJFC1FF80FF87FJFC0FKF807FIFC03FJFH0KF807FC1FFE0J0HF87FF80FJF807FJF803FIFE03FJFC03FE1FFE0FF83FFC0,01FLF807FJF01FHF01FHF01FJFC07FJF80I01FIFC3FJFC0FF81FF07FJFC0FKF80FJFE03FJF01FJFC07FC3FFE0J0HF87FF81FJFC07FJF807FJF03FJFE03FE1FFE0FF87FFC0,01FLF807FE3FF81FHF01FHF03FF07FE07FF0FFC0I01FIFC3FF87FE0FF81FF07FJFC0FKF80FFC7FF03FE1FF01FF8FFE07FC3FFE0J0HF8FHF81FF8FFE07FF0FFC07FE3FF83FFC7FF03FE3FFE0FF87FFC0,01FLF80FF80FF81FHF83FHF03FE03FE07FE07FC0I01FIFC3FF03FE07FC1FF07FC07FC0FF80FF81FF01FF03FE1FF03FE03FE07FC7FFE0J0HF8FF803FE03FE07FE07FC0FF80FF83FF01FF03FE3FE00FF8FHFC0,01FLF80FF80FF81FHF83FHF03FC01FE07FE07FC0I01FF0H03FF03FE07FC1FE07FC07FC0FF80FF81FF01FF03FE1FF03FE03FE07FC7FFE0J0HF9FF003FE03FE07FE07FC0FF80FF83FF01FF03FE7FC00FF8FHFC0,01FLF81FF007FC1FHF83FHF07FC01FF07FC03FE0I01FF0H03FE01FF03FC3FE07FC07FC0FF80FF83FE00FF83FE3FE07FC01FF07FCFHFE0J0HFBFE007FC01FF07FC03FE1FF007FC3FE00FF83FEFF800FF9FHFC0,01FLF81FF007FC1FHFC7FHF07FKF07FC03FE0I01FF0H03FE01FF03FE3FE07FC07FC0FF80FF83FE00FF83FIFC07FC01FF07FDFHFE0J0JFE007FC01FF07FC03FE1FF007FC3FE00FF83FIF800FFBFHFC0,01FLF81FF007FC1FEFC7EFF07FKF07FC03FE0I01FF0H03FE01FF03FE3FC07FC07FC0FF80FF83FE00FF83FIF807FC01FF07FDFHFE0J0JFC007FC01FF07FC03FE1FF007FC3FE00FF83FIFI0HFBFHFC0,01FF801FF81FF007FC1FEFEFEFF07FKF07FC03FE0I01FF0H03FE01FF01FE3FC07FC07FC0FF80FF83FE00FF83FIF807FC01FF07FJFE0J0JF8007FC01FF07FC03FE1FF007FC3FE00FF83FHFE0H0LFC0,01FF801FF81FF007FC1FEFEFEFF07FKF07FC03FE0I01FF0H03FE01FF01FE7F807FC07FC0FF80FF83FE00FF83FIFE07FC01FF07FJFE0J0JFE007FC01FF07FC03FE1FF007FC3FE00FF83FIF800FKFC0,01FF801FF81FF007FC1FE7EFCFF07FKF07FC03FE0I01FF0H03FE01FF00FF7F807FC07FC0FF80FF83FE00FF83FJF07FC01FF07FHFBFE0J0KFH07FC01FF07FC03FE1FF007FC3FE00FF83FIFC00FIF7FC0,01FF801FF81FF007FC1FE7FFCFF07FC0J07FC03FE0I01FF0H03FE01FF00FF7F807FC07FC0FF80FF83FE00FF83FE1FF87FC01FF07FHFBFE0J0KF807FC01FF07FC03FE1FF007FC3FE00FF83FIFE00FIF7FC0,01FF801FF81FF007FC1FE3FF8FF07FC0J07FC03FE0I01FF0H03FE01FF00FF7F007FC07FC0FF80FF83FE00FF83FE0FF87FC01FF07FHF3FE0J0HF9FFC07FC01FF07FC03FE1FF007FC1FE00FF83FE7FF00FHFE7FC0,01FF801FF80FF80FF81FE3FF8FF03FE0J07FE07FE0I01FF0H03FF03FF007FHFH07FC07FC0FF80FF81FF01FF03FE0FF83FE03FE07FHF3FE0J0HF8FFC03FE03FE07FE07FE0FF80FF81FF01FF03FE3FF00FHFE7FC0,01FF801FF80FF80FF81FE3FF8FF03FE03E007FE07FC0I01FF0H03FF03FE007FHFH07FC07FC0FF80FF81FF01FF03FE0FF83FE03FE07FFE3FE0J0HF87FE03FE03FE07FE07FC0FF80FF81FF01FF03FE1FF80FHFC7FC0,01FF801FF807FE3FF01FE1FF0FF03FF0FFE07FF0FFC0I01FF0H03FF87FE003FFE007FC07FC0FF80FF80FFC7FE03FE1FF81FF8FFC07FFC3FE0J0HF87FF01FF8FFC07FF0FFC07FE3FF00FF87FE03FE1FFC0FHF87FC0,01FF801FF807FJF01FE1FF0FF01FJFC07FJFC0I01FF0H03FJFE003FFE007FC07FC0FF80FF80FJFE03FJF81FJFC07FFC3FE0J0HF83FF01FJFC07FJFC07FJFH0KFE03FE0FFC0FHF87FC0,01FF801FF803FIFE01FE0FE0FF00FJF807FJF80I01FF0H03FJFC003FFE007FC07FC0FF80FF807FIFC03FJFH0KF807FF83FE0J0HF83FF80FJF807FJF803FIFE007FIFC03FE0FFE0FHF07FC0,01FF801FF801FIFC01FE0FE0FF00FJF807FJFK01FF0H03FJF8001FFC007FC07FC0FF80FF803FIF803FJFH07FIFH07FF83FE0J0HF81FF807FIFH07FJFH01FIFC003FIF803FE07FE0FHF07FC0,01FF801FF800FIF801FE07E0FF007FHFE007FIFE0J01FF0H03FJFI01FFC007FC07FC0FF80FF801FIFH03FIFE003FHFE007FF03FE0J0HF80FFC03FHFE007FIFE0H0JF8001FIFH03FE03FF0FFE07FC0,01FF801FF8003FFE001FE07C0FF001FHFC007FDFFC0J01FF0H03FEFFE0I0HF8007FC07FC0FF80FF8007FFC003FIFJ0IF8007FF03FE0J0HF80FFE00FHF8007FDFFC0H03FFE0I0IFE003FE03FF8FFE07FC0,S0HF80S07FE0H07FC3F0Q03FE1F80I0HF80X01FF0Q03FE0gI03FE0H07FC3F0J0HF80I01FF0,gV07FC0S03FE0K01FF80iL07FC,gV07FC0S03FE0K01FF0iM07FC,gV07FC0S03FE0I0103FF0iM07FC,gV07FC0S03FE0I01FHFE0iM07FC,:gV07FC0S03FE0I01FHFC0iM07FC,gV07FC0S03FE0J0IFC0iM07FC,gV07FC0S03FE0J0IFiO07FC,iG0HFC,,::::::::::^XA
+^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^JUS^LRN^CI0^XZ
+^XA
 ^MMT
 ^PW1181
 ^LL1772
 ^LS0
-^FT192,224^XG000.GRF,1,1^FS
-^FT302,138^A0N,66,64^FH\^FDAquarius CMP NS220^FS
-^FT897,206^A0N,54,52^FH\^FD" & sn(20) & " " & Litera & "^FS
-^BY3,3,90^FT141,337^BCN,,Y,N
-^FD>:" & sn(0) & "^FS
-^BY3,3,90^FT141,491^BCN,,Y,N
-^FD>:" & sn(1) & "^FS
-^BY3,3,90^FT141,637^BCN,,Y,N
-^FD>:" & sn(2) & "^FS
-^BY3,3,90^FT141,796^BCN,,Y,N
-^FD>:" & sn(3) & "^FS
-^BY3,3,90^FT141,943^BCN,,Y,N
-^FD>:" & sn(4) & "^FS
-^BY3,3,90^FT141,1099^BCN,,Y,N
-^FD>:" & sn(5) & "^FS
-^BY3,3,90^FT141,1238^BCN,,Y,N
-^FD>:" & sn(6) & "^FS
-^BY3,3,90^FT141,1397^BCN,,Y,N
-^FD>:" & sn(7) & "^FS
-^BY3,3,90^FT141,1544^BCN,,Y,N
-^FD>:" & sn(8) & "^FS
-^BY3,3,90^FT141,1701^BCN,,Y,N
-^FD>:" & sn(9) & "^FS
-^BY3,3,90^FT656,337^BCN,,Y,N
-^FD>:" & sn(10) & "^FS
-^BY3,3,90^FT656,491^BCN,,Y,N
-^FD>:" & sn(11) & "^FS
-^BY3,3,90^FT656,637^BCN,,Y,N
-^FD>:" & sn(12) & "^FS
-^BY3,3,90^FT656,796^BCN,,Y,N
-^FD>:" & sn(13) & "^FS
-^BY3,3,90^FT656,943^BCN,,Y,N
-^FD>:" & sn(14) & "^FS
-^BY3,3,90^FT656,1099^BCN,,Y,N
-^FD>:" & sn(15) & "^FS
-^BY3,3,90^FT656,1238^BCN,,Y,N
-^FD>:" & sn(16) & "^FS
-^BY3,3,90^FT656,1397^BCN,,Y,N
-^FD>:" & sn(17) & "^FS
-^BY3,3,90^FT656,1544^BCN,,Y,N
-^FD>:" & sn(18) & "^FS
-^BY3,3,90^FT656,1701^BCN,,Y,N
-^FD>:" & sn(19) & "^FS
+^FO352,1600^GFA,09600,09600,00100,:Z64:
+eJzt1kFu2zAQAEAKOujIJ/Ap7M8oIwcf/YR+xUUPPuYJVdAHREEOYWGC290lKYsSFbSuHRQBFzBkh6sdRSKpFaJGjRo13osW/uHkBvo/SZOYdknV4z0M9QGGhuPdDfNJDPgIY/hyb4Oz/kejdXiOF6J7whNNvxyaH4MRUzkcGsqmIZ8VNoMelTNWOl5TEp+j+gV9C2MHPf4QNMxDGvjYQgsN7OhLz6mCslpAw4CQVj94qtLAsU0+GdppMgwMWGjED/QSXJsMHYYA+JgZlMpGBzA2dB4bmn6sDIcGpmERix/oFfgWjpMRKvAxM0wyJI/AUVrz3VOVpWGc8tJhEStCIejxAhsYgmF4CCvEYzQ6HIVkKKCbC0MwODU3wMlo4MfziXSByaDbBg4r8HHboP+FDapSMEC6eKGUEY0xN2RuSBiaydCTAT9LxksoEIrsscAJ6z/B0QQjDPvOc4rPjVMyLOD8w6lDRqiyNg6uwzKhwAPNKDTsZPguGFMKGyOnivjURmFVMtql8Uo34GK0ydDBeN0wFM2kZBgycBHKX/C6YTTwiLO3xRJ0aVzCDMolg24iGdKFiwjG80jfojHQXoIZZFCV3czAIm/8rGOhuQFsvEGsvTLsXxmiZMiFAbmhl4amjPO5aIRNYm10EGclDzUr4+SKxnnLkAVDZEa6jCuNZ9pQ10YTjedg6IVhysbLpqELRpsby3tlTr5gwAtEg/eANHdx3r77PB7j8zjkBjwsjVG+bzzSAoNsDXYuGWHtLdYgpuVrUOFuhYsfYkpuHHDuXoxpL5HROGwalLqHtJco2ktws94wFBUCCfM98RvYyeC9MO2JwAV2XOiUjLQnBmO/MiQb8eRpb98lI+3ph3hMRrjpe8j2djJSlZnhyZDpZJfeUU18f3gesrG+nRv9ZEzvKNyuqb4rGOE9CKV37eUVmd65bNDTOGYGv2vJEGvDBUPQe5Z7Bs89QzJiO3HpGaKBpbBeNCT8CD0DG9wzrAzHvY8PvY/j3qeJfYmTi95nZmBqMDr4GnofvAWl3gd7K5zatJ/40MNZ7uGwDwwzJrZ3KvVwwdijMWBqMFpQo+DzyVj0cLPozj70ogPZ2XipF+VThvSNBua96IYhOrf+27WxZcj7Gx3Yde6NDVM2uuGGBvXUhVBX/XdlAyfkUMrWVz2lTeNYyja+9NfrjBZKc03QyrqhUb4pVt3Q2LjeUV5j1KhRo0aNGjVq1KhRo0aNGp8ifgPNNWec:5A80
+^BY2,3,41^FT1049,1065^BCI,,N,N
+^FD>:" & Mid(sn(1), 1, 2) & ">5" & Mid(sn(1), 3) & "^FS
+^FT1055,1109^A0I,29,28^FH\^FDS/N:^FS
+^FT1002,1109^A0I,29,28^FH\^FD" & sn(1) & "^FS
+^BY2,3,41^FT1049,958^BCI,,N,N
+^FD>:" & Mid(sn(2), 1, 2) & ">5" & Mid(sn(2), 3) & "^FS
+^FT1055,1003^A0I,29,28^FH\^FDS/N:^FS
+^FT1002,1003^A0I,29,28^FH\^FD" & sn(2) & "^FS
+^BY2,3,41^FT1049,847^BCI,,N,N
+^FD>:" & Mid(sn(3), 1, 2) & ">5" & Mid(sn(3), 3) & "^FS
+^FT1055,891^A0I,29,28^FH\^FDS/N:^FS
+^FT1002,891^A0I,29,28^FH\^FD" & sn(3) & "^FS
+^BY2,3,41^FT1049,741^BCI,,N,N
+^FD>:" & Mid(sn(4), 1, 2) & ">5" & Mid(sn(4), 3) & "^FS
+^FT1055,785^A0I,29,28^FH\^FDS/N:^FS
+^FT1002,785^A0I,29,28^FH\^FD" & sn(4) & "^FS
+^BY2,3,41^FT1049,629^BCI,,N,N
+^FD>:" & Mid(sn(5), 1, 2) & ">5" & Mid(sn(5), 3) & "^FS
+^FT1055,674^A0I,29,28^FH\^FDS/N:^FS
+^FT1002,674^A0I,29,28^FH\^FD" & sn(5) & "^FS
+^BY2,3,41^FT1049,516^BCI,,N,N
+^FD>:" & Mid(sn(6), 1, 2) & ">5" & Mid(sn(6), 3) & "^FS
+^FT1055,561^A0I,29,28^FH\^FDS/N:^FS
+^FT1002,561^A0I,29,28^FH\^FD" & sn(6) & "^FS
+^BY2,3,41^FT1049,405^BCI,,N,N
+^FD>:" & Mid(sn(7), 1, 2) & ">5" & Mid(sn(7), 3) & "^FS
+^FT1055,449^A0I,29,28^FH\^FDS/N:^FS
+^FT1002,449^A0I,29,28^FH\^FD" & sn(7) & "^FS
+^BY2,3,41^FT1049,299^BCI,,N,N
+^FD>:" & Mid(sn(8), 1, 2) & ">5" & Mid(sn(8), 3) & "^FS
+^FT1055,343^A0I,29,28^FH\^FDS/N:^FS
+^FT1002,343^A0I,29,28^FH\^FD" & sn(8) & "^FS
+^BY2,3,41^FT1049,187^BCI,,N,N
+^FD>:" & Mid(sn(9), 1, 2) & ">5" & Mid(sn(9), 3) & "^FS
+^FT1055,232^A0I,29,28^FH\^FDS/N:^FS
+^FT1002,232^A0I,29,28^FH\^FD" & sn(9) & "^FS
+^BY2,3,41^FT1049,79^BCI,,N,N
+^FD>:" & Mid(sn(10), 1, 2) & ">5" & Mid(sn(10), 3) & "^FS
+^FT1055,124^A0I,29,28^FH\^FDS/N:^FS
+^FT1002,124^A0I,29,28^FH\^FD" & sn(10) & "^FS
+^BY2,3,41^FT564,1065^BCI,,N,N
+^FD>:" & Mid(sn(11), 1, 2) & ">5" & Mid(sn(11), 3) & "^FS
+^FT571,1109^A0I,29,28^FH\^FDS/N:^FS
+^FT518,1109^A0I,29,28^FH\^FD" & sn(11) & "^FS
+^BY2,3,41^FT564,958^BCI,,N,N
+^FD>:" & Mid(sn(12), 1, 2) & ">5" & Mid(sn(12), 3) & "^FS
+^FT571,1003^A0I,29,28^FH\^FDS/N:^FS
+^FT518,1003^A0I,29,28^FH\^FD" & sn(12) & "^FS
+^BY2,3,41^FT564,847^BCI,,N,N
+^FD>:" & Mid(sn(13), 1, 2) & ">5" & Mid(sn(13), 3) & "^FS
+^FT571,891^A0I,29,28^FH\^FDS/N:^FS
+^FT518,891^A0I,29,28^FH\^FD" & sn(13) & "^FS
+^BY2,3,41^FT564,741^BCI,,N,N
+^FD>:" & Mid(sn(14), 1, 2) & ">5" & Mid(sn(14), 3) & "^FS
+^FT571,785^A0I,29,28^FH\^FDS/N:^FS
+^FT518,785^A0I,29,28^FH\^FD" & sn(14) & "^FS
+^BY2,3,41^FT564,629^BCI,,N,N
+^FD>:" & Mid(sn(15), 1, 2) & ">5" & Mid(sn(15), 3) & "^FS
+^FT571,674^A0I,29,28^FH\^FDS/N:^FS
+^FT518,674^A0I,29,28^FH\^FD" & sn(15) & "^FS
+^BY2,3,41^FT564,516^BCI,,N,N
+^FD>:" & Mid(sn(16), 1, 2) & ">5" & Mid(sn(16), 3) & "^FS
+^FT571,561^A0I,29,28^FH\^FDS/N:^FS
+^FT518,561^A0I,29,28^FH\^FD" & sn(16) & "^FS
+^BY2,3,41^FT564,405^BCI,,N,N
+^FD>:" & Mid(sn(17), 1, 2) & ">5" & Mid(sn(17), 3) & "^FS
+^FT571,449^A0I,29,28^FH\^FDS/N:^FS
+^FT518,449^A0I,29,28^FH\^FD" & sn(17) & "^FS
+^BY2,3,41^FT564,299^BCI,,N,N
+^FD>:" & Mid(sn(18), 1, 2) & ">5" & Mid(sn(18), 3) & "^FS
+^FT571,343^A0I,29,28^FH\^FDS/N:^FS
+^FT518,343^A0I,29,28^FH\^FD" & sn(18) & "^FS
+^BY2,3,41^FT564,187^BCI,,N,N
+^FD>:" & Mid(sn(19), 1, 2) & ">5" & Mid(sn(19), 3) & "^FS
+^FT571,232^A0I,29,28^FH\^FDS/N:^FS
+^FT518,232^A0I,29,28^FH\^FD" & sn(19) & "^FS
+^BY2,3,41^FT564,79^BCI,,N,N
+^FD>:" & Mid(sn(20), 1, 2) & ">5" & Mid(sn(20), 3) & "^FS
+^FT571,124^A0I,29,28^FH\^FDS/N:^FS
+^FT518,124^A0I,29,28^FH\^FD" & sn(20) & "^FS
+^FT367,1615^A0I,67,67^FH\^FD" & sn(0) & "^FS
+^FT440,1600^BQN,2,5
+^FDLA," & sn(1) & ";" & sn(2) & ";" & sn(3) & ";" & sn(4) & ";" & sn(5) & ";" & sn(6) & ";" & sn(7) & ";" & sn(8) & ";" & sn(9) & ";" & sn(10) & ";" & sn(11) & ";" & sn(12) & ";" & sn(13) & ";" & sn(14) & ";" & sn(15) & ";" & sn(16) & ";" & sn(17) & ";" & sn(18) & ";" & sn(19) & ";" & sn(20) & ";^FS
 ^PQ1,0,1,Y^XZ
 "
 
@@ -602,7 +659,7 @@ Public Class WorkForm
             System.Threading.Thread.Sleep(1000)
             SerchBoxForPrint(LOTID, NumBox.Value, PCInfo(8))
             SNArray = GetSNFromGrid()
-            If SNArray.Count = 21 Then
+            If SNArray.Count = 13 Then
                 PrintGroupLabel(SNArray)
             Else
                 PrintLabel(Controllabel, "Корбка еще не закрыта!", 12, 193, Color.Red)
@@ -626,3 +683,4 @@ Public Class WorkForm
 
 
 End Class
+
