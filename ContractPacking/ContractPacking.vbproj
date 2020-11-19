@@ -76,6 +76,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aqarius_AQB365MC.Designer.vb">
+      <DependentUpon>Aqarius_AQB365MC.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Aqarius_AQB365MC.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SettingsForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -132,6 +138,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Aqarius_AQB365MC.resx">
+      <DependentUpon>Aqarius_AQB365MC.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.vb</DependentUpon>
     </EmbeddedResource>
