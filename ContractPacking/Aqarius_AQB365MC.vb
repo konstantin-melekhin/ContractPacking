@@ -416,60 +416,60 @@ Public Class Aqarius_AQB365MC
         End Function
 
 
-        '5. Запись в базу данных и в Рабочий грид
-        Dim TableColumn As ArrayList
-        Private Sub WriteDB(SMTSN As String, FASSN As String)
-            If UnitCounter = LOTInfo(15) Then
-                ds.Clear() 'если юнит каунтер = емкости коробки, то очищаем грид коробки и увеличиваем счетчик на 1
-                'если текущий номер коробки делится на объем паллета без остатка, то увеличиваем номер паллета
-                PalletNumber = If(BoxNumber Mod LOTInfo(16) = 0, PalletNumber + 1, PalletNumber)
-                PalletNum.Text = PalletNumber
-                BoxNumber += 1
-                BoxNum.Text = BoxNumber
-                NextBoxNum.Text = BoxNumber + 1
-            End If
-            'юнит каунтер = определяется количеством строк в гриде
-            UnitCounter = DG_Packing.RowCount + 1
-            'список для записи в грид упаковки
-            TableColumn = New ArrayList() From {UnitCounter, SMTSN, FASSN, Litera, PalletNumber, BoxNumber, Date.Now}
-            Dim row = ds.Tables(0).NewRow()
-            Dim i = 0
-            For Each item In TableColumn
-                row.Item(i) = item
-                i += 1
-            Next
-            ds.Tables(0).Rows.Add(row)
-            DG_Packing.DataSource = ds
-            DG_Packing.Sort(DG_Packing.Columns(0), System.ComponentModel.ListSortDirection.Descending)
-            RunCommand(" use FAS
+    '5. Запись в базу данных и в Рабочий грид
+    Dim TableColumn As ArrayList
+    Private Sub WriteDB(SMTSN As String, FASSN As String)
+        If UnitCounter = LOTInfo(15) Then
+            ds.Clear() 'если юнит каунтер = емкости коробки, то очищаем грид коробки и увеличиваем счетчик на 1
+            'если текущий номер коробки делится на объем паллета без остатка, то увеличиваем номер паллета
+            PalletNumber = If(BoxNumber Mod LOTInfo(16) = 0, PalletNumber + 1, PalletNumber)
+            PalletNum.Text = PalletNumber
+            BoxNumber += 1
+            BoxNum.Text = BoxNumber
+            NextBoxNum.Text = BoxNumber + 1
+        End If
+        'юнит каунтер = определяется количеством строк в гриде
+        UnitCounter = DG_Packing.RowCount + 1
+        'список для записи в грид упаковки
+        TableColumn = New ArrayList() From {UnitCounter, SMTSN, FASSN, Litera, PalletNumber, BoxNumber, Date.Now}
+        Dim row = ds.Tables(0).NewRow()
+        Dim i = 0
+        For Each item In TableColumn
+            row.Item(i) = item
+            i += 1
+        Next
+        ds.Tables(0).Rows.Add(row)
+        DG_Packing.DataSource = ds
+        DG_Packing.Sort(DG_Packing.Columns(0), System.ComponentModel.ListSortDirection.Descending)
+        RunCommand(" use FAS
                 insert into [FAS].[dbo].[Ct_PackingTable] (PCBID,SNID,LOTID, LiterID,LiterIndex,PalletNum,BoxNum,UnitNum,PackingDate,UserID)values
                 (" & If(PCBID = 0, "Null", PCBID) & "," & If(SNID = 0, "Null", SNID) & "," & LOTID & "," & PCInfo(8) & "," & LOTInfo(17) & "," & PalletNumber & "," & BoxNumber & "," & UnitCounter & ",current_timestamp," & UserInfo(0) & ")
                 update [FAS].[dbo].[FAS_PackingCounter] set [PalletCounter] = " & PalletNumber & ",[BoxCounter] = " & BoxNumber & ",[UnitCounter] = " & UnitCounter & " 
                 where [LineID] = " & PCInfo(2) & " and [LOTID] = " & LOTID)
-            SNBufer = New ArrayList
-            ShiftCounter(2)
-            'печать групповой этикетки 
-            If UnitCounter = LOTInfo(15) Then '
-                SerchBoxForPrint(LOTID, BoxNumber, PCInfo(8))
-                SNArray = GetSNFromGrid()
-                PrintGroupLabel(SNArray)
-            End If
+        SNBufer = New ArrayList
+        ShiftCounter(2)
+        'печать групповой этикетки 
+        If UnitCounter = LOTInfo(15) Then '
+            SerchBoxForPrint(LOTID, BoxNumber, PCInfo(8))
+            SNArray = GetSNFromGrid()
+            PrintGroupLabel(SNArray)
+        End If
 
-            If PCBID <> 0 Then
-                RunCommand("USE FAS Update [FAS].[dbo].[Ct_StepResult] 
+        If PCBID <> 0 Then
+            RunCommand("USE FAS Update [FAS].[dbo].[Ct_StepResult] 
                     set StepID = 6, TestResult = 2, ScanDate = CURRENT_TIMESTAMP, SNID = " & SNID & "
                     where PCBID = " & PCBID)
-                RunCommand("insert into [FAS].[dbo].[Ct_OperLog] ([PCBID],[LOTID],[StepID],[TestResultID],[StepDate],
+            RunCommand("insert into [FAS].[dbo].[Ct_OperLog] ([PCBID],[LOTID],[StepID],[TestResultID],[StepDate],
                     [StepByID],[LineID],[SNID])values
                     (" & PCBID & "," & LOTID & ",6,2,CURRENT_TIMESTAMP," & UserInfo(0) & "," & PCInfo(2) & "," & SNID & ")")
-            End If
+        End If
 
 
 
-        End Sub
+    End Sub
 
-        '6. 'Счетчик продукции
-        Private Sub ShiftCounter(StepRes As Integer)
+    '6. 'Счетчик продукции
+    Private Sub ShiftCounter(StepRes As Integer)
             ShiftCounterInfo(1) += 1
             ShiftCounterInfo(2) += 1
             If StepRes = 2 Then
@@ -635,13 +635,14 @@ eJzt1k9u2zgUBvBHcMHd8AID8RpdeKwrZamigkXBixxjjlIGWfQaNLLwbsKgi3AAQez3KDv6UyNpUq9m
                 System.Threading.Thread.Sleep(1000)
                 SerchBoxForPrint(LOTID, NumBox.Value, PCInfo(8))
                 SNArray = GetSNFromGrid()
-                If SNArray.Count = 21 Then
-                    PrintGroupLabel(SNArray)
-                Else
-                    PrintLabel(Controllabel, "Корбка еще не закрыта!", 12, 193, Color.Red)
-                End If
+            If SNArray.Count = 13 Then
+                PrintGroupLabel(SNArray)
                 NumBox.Value += 1
-            End If
+            Else
+                PrintLabel(Controllabel, "Корбка еще не закрыта!", 12, 193, Color.Red)
+                End If
+
+        End If
         End Sub
 
         Private Function SerchSN(Sn As String)

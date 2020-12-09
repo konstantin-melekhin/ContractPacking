@@ -654,17 +654,19 @@ eJzt1kFu2zAQAEAKOujIJ/Ap7M8oIwcf/YR+xUUPPuYJVdAHREEOYWGC290lKYsSFbSuHRQBFzBkh6sd
         End If
     End Sub
 
+
     Private Sub NumBox_KeyDown(sender As Object, e As KeyEventArgs) Handles NumBox.KeyDown
         If e.KeyCode = Keys.Enter Then
             System.Threading.Thread.Sleep(1000)
             SerchBoxForPrint(LOTID, NumBox.Value, PCInfo(8))
             SNArray = GetSNFromGrid()
-            If SNArray.Count = 13 Then
+            If SNArray.Count = 21 Then
                 PrintGroupLabel(SNArray)
+                NumBox.Value += 1
             Else
                 PrintLabel(Controllabel, "Корбка еще не закрыта!", 12, 193, Color.Red)
             End If
-            NumBox.Value += 1
+
         End If
     End Sub
 
