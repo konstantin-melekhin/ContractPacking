@@ -1,12 +1,12 @@
 ﻿Imports Library3
-Public Class WorkForm
+Public Class WF_NS220
     Public Sub New(LOTID As Integer, IDApp As Integer)
         InitializeComponent()
         Me.LOTID = LOTID
         Me.IDApp = IDApp
     End Sub
 
-    Dim LOTID, IDApp, UnitCounter,PCBID, SNID, PalletNumber, BoxNumber As Integer
+    Dim LOTID, IDApp, UnitCounter, PCBID, SNID, PalletNumber, BoxNumber As Integer
     Dim ds As New DataSet
     Dim LenSN_SMT, LenSN_FAS, StartStepID, PreStepID, NextStepID As Integer
     Dim StartStep, PreStep, NextStep, Litera As String
@@ -179,7 +179,7 @@ Public Class WorkForm
 
     ' условия для возврата в окно настроек
     Dim OpenSettings As Boolean
-    Private Sub Button_Click(sender As Object, e As EventArgs) Handles BT_OpenSettings.Click, BT_LOGInClose.Click
+    Private Sub Button_Click(sender As Object, e As EventArgs) Handles BT_OpenSettings.Click, BT_LogInClose.Click
         OpenSettings = True
         Me.Close()
     End Sub
@@ -364,15 +364,15 @@ Public Class WorkForm
             'проверка задвоения в базе
             Dim PackedSN As ArrayList
             Select Case GetPCB_SNID(2)
-                    Case 1
-                        SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
+                Case 1
+                    SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
                         FROM [FAS].[dbo].[Ct_PackingTable] as P
                         left join SMDCOMPONETS.dbo.LazerBase as L On L.IDLaser = P.PCBID
                         Left join Ct_FASSN_reg as S On S.ID = P.SNID
                         Left join FAS_Liter as Lit On Lit.ID = P.LiterID
                         Left join FAS_Users as U On U.UserID = P.UserID
                         where PCBID = " & GetPCB_SNID(1)
-                        PackedSN = New ArrayList(SelectListString(SQL))
+                    PackedSN = New ArrayList(SelectListString(SQL))
                     Res2 = (PackedSN.Count = 0)
                     If Res1 = True And Res2 = False Or Res1 = False And Res2 = False Then
                         Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
@@ -381,15 +381,15 @@ Public Class WorkForm
                     End If
 
                 Case 2
-                        SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
+                    SQL = "Use FAS SELECT L.Content,S.SN,Lit.LiterName + cast ([LiterIndex] as nvarchar),[PalletNum],[BoxNum],[UnitNum],[PackingDate],U.UserName
                         FROM [FAS].[dbo].[Ct_PackingTable] as P
                         left join SMDCOMPONETS.dbo.LazerBase as L On L.IDLaser = P.PCBID
                         Left join Ct_FASSN_reg as S On S.ID = P.SNID
                         Left join FAS_Liter as Lit On Lit.ID = P.LiterID
                         Left join FAS_Users as U On U.UserID = P.UserID
                         where SNID = " & GetPCB_SNID(1)
-                        PackedSN = New ArrayList(SelectListString(SQL))
-                        Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
+                    PackedSN = New ArrayList(SelectListString(SQL))
+                    Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
                             "Литера - " & PackedSN(2) & " Паллет - " & PackedSN(3) & " Групповая - " & PackedSN(4) & " № - " & PackedSN(5) & vbCrLf &
                             "Дата - " & PackedSN(6), "")
                     Res2 = (PackedSN.Count = 0)

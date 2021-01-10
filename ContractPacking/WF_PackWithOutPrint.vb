@@ -262,11 +262,19 @@ Public Class WF_PackWithOutPrint
             If Res = True Then
                 If SingleSN = False Then
                     If SNBufer.Count <> 0 Then
-                        If SNBufer(1) = SerialTextBox.Text Or SNBufer(3) = SerialTextBox.Text Then
-                            Mess = "Этот номер " & SerialTextBox.Text & " уже был отсканирован. " & vbCrLf &
-                            "Сбросьте ошибку и повторите сканирование обоих" & vbCrLf & "номеров платы заново!"
-                            Res = False
-                        End If
+                    If SNBufer(1) = SerialTextBox.Text Or SNBufer(3) = SerialTextBox.Text Then
+                        Mess = "Этот номер " & SerialTextBox.Text & " уже был отсканирован. " & vbCrLf &
+                        "Сбросьте ошибку и повторите сканирование обоих" & vbCrLf & "номеров платы заново!"
+                        Res = False
+                    ElseIf SNBufer(1) <> "" And SNFormat(1) = 1 Then
+                        Mess = "SMT номер уже был отсканирован. " & vbCrLf &
+                        "Сбросьте ошибку и повторите сканирование обоих" & vbCrLf & "номеров платы заново!"
+                        Res = False
+                    ElseIf SNBufer(3) <> "" And SNFormat(1) = 2 Then
+                        Mess = "FAS номер уже был отсканирован. " & vbCrLf &
+                        "Сбросьте ошибку и повторите сканирование обоих" & vbCrLf & "номеров платы заново!"
+                        Res = False
+                    End If
                     End If
                 End If
             End If
@@ -340,15 +348,15 @@ Public Class WF_PackWithOutPrint
         '4. Проверка предыдущего шага и дубликатов
         Private Function CheckDublicate(SN As String, GetPCB_SNID As ArrayList) As Boolean
             Dim Res As Boolean, SQL As String, Mess As String, Col As Color
-            'Проверка предыдущего шага
-            If GetPCB_SNID(0) = True Then
+        'Проверка предыдущего шага 
+        If GetPCB_SNID(0) = True Then
             Select Case GetPCB_SNID(2)
                 Case 1
-                    'Dim PCBStepRes As New ArrayList(SelectListString("USE FAS SELECT [StepID],[TestResult],[ScanDate],[SNID]
-                    '        FROM [FAS].[dbo].[Ct_StepResult] where [PCBID] = " & GetPCB_SNID(1)))
-                    'Res = If(PCBStepRes.Count <> 0, (PCBStepRes(0) = PreStepID And PCBStepRes(1) = 2), False)
-                    'Mess = If(Res = False, "Плата " & SerialTextBox.Text & vbCrLf & "имеет не верный предыдущий шаг!", "")
-                    Res = True
+                    Dim PCBStepRes As New ArrayList(SelectListString("USE FAS SELECT [StepID],[TestResult],[ScanDate],[SNID]
+                            FROM [FAS].[dbo].[Ct_StepResult] where [PCBID] = " & GetPCB_SNID(1)))
+                    Res = If(PCBStepRes.Count <> 0, ((PCBStepRes(0) = 1 Or PCBStepRes(0) = 4) And PCBStepRes(1) = 2), False)
+                    Mess = If(Res = False, "Плата " & SerialTextBox.Text & vbCrLf & "имеет не верный предыдущий шаг!", "")
+                    'Res = True
                 Case 2
                     Res = True
             End Select

@@ -130,10 +130,10 @@
     <Compile Include="WF_WihtOutLaser.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WorkForm.Designer.vb">
-      <DependentUpon>WorkForm.vb</DependentUpon>
+    <Compile Include="WF_NS220.Designer.vb">
+      <DependentUpon>WF_NS220.vb</DependentUpon>
     </Compile>
-    <Compile Include="WorkForm.vb">
+    <Compile Include="WF_NS220.vb">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
@@ -162,8 +162,8 @@
     <EmbeddedResource Include="WF_WihtOutLaser.resx">
       <DependentUpon>WF_WihtOutLaser.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WorkForm.resx">
-      <DependentUpon>WorkForm.vb</DependentUpon>
+    <EmbeddedResource Include="WF_NS220.resx">
+      <DependentUpon>WF_NS220.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
