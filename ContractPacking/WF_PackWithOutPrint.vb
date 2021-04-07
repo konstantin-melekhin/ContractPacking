@@ -354,13 +354,11 @@ Public Class WF_PackWithOutPrint
                 Case 1
                     Dim PCBStepRes As New ArrayList(SelectListString("USE FAS SELECT [StepID],[TestResult],[ScanDate],[SNID]
                             FROM [FAS].[dbo].[Ct_StepResult] where [PCBID] = " & GetPCB_SNID(1)))
-                    Res = If(PCBStepRes.Count <> 0, ((PCBStepRes(0) = 1 Or PCBStepRes(0) = 4) And PCBStepRes(1) = 2), False)
+                    Res = If(PCBStepRes.Count <> 0, (PCBStepRes(0) = 1 And PCBStepRes(1) = 2), False)
                     Mess = If(Res = False, "Плата " & SerialTextBox.Text & vbCrLf & "имеет не верный предыдущий шаг!", "")
-                    'Res = True
                 Case 2
                     Res = True
             End Select
-
             'проверка задвоения в базе
             If Res = True Then
                 Dim PackedSN As ArrayList

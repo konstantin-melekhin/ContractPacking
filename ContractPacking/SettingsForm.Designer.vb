@@ -60,6 +60,8 @@ Partial Class SettingsForm
         Me.L_Result = New System.Windows.Forms.Label()
         Me.BT_RefreshLOT = New System.Windows.Forms.Button()
         Me.BT_SelectLot = New System.Windows.Forms.Button()
+        Me.LB_SW_Wers = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
         CType(Me.DG_AppList, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GB_LineSettings.SuspendLayout()
         Me.GB_SelectLine.SuspendLayout()
@@ -337,6 +339,8 @@ Partial Class SettingsForm
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.LB_SW_Wers)
+        Me.GroupBox3.Controls.Add(Me.Label15)
         Me.GroupBox3.Controls.Add(Me.Lebel_StationLine)
         Me.GroupBox3.Controls.Add(Me.Label3)
         Me.GroupBox3.Controls.Add(Me.LB_SelectLine)
@@ -348,7 +352,7 @@ Partial Class SettingsForm
         Me.GroupBox3.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox3.Size = New System.Drawing.Size(287, 184)
+        Me.GroupBox3.Size = New System.Drawing.Size(287, 295)
         Me.GroupBox3.TabIndex = 49
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Информация о рабочей станции"
@@ -357,7 +361,7 @@ Partial Class SettingsForm
         '
         Me.Lebel_StationLine.AutoSize = True
         Me.Lebel_StationLine.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Lebel_StationLine.Location = New System.Drawing.Point(92, 157)
+        Me.Lebel_StationLine.Location = New System.Drawing.Point(95, 217)
         Me.Lebel_StationLine.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Lebel_StationLine.Name = "Lebel_StationLine"
         Me.Lebel_StationLine.Size = New System.Drawing.Size(43, 20)
@@ -368,7 +372,7 @@ Partial Class SettingsForm
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label3.Location = New System.Drawing.Point(4, 17)
+        Me.Label3.Location = New System.Drawing.Point(7, 77)
         Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(176, 16)
@@ -379,7 +383,7 @@ Partial Class SettingsForm
         '
         Me.LB_SelectLine.AutoSize = True
         Me.LB_SelectLine.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.LB_SelectLine.Location = New System.Drawing.Point(8, 159)
+        Me.LB_SelectLine.Location = New System.Drawing.Point(11, 219)
         Me.LB_SelectLine.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LB_SelectLine.Name = "LB_SelectLine"
         Me.LB_SelectLine.Size = New System.Drawing.Size(57, 16)
@@ -390,7 +394,7 @@ Partial Class SettingsForm
         '
         Me.LabelAppName.AutoSize = True
         Me.LabelAppName.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.LabelAppName.Location = New System.Drawing.Point(8, 57)
+        Me.LabelAppName.Location = New System.Drawing.Point(11, 117)
         Me.LabelAppName.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelAppName.Name = "LabelAppName"
         Me.LabelAppName.Size = New System.Drawing.Size(116, 20)
@@ -402,7 +406,7 @@ Partial Class SettingsForm
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label1.Location = New System.Drawing.Point(4, 100)
+        Me.Label1.Location = New System.Drawing.Point(7, 160)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(151, 16)
@@ -413,7 +417,7 @@ Partial Class SettingsForm
         '
         Me.LB_CurrentStep.AutoSize = True
         Me.LB_CurrentStep.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.LB_CurrentStep.Location = New System.Drawing.Point(4, 36)
+        Me.LB_CurrentStep.Location = New System.Drawing.Point(7, 96)
         Me.LB_CurrentStep.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LB_CurrentStep.Name = "LB_CurrentStep"
         Me.LB_CurrentStep.Size = New System.Drawing.Size(179, 20)
@@ -424,7 +428,7 @@ Partial Class SettingsForm
         '
         Me.Label_StationName.AutoSize = True
         Me.Label_StationName.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label_StationName.Location = New System.Drawing.Point(4, 116)
+        Me.Label_StationName.Location = New System.Drawing.Point(7, 176)
         Me.Label_StationName.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label_StationName.Name = "Label_StationName"
         Me.Label_StationName.Size = New System.Drawing.Size(165, 20)
@@ -458,11 +462,31 @@ Partial Class SettingsForm
         Me.BT_SelectLot.FlatAppearance.BorderSize = 0
         Me.BT_SelectLot.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.BT_SelectLot.Image = Global.ContractPacking.My.Resources.Resources.play
-        Me.BT_SelectLot.Location = New System.Drawing.Point(991, 204)
+        Me.BT_SelectLot.Location = New System.Drawing.Point(994, 315)
         Me.BT_SelectLot.Name = "BT_SelectLot"
         Me.BT_SelectLot.Size = New System.Drawing.Size(94, 79)
         Me.BT_SelectLot.TabIndex = 54
         Me.BT_SelectLot.UseVisualStyleBackColor = True
+        '
+        'LB_SW_Wers
+        '
+        Me.LB_SW_Wers.AutoSize = True
+        Me.LB_SW_Wers.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.LB_SW_Wers.Location = New System.Drawing.Point(164, 22)
+        Me.LB_SW_Wers.Name = "LB_SW_Wers"
+        Me.LB_SW_Wers.Size = New System.Drawing.Size(76, 16)
+        Me.LB_SW_Wers.TabIndex = 34
+        Me.LB_SW_Wers.Text = "SW_Wers"
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label15.Location = New System.Drawing.Point(7, 22)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(159, 16)
+        Me.Label15.TabIndex = 33
+        Me.Label15.Text = "Версия приложения:"
         '
         'SettingsForm
         '
@@ -532,4 +556,6 @@ Partial Class SettingsForm
     Friend WithEvents LB_CurrentStep As Label
     Friend WithEvents Label_StationName As Label
     Friend WithEvents L_Result As Label
+    Friend WithEvents LB_SW_Wers As Label
+    Friend WithEvents Label15 As Label
 End Class
