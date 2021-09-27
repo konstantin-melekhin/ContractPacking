@@ -8,14 +8,14 @@
     <OutputType>WinExe</OutputType>
     <StartupObject>ContractPacking.My.MyApplication</StartupObject>
     <RootNamespace>ContractPacking</RootNamespace>
-    <AssemblyName>Aqua_Packing_Station</AssemblyName>
+    <AssemblyName>PC_MainBoard_Packing</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>\\192.168.180.9\ProdSoft\Aquarius_Stations\</PublishUrl>
+    <PublishUrl>\\192.168.180.9\ProdSoft\PC_MainBoard_Packing\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -25,9 +25,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>\\192.168.180.9\ProdSoft\Aquarius_Stations\</InstallUrl>
-    <UpdateUrl>\\192.168.180.9\ProdSoft\Aquarius_Stations\</UpdateUrl>
-    <ApplicationRevision>5</ApplicationRevision>
+    <UpdateUrl>\\192.168.180.9\ProdSoft\PC_MainBoard_Packing\</UpdateUrl>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -40,7 +39,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>Aqua_Packing_Station.xml</DocumentationFile>
+    <DocumentationFile>PC_MainBoard_Packing.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -50,7 +49,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>Aqua_Packing_Station.xml</DocumentationFile>
+    <DocumentationFile>PC_MainBoard_Packing.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -112,7 +111,13 @@
     <Compile Include="Aqarius_AQB365MC.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Module1.vb" />
+    <Compile Include="RawPrinterHelper.vb" />
+    <Compile Include="Repacking.Designer.vb">
+      <DependentUpon>Repacking.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Repacking.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SettingsForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -149,10 +154,10 @@
     <Compile Include="WF_PackWithOutPrint.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WF_Rostelekom.Designer.vb">
-      <DependentUpon>WF_Rostelekom.vb</DependentUpon>
+    <Compile Include="WF_SberDevice.Designer.vb">
+      <DependentUpon>WF_SberDevice.vb</DependentUpon>
     </Compile>
-    <Compile Include="WF_Rostelekom.vb">
+    <Compile Include="WF_SberDevice.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="WF_WihtOutLaser.Designer.vb">
@@ -172,6 +177,9 @@
     <EmbeddedResource Include="Aqarius_AQB365MC.resx">
       <DependentUpon>Aqarius_AQB365MC.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Repacking.resx">
+      <DependentUpon>Repacking.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -187,8 +195,8 @@
     <EmbeddedResource Include="WF_PackWithOutPrint.resx">
       <DependentUpon>WF_PackWithOutPrint.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WF_Rostelekom.resx">
-      <DependentUpon>WF_Rostelekom.vb</DependentUpon>
+    <EmbeddedResource Include="WF_SberDevice.resx">
+      <DependentUpon>WF_SberDevice.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WF_WihtOutLaser.resx">
       <DependentUpon>WF_WihtOutLaser.vb</DependentUpon>
@@ -214,6 +222,7 @@
     <None Include="Resources\04.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Coordinats.csv" />
     <None Include="Resources\icons8-стрелка-влево-в-круге-2-64.png" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class WF_Rostelekom
+Partial Class WF_SberDevice
     Inherits System.Windows.Forms.Form
 
     'Форма переопределяет dispose для очистки списка компонентов.
@@ -46,16 +46,11 @@ Partial Class WF_Rostelekom
         Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Me.BoxNum = New System.Windows.Forms.Label()
-        Me.SerialTextBox = New System.Windows.Forms.TextBox()
-        Me.GB_UserData = New System.Windows.Forms.GroupBox()
         Me.BT_LogInClose = New System.Windows.Forms.Button()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.TB_RFIDIn = New System.Windows.Forms.TextBox()
-        Me.GB_NotVisible = New System.Windows.Forms.GroupBox()
         Me.DG_SelectedBox = New System.Windows.Forms.DataGridView()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Label20 = New System.Windows.Forms.Label()
+        Me.GB_NotVisible = New System.Windows.Forms.GroupBox()
         Me.DG_StepList = New System.Windows.Forms.DataGridView()
         Me.DG_StartShiftCounter = New System.Windows.Forms.DataGridView()
         Me.DG_NotFullBox = New System.Windows.Forms.DataGridView()
@@ -70,32 +65,10 @@ Partial Class WF_Rostelekom
         Me.Label14 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.DG_UserData = New System.Windows.Forms.DataGridView()
-        Me.BT_ClearSN = New System.Windows.Forms.Button()
-        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
-        Me.NextBoxNum = New System.Windows.Forms.Label()
-        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
-        Me.Label_ShiftCounter = New System.Windows.Forms.Label()
-        Me.Controllabel = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.CurrentTimeTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.NumBox = New System.Windows.Forms.NumericUpDown()
-        Me.CB_SN_or_Box = New System.Windows.Forms.CheckBox()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.TB_ScanSN = New System.Windows.Forms.TextBox()
-        Me.CB_ManualPrint = New System.Windows.Forms.CheckBox()
-        Me.BT_Pause = New System.Windows.Forms.Button()
-        Me.DG_Packing = New System.Windows.Forms.DataGridView()
-        Me.GroupBox8 = New System.Windows.Forms.GroupBox()
-        Me.LB_LOTCounter = New System.Windows.Forms.Label()
-        Me.PrintSerialPort = New System.IO.Ports.SerialPort(Me.components)
-        Me.GB_WorkAria = New System.Windows.Forms.GroupBox()
-        Me.GB_ManualPrint = New System.Windows.Forms.GroupBox()
-        Me.BT_OpenSettings = New System.Windows.Forms.Button()
-        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
-        Me.CurrrentTimeLabel = New System.Windows.Forms.Label()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.PalletNum = New System.Windows.Forms.Label()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.TB_RFIDIn = New System.Windows.Forms.TextBox()
+        Me.LB_SW_Wers = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
         Me.LabelAppName = New System.Windows.Forms.Label()
         Me.L_UserName = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -105,19 +78,55 @@ Partial Class WF_Rostelekom
         Me.L_PalletCapacity = New System.Windows.Forms.Label()
         Me.L_BoxCapacity = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.GB_UserData = New System.Windows.Forms.GroupBox()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.Num_X = New System.Windows.Forms.NumericUpDown()
+        Me.BT_Save_Coordinats = New System.Windows.Forms.Button()
+        Me.Num_Y = New System.Windows.Forms.NumericUpDown()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.CB_DefaultPrinter = New System.Windows.Forms.ComboBox()
+        Me.GB_Printers = New System.Windows.Forms.GroupBox()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.CurrentTimeTimer = New System.Windows.Forms.Timer(Me.components)
         Me.L_Model = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
+        Me.NextBoxNum = New System.Windows.Forms.Label()
+        Me.BT_ClearSN = New System.Windows.Forms.Button()
+        Me.BT_OpenSettings = New System.Windows.Forms.Button()
+        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.NumBox = New System.Windows.Forms.NumericUpDown()
+        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.TB_ScanSN = New System.Windows.Forms.TextBox()
+        Me.GB_ManualPrint = New System.Windows.Forms.GroupBox()
+        Me.CB_SN_or_Box = New System.Windows.Forms.CheckBox()
+        Me.BT_SetPrinter = New System.Windows.Forms.Button()
+        Me.GB_WorkAria = New System.Windows.Forms.GroupBox()
+        Me.CB_ManualPrint = New System.Windows.Forms.CheckBox()
+        Me.BT_Pause = New System.Windows.Forms.Button()
+        Me.DG_Packing = New System.Windows.Forms.DataGridView()
+        Me.GroupBox8 = New System.Windows.Forms.GroupBox()
+        Me.LB_LOTCounter = New System.Windows.Forms.Label()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.CurrrentTimeLabel = New System.Windows.Forms.Label()
+        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.Label_ShiftCounter = New System.Windows.Forms.Label()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.PalletNum = New System.Windows.Forms.Label()
+        Me.Controllabel = New System.Windows.Forms.Label()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.BoxNum = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.SerialTextBox = New System.Windows.Forms.TextBox()
+        Me.GB_StationInfo = New System.Windows.Forms.GroupBox()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.L_LOT = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.L_Liter = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Lebel_StationLine = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.GB_UserData.SuspendLayout()
-        Me.GB_NotVisible.SuspendLayout()
         CType(Me.DG_SelectedBox, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GB_NotVisible.SuspendLayout()
         CType(Me.DG_StepList, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DG_StartShiftCounter, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DG_NotFullBox, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -125,51 +134,23 @@ Partial Class WF_Rostelekom
         CType(Me.DG_CheckSN, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DG_IsPacked, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DG_UserData, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GB_UserData.SuspendLayout()
+        CType(Me.Num_X, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.Num_Y, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GB_Printers.SuspendLayout()
         Me.GroupBox7.SuspendLayout()
-        Me.GroupBox6.SuspendLayout()
         CType(Me.NumBox, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GB_ManualPrint.SuspendLayout()
+        Me.GB_WorkAria.SuspendLayout()
         CType(Me.DG_Packing, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox8.SuspendLayout()
-        Me.GB_WorkAria.SuspendLayout()
-        Me.GB_ManualPrint.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
+        Me.GroupBox6.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        Me.GB_StationInfo.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'BoxNum
-        '
-        Me.BoxNum.AutoSize = True
-        Me.BoxNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 48.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.BoxNum.Location = New System.Drawing.Point(6, 23)
-        Me.BoxNum.Name = "BoxNum"
-        Me.BoxNum.Size = New System.Drawing.Size(176, 73)
-        Me.BoxNum.TabIndex = 0
-        Me.BoxNum.Text = "9999"
-        '
-        'SerialTextBox
-        '
-        Me.SerialTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.SerialTextBox.Location = New System.Drawing.Point(17, 325)
-        Me.SerialTextBox.Name = "SerialTextBox"
-        Me.SerialTextBox.Size = New System.Drawing.Size(508, 31)
-        Me.SerialTextBox.TabIndex = 1
-        '
-        'GB_UserData
-        '
-        Me.GB_UserData.BackColor = System.Drawing.Color.NavajoWhite
-        Me.GB_UserData.Controls.Add(Me.BT_LogInClose)
-        Me.GB_UserData.Controls.Add(Me.Label13)
-        Me.GB_UserData.Controls.Add(Me.TB_RFIDIn)
-        Me.GB_UserData.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.GB_UserData.Location = New System.Drawing.Point(1181, 12)
-        Me.GB_UserData.Name = "GB_UserData"
-        Me.GB_UserData.Size = New System.Drawing.Size(429, 177)
-        Me.GB_UserData.TabIndex = 46
-        Me.GB_UserData.TabStop = False
-        Me.GB_UserData.Text = "Регистрация пользователя"
         '
         'BT_LogInClose
         '
@@ -179,56 +160,11 @@ Partial Class WF_Rostelekom
         Me.BT_LogInClose.FlatAppearance.BorderSize = 0
         Me.BT_LogInClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.BT_LogInClose.ForeColor = System.Drawing.Color.Transparent
-        Me.BT_LogInClose.Image = Global.ContractPacking.My.Resources.Resources.close
         Me.BT_LogInClose.Location = New System.Drawing.Point(362, 73)
         Me.BT_LogInClose.Name = "BT_LogInClose"
         Me.BT_LogInClose.Size = New System.Drawing.Size(47, 61)
         Me.BT_LogInClose.TabIndex = 30
         Me.BT_LogInClose.UseVisualStyleBackColor = False
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(7, 45)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(321, 25)
-        Me.Label13.TabIndex = 1
-        Me.Label13.Text = "Отсканируйте свой бэйджик"
-        '
-        'TB_RFIDIn
-        '
-        Me.TB_RFIDIn.Location = New System.Drawing.Point(11, 88)
-        Me.TB_RFIDIn.Name = "TB_RFIDIn"
-        Me.TB_RFIDIn.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.TB_RFIDIn.Size = New System.Drawing.Size(345, 31)
-        Me.TB_RFIDIn.TabIndex = 0
-        '
-        'GB_NotVisible
-        '
-        Me.GB_NotVisible.Controls.Add(Me.DG_SelectedBox)
-        Me.GB_NotVisible.Controls.Add(Me.TextBox2)
-        Me.GB_NotVisible.Controls.Add(Me.Label20)
-        Me.GB_NotVisible.Controls.Add(Me.DG_StepList)
-        Me.GB_NotVisible.Controls.Add(Me.DG_StartShiftCounter)
-        Me.GB_NotVisible.Controls.Add(Me.DG_NotFullBox)
-        Me.GB_NotVisible.Controls.Add(Me.DG_PackingCounter)
-        Me.GB_NotVisible.Controls.Add(Me.DG_CheckSN)
-        Me.GB_NotVisible.Controls.Add(Me.TextBox1)
-        Me.GB_NotVisible.Controls.Add(Me.DG_IsPacked)
-        Me.GB_NotVisible.Controls.Add(Me.Label15)
-        Me.GB_NotVisible.Controls.Add(Me.Label17)
-        Me.GB_NotVisible.Controls.Add(Me.Label18)
-        Me.GB_NotVisible.Controls.Add(Me.Label16)
-        Me.GB_NotVisible.Controls.Add(Me.Label14)
-        Me.GB_NotVisible.Controls.Add(Me.Label12)
-        Me.GB_NotVisible.Controls.Add(Me.DG_UserData)
-        Me.GB_NotVisible.Location = New System.Drawing.Point(1181, 210)
-        Me.GB_NotVisible.Name = "GB_NotVisible"
-        Me.GB_NotVisible.Size = New System.Drawing.Size(565, 532)
-        Me.GB_NotVisible.TabIndex = 45
-        Me.GB_NotVisible.TabStop = False
-        Me.GB_NotVisible.Text = "NotVisible"
-        Me.GB_NotVisible.Visible = False
         '
         'DG_SelectedBox
         '
@@ -258,6 +194,33 @@ Partial Class WF_Rostelekom
         Me.Label20.Size = New System.Drawing.Size(70, 13)
         Me.Label20.TabIndex = 39
         Me.Label20.Text = "DG_StepList "
+        '
+        'GB_NotVisible
+        '
+        Me.GB_NotVisible.Controls.Add(Me.DG_SelectedBox)
+        Me.GB_NotVisible.Controls.Add(Me.TextBox2)
+        Me.GB_NotVisible.Controls.Add(Me.Label20)
+        Me.GB_NotVisible.Controls.Add(Me.DG_StepList)
+        Me.GB_NotVisible.Controls.Add(Me.DG_StartShiftCounter)
+        Me.GB_NotVisible.Controls.Add(Me.DG_NotFullBox)
+        Me.GB_NotVisible.Controls.Add(Me.DG_PackingCounter)
+        Me.GB_NotVisible.Controls.Add(Me.DG_CheckSN)
+        Me.GB_NotVisible.Controls.Add(Me.TextBox1)
+        Me.GB_NotVisible.Controls.Add(Me.DG_IsPacked)
+        Me.GB_NotVisible.Controls.Add(Me.Label15)
+        Me.GB_NotVisible.Controls.Add(Me.Label17)
+        Me.GB_NotVisible.Controls.Add(Me.Label18)
+        Me.GB_NotVisible.Controls.Add(Me.Label16)
+        Me.GB_NotVisible.Controls.Add(Me.Label14)
+        Me.GB_NotVisible.Controls.Add(Me.Label12)
+        Me.GB_NotVisible.Controls.Add(Me.DG_UserData)
+        Me.GB_NotVisible.Location = New System.Drawing.Point(1457, 276)
+        Me.GB_NotVisible.Name = "GB_NotVisible"
+        Me.GB_NotVisible.Size = New System.Drawing.Size(565, 532)
+        Me.GB_NotVisible.TabIndex = 72
+        Me.GB_NotVisible.TabStop = False
+        Me.GB_NotVisible.Text = "NotVisible"
+        Me.GB_NotVisible.Visible = False
         '
         'DG_StepList
         '
@@ -573,16 +536,280 @@ Partial Class WF_Rostelekom
         Me.DG_UserData.TabIndex = 31
         Me.DG_UserData.Visible = False
         '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(7, 45)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(321, 25)
+        Me.Label13.TabIndex = 1
+        Me.Label13.Text = "Отсканируйте свой бэйджик"
+        '
+        'TB_RFIDIn
+        '
+        Me.TB_RFIDIn.Location = New System.Drawing.Point(11, 88)
+        Me.TB_RFIDIn.Name = "TB_RFIDIn"
+        Me.TB_RFIDIn.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.TB_RFIDIn.Size = New System.Drawing.Size(345, 31)
+        Me.TB_RFIDIn.TabIndex = 0
+        '
+        'LB_SW_Wers
+        '
+        Me.LB_SW_Wers.AutoSize = True
+        Me.LB_SW_Wers.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.LB_SW_Wers.Location = New System.Drawing.Point(228, 29)
+        Me.LB_SW_Wers.Name = "LB_SW_Wers"
+        Me.LB_SW_Wers.Size = New System.Drawing.Size(88, 20)
+        Me.LB_SW_Wers.TabIndex = 24
+        Me.LB_SW_Wers.Text = "SW_Wers"
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label10.Location = New System.Drawing.Point(42, 29)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(183, 20)
+        Me.Label10.TabIndex = 23
+        Me.Label10.Text = "Версия приложения:"
+        '
+        'LabelAppName
+        '
+        Me.LabelAppName.AutoSize = True
+        Me.LabelAppName.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.LabelAppName.Location = New System.Drawing.Point(228, 45)
+        Me.LabelAppName.Name = "LabelAppName"
+        Me.LabelAppName.Size = New System.Drawing.Size(64, 20)
+        Me.LabelAppName.TabIndex = 20
+        Me.LabelAppName.Text = "fasend"
+        '
+        'L_UserName
+        '
+        Me.L_UserName.AutoSize = True
+        Me.L_UserName.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.L_UserName.Location = New System.Drawing.Point(228, 216)
+        Me.L_UserName.Name = "L_UserName"
+        Me.L_UserName.Size = New System.Drawing.Size(174, 20)
+        Me.L_UserName.TabIndex = 19
+        Me.L_UserName.Text = "Имя пользователя:"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label5.Location = New System.Drawing.Point(51, 216)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(174, 20)
+        Me.Label5.TabIndex = 19
+        Me.Label5.Text = "Имя пользователя:"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label6.Location = New System.Drawing.Point(21, 45)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(204, 20)
+        Me.Label6.TabIndex = 16
+        Me.Label6.Text = "Название приложения:"
+        '
+        'Label_StationName
+        '
+        Me.Label_StationName.AutoSize = True
+        Me.Label_StationName.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label_StationName.Location = New System.Drawing.Point(228, 67)
+        Me.Label_StationName.Name = "Label_StationName"
+        Me.Label_StationName.Size = New System.Drawing.Size(33, 20)
+        Me.Label_StationName.TabIndex = 16
+        Me.Label_StationName.Text = "ПК"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label7.Location = New System.Drawing.Point(100, 67)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(125, 20)
+        Me.Label7.TabIndex = 16
+        Me.Label7.Text = "Название ПК:"
+        '
+        'L_PalletCapacity
+        '
+        Me.L_PalletCapacity.AutoSize = True
+        Me.L_PalletCapacity.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.L_PalletCapacity.Location = New System.Drawing.Point(228, 196)
+        Me.L_PalletCapacity.Name = "L_PalletCapacity"
+        Me.L_PalletCapacity.Size = New System.Drawing.Size(123, 20)
+        Me.L_PalletCapacity.TabIndex = 16
+        Me.L_PalletCapacity.Text = "PalletCapacity"
+        '
+        'L_BoxCapacity
+        '
+        Me.L_BoxCapacity.AutoSize = True
+        Me.L_BoxCapacity.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.L_BoxCapacity.Location = New System.Drawing.Point(228, 174)
+        Me.L_BoxCapacity.Name = "L_BoxCapacity"
+        Me.L_BoxCapacity.Size = New System.Drawing.Size(108, 20)
+        Me.L_BoxCapacity.TabIndex = 16
+        Me.L_BoxCapacity.Text = "BoxCapacity"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label4.Location = New System.Drawing.Point(61, 196)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(164, 20)
+        Me.Label4.TabIndex = 16
+        Me.Label4.Text = "Кол-во в паллете:"
+        '
+        'GB_UserData
+        '
+        Me.GB_UserData.BackColor = System.Drawing.Color.NavajoWhite
+        Me.GB_UserData.Controls.Add(Me.BT_LogInClose)
+        Me.GB_UserData.Controls.Add(Me.Label13)
+        Me.GB_UserData.Controls.Add(Me.TB_RFIDIn)
+        Me.GB_UserData.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.GB_UserData.Location = New System.Drawing.Point(1178, 8)
+        Me.GB_UserData.Name = "GB_UserData"
+        Me.GB_UserData.Size = New System.Drawing.Size(429, 177)
+        Me.GB_UserData.TabIndex = 73
+        Me.GB_UserData.TabStop = False
+        Me.GB_UserData.Text = "Регистрация пользователя"
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Location = New System.Drawing.Point(6, 104)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(106, 20)
+        Me.Label21.TabIndex = 64
+        Me.Label21.Text = "Корекция X"
+        '
+        'Num_X
+        '
+        Me.Num_X.Location = New System.Drawing.Point(118, 101)
+        Me.Num_X.Minimum = New Decimal(New Integer() {100, 0, 0, -2147483648})
+        Me.Num_X.Name = "Num_X"
+        Me.Num_X.Size = New System.Drawing.Size(69, 26)
+        Me.Num_X.TabIndex = 62
+        '
+        'BT_Save_Coordinats
+        '
+        Me.BT_Save_Coordinats.FlatAppearance.BorderSize = 0
+        Me.BT_Save_Coordinats.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.BT_Save_Coordinats.Location = New System.Drawing.Point(193, 96)
+        Me.BT_Save_Coordinats.Name = "BT_Save_Coordinats"
+        Me.BT_Save_Coordinats.Size = New System.Drawing.Size(58, 63)
+        Me.BT_Save_Coordinats.TabIndex = 65
+        Me.BT_Save_Coordinats.UseVisualStyleBackColor = True
+        '
+        'Num_Y
+        '
+        Me.Num_Y.Location = New System.Drawing.Point(118, 126)
+        Me.Num_Y.Minimum = New Decimal(New Integer() {100, 0, 0, -2147483648})
+        Me.Num_Y.Name = "Num_Y"
+        Me.Num_Y.Size = New System.Drawing.Size(69, 26)
+        Me.Num_Y.TabIndex = 63
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = True
+        Me.Label22.Location = New System.Drawing.Point(6, 129)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(106, 20)
+        Me.Label22.TabIndex = 64
+        Me.Label22.Text = "Корекция Y"
+        '
+        'CB_DefaultPrinter
+        '
+        Me.CB_DefaultPrinter.FormattingEnabled = True
+        Me.CB_DefaultPrinter.Location = New System.Drawing.Point(10, 57)
+        Me.CB_DefaultPrinter.Name = "CB_DefaultPrinter"
+        Me.CB_DefaultPrinter.Size = New System.Drawing.Size(406, 28)
+        Me.CB_DefaultPrinter.TabIndex = 47
+        '
+        'GB_Printers
+        '
+        Me.GB_Printers.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.GB_Printers.Controls.Add(Me.Label21)
+        Me.GB_Printers.Controls.Add(Me.Num_X)
+        Me.GB_Printers.Controls.Add(Me.BT_Save_Coordinats)
+        Me.GB_Printers.Controls.Add(Me.Num_Y)
+        Me.GB_Printers.Controls.Add(Me.Label22)
+        Me.GB_Printers.Controls.Add(Me.Label23)
+        Me.GB_Printers.Controls.Add(Me.CB_DefaultPrinter)
+        Me.GB_Printers.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.GB_Printers.Location = New System.Drawing.Point(1137, 236)
+        Me.GB_Printers.Name = "GB_Printers"
+        Me.GB_Printers.Size = New System.Drawing.Size(422, 169)
+        Me.GB_Printers.TabIndex = 74
+        Me.GB_Printers.TabStop = False
+        Me.GB_Printers.Text = "Настройка принтеров"
+        Me.GB_Printers.Visible = False
+        '
+        'Label23
+        '
+        Me.Label23.AutoSize = True
+        Me.Label23.Location = New System.Drawing.Point(6, 34)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(271, 20)
+        Me.Label23.TabIndex = 48
+        Me.Label23.Text = "Выберите принтер для печати"
+        '
+        'CurrentTimeTimer
+        '
+        Me.CurrentTimeTimer.Interval = 1000
+        '
+        'L_Model
+        '
+        Me.L_Model.AutoSize = True
+        Me.L_Model.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.L_Model.Location = New System.Drawing.Point(228, 152)
+        Me.L_Model.Name = "L_Model"
+        Me.L_Model.Size = New System.Drawing.Size(57, 20)
+        Me.L_Model.TabIndex = 16
+        Me.L_Model.Text = "Model"
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label11.Location = New System.Drawing.Point(144, 152)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(81, 20)
+        Me.Label11.TabIndex = 16
+        Me.Label11.Text = "Модель:"
+        '
+        'NextBoxNum
+        '
+        Me.NextBoxNum.AutoSize = True
+        Me.NextBoxNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 48.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.NextBoxNum.Location = New System.Drawing.Point(6, 23)
+        Me.NextBoxNum.Name = "NextBoxNum"
+        Me.NextBoxNum.Size = New System.Drawing.Size(176, 73)
+        Me.NextBoxNum.TabIndex = 0
+        Me.NextBoxNum.Text = "9999"
+        '
         'BT_ClearSN
         '
         Me.BT_ClearSN.FlatAppearance.BorderSize = 0
         Me.BT_ClearSN.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.BT_ClearSN.Image = Global.ContractPacking.My.Resources.Resources.edittrash
         Me.BT_ClearSN.Location = New System.Drawing.Point(531, 293)
         Me.BT_ClearSN.Name = "BT_ClearSN"
         Me.BT_ClearSN.Size = New System.Drawing.Size(75, 67)
         Me.BT_ClearSN.TabIndex = 38
         Me.BT_ClearSN.UseVisualStyleBackColor = True
+        '
+        'BT_OpenSettings
+        '
+        Me.BT_OpenSettings.FlatAppearance.BorderSize = 0
+        Me.BT_OpenSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.BT_OpenSettings.Location = New System.Drawing.Point(1009, 297)
+        Me.BT_OpenSettings.Name = "BT_OpenSettings"
+        Me.BT_OpenSettings.Size = New System.Drawing.Size(69, 63)
+        Me.BT_OpenSettings.TabIndex = 35
+        Me.BT_OpenSettings.UseVisualStyleBackColor = True
         '
         'GroupBox7
         '
@@ -596,62 +823,6 @@ Partial Class WF_Rostelekom
         Me.GroupBox7.TabStop = False
         Me.GroupBox7.Text = "Следующая коробка"
         '
-        'NextBoxNum
-        '
-        Me.NextBoxNum.AutoSize = True
-        Me.NextBoxNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 48.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.NextBoxNum.Location = New System.Drawing.Point(6, 23)
-        Me.NextBoxNum.Name = "NextBoxNum"
-        Me.NextBoxNum.Size = New System.Drawing.Size(176, 73)
-        Me.NextBoxNum.TabIndex = 0
-        Me.NextBoxNum.Text = "9999"
-        '
-        'GroupBox6
-        '
-        Me.GroupBox6.BackColor = System.Drawing.Color.RosyBrown
-        Me.GroupBox6.Controls.Add(Me.Label_ShiftCounter)
-        Me.GroupBox6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.GroupBox6.Location = New System.Drawing.Point(29, 0)
-        Me.GroupBox6.Name = "GroupBox6"
-        Me.GroupBox6.Size = New System.Drawing.Size(263, 82)
-        Me.GroupBox6.TabIndex = 24
-        Me.GroupBox6.TabStop = False
-        Me.GroupBox6.Text = "Выпуск за смену"
-        '
-        'Label_ShiftCounter
-        '
-        Me.Label_ShiftCounter.AutoSize = True
-        Me.Label_ShiftCounter.Font = New System.Drawing.Font("Microsoft Sans Serif", 36.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label_ShiftCounter.Location = New System.Drawing.Point(6, 22)
-        Me.Label_ShiftCounter.Name = "Label_ShiftCounter"
-        Me.Label_ShiftCounter.Size = New System.Drawing.Size(186, 55)
-        Me.Label_ShiftCounter.TabIndex = 0
-        Me.Label_ShiftCounter.Text = "999999"
-        '
-        'Controllabel
-        '
-        Me.Controllabel.AutoSize = True
-        Me.Controllabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Controllabel.Location = New System.Drawing.Point(26, 198)
-        Me.Controllabel.Name = "Controllabel"
-        Me.Controllabel.Size = New System.Drawing.Size(217, 29)
-        Me.Controllabel.TabIndex = 21
-        Me.Controllabel.Text = "CONTROLLABEL"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label2.Location = New System.Drawing.Point(14, 297)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(161, 25)
-        Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Serial Number"
-        '
-        'CurrentTimeTimer
-        '
-        Me.CurrentTimeTimer.Interval = 1000
-        '
         'NumBox
         '
         Me.NumBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
@@ -662,17 +833,6 @@ Partial Class WF_Rostelekom
         Me.NumBox.Size = New System.Drawing.Size(159, 26)
         Me.NumBox.TabIndex = 49
         Me.NumBox.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
-        'CB_SN_or_Box
-        '
-        Me.CB_SN_or_Box.AutoSize = True
-        Me.CB_SN_or_Box.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.CB_SN_or_Box.Location = New System.Drawing.Point(9, 23)
-        Me.CB_SN_or_Box.Name = "CB_SN_or_Box"
-        Me.CB_SN_or_Box.Size = New System.Drawing.Size(290, 24)
-        Me.CB_SN_or_Box.TabIndex = 48
-        Me.CB_SN_or_Box.Text = "Отсканируйте серийный номер"
-        Me.CB_SN_or_Box.UseVisualStyleBackColor = True
         '
         'DataGridView1
         '
@@ -692,6 +852,66 @@ Partial Class WF_Rostelekom
         Me.TB_ScanSN.Name = "TB_ScanSN"
         Me.TB_ScanSN.Size = New System.Drawing.Size(342, 26)
         Me.TB_ScanSN.TabIndex = 46
+        '
+        'GB_ManualPrint
+        '
+        Me.GB_ManualPrint.Controls.Add(Me.NumBox)
+        Me.GB_ManualPrint.Controls.Add(Me.CB_SN_or_Box)
+        Me.GB_ManualPrint.Controls.Add(Me.DataGridView1)
+        Me.GB_ManualPrint.Controls.Add(Me.TB_ScanSN)
+        Me.GB_ManualPrint.Location = New System.Drawing.Point(12, 710)
+        Me.GB_ManualPrint.Name = "GB_ManualPrint"
+        Me.GB_ManualPrint.Size = New System.Drawing.Size(1091, 484)
+        Me.GB_ManualPrint.TabIndex = 70
+        Me.GB_ManualPrint.TabStop = False
+        Me.GB_ManualPrint.Text = "Ручная печать этикетки"
+        Me.GB_ManualPrint.Visible = False
+        '
+        'CB_SN_or_Box
+        '
+        Me.CB_SN_or_Box.AutoSize = True
+        Me.CB_SN_or_Box.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.CB_SN_or_Box.Location = New System.Drawing.Point(9, 23)
+        Me.CB_SN_or_Box.Name = "CB_SN_or_Box"
+        Me.CB_SN_or_Box.Size = New System.Drawing.Size(290, 24)
+        Me.CB_SN_or_Box.TabIndex = 48
+        Me.CB_SN_or_Box.Text = "Отсканируйте серийный номер"
+        Me.CB_SN_or_Box.UseVisualStyleBackColor = True
+        '
+        'BT_SetPrinter
+        '
+        Me.BT_SetPrinter.FlatAppearance.BorderSize = 0
+        Me.BT_SetPrinter.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.BT_SetPrinter.Location = New System.Drawing.Point(912, 293)
+        Me.BT_SetPrinter.Name = "BT_SetPrinter"
+        Me.BT_SetPrinter.Size = New System.Drawing.Size(75, 67)
+        Me.BT_SetPrinter.TabIndex = 46
+        Me.BT_SetPrinter.UseVisualStyleBackColor = True
+        '
+        'GB_WorkAria
+        '
+        Me.GB_WorkAria.Controls.Add(Me.BT_SetPrinter)
+        Me.GB_WorkAria.Controls.Add(Me.CB_ManualPrint)
+        Me.GB_WorkAria.Controls.Add(Me.BT_Pause)
+        Me.GB_WorkAria.Controls.Add(Me.BT_ClearSN)
+        Me.GB_WorkAria.Controls.Add(Me.DG_Packing)
+        Me.GB_WorkAria.Controls.Add(Me.GroupBox8)
+        Me.GB_WorkAria.Controls.Add(Me.BT_OpenSettings)
+        Me.GB_WorkAria.Controls.Add(Me.GroupBox7)
+        Me.GB_WorkAria.Controls.Add(Me.GroupBox5)
+        Me.GB_WorkAria.Controls.Add(Me.GroupBox6)
+        Me.GB_WorkAria.Controls.Add(Me.GroupBox2)
+        Me.GB_WorkAria.Controls.Add(Me.Controllabel)
+        Me.GB_WorkAria.Controls.Add(Me.GroupBox1)
+        Me.GB_WorkAria.Controls.Add(Me.Label2)
+        Me.GB_WorkAria.Controls.Add(Me.SerialTextBox)
+        Me.GB_WorkAria.Controls.Add(Me.GB_StationInfo)
+        Me.GB_WorkAria.Location = New System.Drawing.Point(6, 8)
+        Me.GB_WorkAria.Name = "GB_WorkAria"
+        Me.GB_WorkAria.Size = New System.Drawing.Size(1103, 665)
+        Me.GB_WorkAria.TabIndex = 71
+        Me.GB_WorkAria.TabStop = False
+        Me.GB_WorkAria.Visible = False
         '
         'CB_ManualPrint
         '
@@ -767,56 +987,6 @@ Partial Class WF_Rostelekom
         Me.LB_LOTCounter.TabIndex = 0
         Me.LB_LOTCounter.Text = "99999"
         '
-        'GB_WorkAria
-        '
-        Me.GB_WorkAria.Controls.Add(Me.GB_ManualPrint)
-        Me.GB_WorkAria.Controls.Add(Me.CB_ManualPrint)
-        Me.GB_WorkAria.Controls.Add(Me.BT_Pause)
-        Me.GB_WorkAria.Controls.Add(Me.BT_ClearSN)
-        Me.GB_WorkAria.Controls.Add(Me.DG_Packing)
-        Me.GB_WorkAria.Controls.Add(Me.GroupBox8)
-        Me.GB_WorkAria.Controls.Add(Me.BT_OpenSettings)
-        Me.GB_WorkAria.Controls.Add(Me.GroupBox7)
-        Me.GB_WorkAria.Controls.Add(Me.GroupBox5)
-        Me.GB_WorkAria.Controls.Add(Me.GroupBox6)
-        Me.GB_WorkAria.Controls.Add(Me.GroupBox2)
-        Me.GB_WorkAria.Controls.Add(Me.Controllabel)
-        Me.GB_WorkAria.Controls.Add(Me.GroupBox4)
-        Me.GB_WorkAria.Controls.Add(Me.GroupBox1)
-        Me.GB_WorkAria.Controls.Add(Me.Label2)
-        Me.GB_WorkAria.Controls.Add(Me.SerialTextBox)
-        Me.GB_WorkAria.Location = New System.Drawing.Point(9, 12)
-        Me.GB_WorkAria.Name = "GB_WorkAria"
-        Me.GB_WorkAria.Size = New System.Drawing.Size(1103, 665)
-        Me.GB_WorkAria.TabIndex = 44
-        Me.GB_WorkAria.TabStop = False
-        Me.GB_WorkAria.Visible = False
-        '
-        'GB_ManualPrint
-        '
-        Me.GB_ManualPrint.Controls.Add(Me.NumBox)
-        Me.GB_ManualPrint.Controls.Add(Me.CB_SN_or_Box)
-        Me.GB_ManualPrint.Controls.Add(Me.DataGridView1)
-        Me.GB_ManualPrint.Controls.Add(Me.TB_ScanSN)
-        Me.GB_ManualPrint.Location = New System.Drawing.Point(12, 362)
-        Me.GB_ManualPrint.Name = "GB_ManualPrint"
-        Me.GB_ManualPrint.Size = New System.Drawing.Size(1091, 484)
-        Me.GB_ManualPrint.TabIndex = 45
-        Me.GB_ManualPrint.TabStop = False
-        Me.GB_ManualPrint.Text = "Ручная печать этикетки"
-        Me.GB_ManualPrint.Visible = False
-        '
-        'BT_OpenSettings
-        '
-        Me.BT_OpenSettings.FlatAppearance.BorderSize = 0
-        Me.BT_OpenSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.BT_OpenSettings.Image = Global.ContractPacking.My.Resources.Resources.package_utilities
-        Me.BT_OpenSettings.Location = New System.Drawing.Point(1009, 297)
-        Me.BT_OpenSettings.Name = "BT_OpenSettings"
-        Me.BT_OpenSettings.Size = New System.Drawing.Size(69, 63)
-        Me.BT_OpenSettings.TabIndex = 35
-        Me.BT_OpenSettings.UseVisualStyleBackColor = True
-        '
         'GroupBox5
         '
         Me.GroupBox5.BackColor = System.Drawing.SystemColors.Control
@@ -841,6 +1011,28 @@ Partial Class WF_Rostelekom
         Me.CurrrentTimeLabel.TabIndex = 6
         Me.CurrrentTimeLabel.Text = "Current TIME"
         '
+        'GroupBox6
+        '
+        Me.GroupBox6.BackColor = System.Drawing.Color.RosyBrown
+        Me.GroupBox6.Controls.Add(Me.Label_ShiftCounter)
+        Me.GroupBox6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.GroupBox6.Location = New System.Drawing.Point(29, 0)
+        Me.GroupBox6.Name = "GroupBox6"
+        Me.GroupBox6.Size = New System.Drawing.Size(263, 82)
+        Me.GroupBox6.TabIndex = 24
+        Me.GroupBox6.TabStop = False
+        Me.GroupBox6.Text = "Выпуск за смену"
+        '
+        'Label_ShiftCounter
+        '
+        Me.Label_ShiftCounter.AutoSize = True
+        Me.Label_ShiftCounter.Font = New System.Drawing.Font("Microsoft Sans Serif", 36.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label_ShiftCounter.Location = New System.Drawing.Point(6, 22)
+        Me.Label_ShiftCounter.Name = "Label_ShiftCounter"
+        Me.Label_ShiftCounter.Size = New System.Drawing.Size(186, 55)
+        Me.Label_ShiftCounter.TabIndex = 0
+        Me.Label_ShiftCounter.Text = "999999"
+        '
         'GroupBox2
         '
         Me.GroupBox2.BackColor = System.Drawing.Color.Green
@@ -863,213 +1055,15 @@ Partial Class WF_Rostelekom
         Me.PalletNum.TabIndex = 0
         Me.PalletNum.Text = "999"
         '
-        'GroupBox4
+        'Controllabel
         '
-        Me.GroupBox4.Controls.Add(Me.LabelAppName)
-        Me.GroupBox4.Controls.Add(Me.L_UserName)
-        Me.GroupBox4.Controls.Add(Me.Label5)
-        Me.GroupBox4.Controls.Add(Me.Label6)
-        Me.GroupBox4.Controls.Add(Me.Label_StationName)
-        Me.GroupBox4.Controls.Add(Me.Label7)
-        Me.GroupBox4.Controls.Add(Me.L_PalletCapacity)
-        Me.GroupBox4.Controls.Add(Me.L_BoxCapacity)
-        Me.GroupBox4.Controls.Add(Me.Label4)
-        Me.GroupBox4.Controls.Add(Me.L_Model)
-        Me.GroupBox4.Controls.Add(Me.Label3)
-        Me.GroupBox4.Controls.Add(Me.Label11)
-        Me.GroupBox4.Controls.Add(Me.L_LOT)
-        Me.GroupBox4.Controls.Add(Me.Label9)
-        Me.GroupBox4.Controls.Add(Me.L_Liter)
-        Me.GroupBox4.Controls.Add(Me.Label8)
-        Me.GroupBox4.Controls.Add(Me.Lebel_StationLine)
-        Me.GroupBox4.Controls.Add(Me.Label1)
-        Me.GroupBox4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.GroupBox4.Location = New System.Drawing.Point(585, 14)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(493, 264)
-        Me.GroupBox4.TabIndex = 10
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Информация о ЛОТе и станции"
-        '
-        'LabelAppName
-        '
-        Me.LabelAppName.AutoSize = True
-        Me.LabelAppName.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.LabelAppName.Location = New System.Drawing.Point(228, 19)
-        Me.LabelAppName.Name = "LabelAppName"
-        Me.LabelAppName.Size = New System.Drawing.Size(64, 20)
-        Me.LabelAppName.TabIndex = 20
-        Me.LabelAppName.Text = "fasend"
-        '
-        'L_UserName
-        '
-        Me.L_UserName.AutoSize = True
-        Me.L_UserName.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.L_UserName.Location = New System.Drawing.Point(228, 190)
-        Me.L_UserName.Name = "L_UserName"
-        Me.L_UserName.Size = New System.Drawing.Size(174, 20)
-        Me.L_UserName.TabIndex = 19
-        Me.L_UserName.Text = "Имя пользователя:"
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label5.Location = New System.Drawing.Point(51, 190)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(174, 20)
-        Me.Label5.TabIndex = 19
-        Me.Label5.Text = "Имя пользователя:"
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label6.Location = New System.Drawing.Point(21, 19)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(204, 20)
-        Me.Label6.TabIndex = 16
-        Me.Label6.Text = "Название приложения:"
-        '
-        'Label_StationName
-        '
-        Me.Label_StationName.AutoSize = True
-        Me.Label_StationName.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label_StationName.Location = New System.Drawing.Point(228, 41)
-        Me.Label_StationName.Name = "Label_StationName"
-        Me.Label_StationName.Size = New System.Drawing.Size(33, 20)
-        Me.Label_StationName.TabIndex = 16
-        Me.Label_StationName.Text = "ПК"
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label7.Location = New System.Drawing.Point(100, 41)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(125, 20)
-        Me.Label7.TabIndex = 16
-        Me.Label7.Text = "Название ПК:"
-        '
-        'L_PalletCapacity
-        '
-        Me.L_PalletCapacity.AutoSize = True
-        Me.L_PalletCapacity.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.L_PalletCapacity.Location = New System.Drawing.Point(228, 170)
-        Me.L_PalletCapacity.Name = "L_PalletCapacity"
-        Me.L_PalletCapacity.Size = New System.Drawing.Size(123, 20)
-        Me.L_PalletCapacity.TabIndex = 16
-        Me.L_PalletCapacity.Text = "PalletCapacity"
-        '
-        'L_BoxCapacity
-        '
-        Me.L_BoxCapacity.AutoSize = True
-        Me.L_BoxCapacity.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.L_BoxCapacity.Location = New System.Drawing.Point(228, 148)
-        Me.L_BoxCapacity.Name = "L_BoxCapacity"
-        Me.L_BoxCapacity.Size = New System.Drawing.Size(108, 20)
-        Me.L_BoxCapacity.TabIndex = 16
-        Me.L_BoxCapacity.Text = "BoxCapacity"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label4.Location = New System.Drawing.Point(61, 170)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(164, 20)
-        Me.Label4.TabIndex = 16
-        Me.Label4.Text = "Кол-во в паллете:"
-        '
-        'L_Model
-        '
-        Me.L_Model.AutoSize = True
-        Me.L_Model.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.L_Model.Location = New System.Drawing.Point(228, 126)
-        Me.L_Model.Name = "L_Model"
-        Me.L_Model.Size = New System.Drawing.Size(57, 20)
-        Me.L_Model.TabIndex = 16
-        Me.L_Model.Text = "Model"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label3.Location = New System.Drawing.Point(47, 148)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(178, 20)
-        Me.Label3.TabIndex = 16
-        Me.Label3.Text = "Кол-во в групповой:"
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label11.Location = New System.Drawing.Point(144, 126)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(81, 20)
-        Me.Label11.TabIndex = 16
-        Me.Label11.Text = "Модель:"
-        '
-        'L_LOT
-        '
-        Me.L_LOT.AutoSize = True
-        Me.L_LOT.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.L_LOT.Location = New System.Drawing.Point(228, 107)
-        Me.L_LOT.Name = "L_LOT"
-        Me.L_LOT.Size = New System.Drawing.Size(42, 20)
-        Me.L_LOT.TabIndex = 16
-        Me.L_LOT.Text = "LOT"
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label9.Location = New System.Drawing.Point(78, 107)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(147, 20)
-        Me.Label9.TabIndex = 16
-        Me.Label9.Text = "Название ЛОТа:"
-        '
-        'L_Liter
-        '
-        Me.L_Liter.AutoSize = True
-        Me.L_Liter.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.L_Liter.Location = New System.Drawing.Point(228, 85)
-        Me.L_Liter.Name = "L_Liter"
-        Me.L_Liter.Size = New System.Drawing.Size(45, 20)
-        Me.L_Liter.TabIndex = 16
-        Me.L_Liter.Text = "Liter"
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label8.Location = New System.Drawing.Point(148, 85)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(77, 20)
-        Me.Label8.TabIndex = 16
-        Me.Label8.Text = "Литера:"
-        '
-        'Lebel_StationLine
-        '
-        Me.Lebel_StationLine.AutoSize = True
-        Me.Lebel_StationLine.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Lebel_StationLine.Location = New System.Drawing.Point(228, 63)
-        Me.Lebel_StationLine.Name = "Lebel_StationLine"
-        Me.Lebel_StationLine.Size = New System.Drawing.Size(43, 20)
-        Me.Lebel_StationLine.TabIndex = 16
-        Me.Lebel_StationLine.Text = "Line"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label1.Location = New System.Drawing.Point(158, 63)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(67, 20)
-        Me.Label1.TabIndex = 16
-        Me.Label1.Text = "Линия:"
+        Me.Controllabel.AutoSize = True
+        Me.Controllabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Controllabel.Location = New System.Drawing.Point(26, 198)
+        Me.Controllabel.Name = "Controllabel"
+        Me.Controllabel.Size = New System.Drawing.Size(217, 29)
+        Me.Controllabel.TabIndex = 21
+        Me.Controllabel.Text = "CONTROLLABEL"
         '
         'GroupBox1
         '
@@ -1083,22 +1077,150 @@ Partial Class WF_Rostelekom
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Текущаяя корбка"
         '
-        'WF_Rostelekom
+        'BoxNum
+        '
+        Me.BoxNum.AutoSize = True
+        Me.BoxNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 48.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.BoxNum.Location = New System.Drawing.Point(6, 23)
+        Me.BoxNum.Name = "BoxNum"
+        Me.BoxNum.Size = New System.Drawing.Size(176, 73)
+        Me.BoxNum.TabIndex = 0
+        Me.BoxNum.Text = "9999"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label2.Location = New System.Drawing.Point(14, 297)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(161, 25)
+        Me.Label2.TabIndex = 3
+        Me.Label2.Text = "Serial Number"
+        '
+        'SerialTextBox
+        '
+        Me.SerialTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.SerialTextBox.Location = New System.Drawing.Point(17, 325)
+        Me.SerialTextBox.Name = "SerialTextBox"
+        Me.SerialTextBox.Size = New System.Drawing.Size(508, 31)
+        Me.SerialTextBox.TabIndex = 1
+        '
+        'GB_StationInfo
+        '
+        Me.GB_StationInfo.Controls.Add(Me.LB_SW_Wers)
+        Me.GB_StationInfo.Controls.Add(Me.Label10)
+        Me.GB_StationInfo.Controls.Add(Me.LabelAppName)
+        Me.GB_StationInfo.Controls.Add(Me.L_UserName)
+        Me.GB_StationInfo.Controls.Add(Me.Label5)
+        Me.GB_StationInfo.Controls.Add(Me.Label6)
+        Me.GB_StationInfo.Controls.Add(Me.Label_StationName)
+        Me.GB_StationInfo.Controls.Add(Me.Label7)
+        Me.GB_StationInfo.Controls.Add(Me.L_PalletCapacity)
+        Me.GB_StationInfo.Controls.Add(Me.L_BoxCapacity)
+        Me.GB_StationInfo.Controls.Add(Me.Label4)
+        Me.GB_StationInfo.Controls.Add(Me.L_Model)
+        Me.GB_StationInfo.Controls.Add(Me.Label3)
+        Me.GB_StationInfo.Controls.Add(Me.Label11)
+        Me.GB_StationInfo.Controls.Add(Me.L_LOT)
+        Me.GB_StationInfo.Controls.Add(Me.Label9)
+        Me.GB_StationInfo.Controls.Add(Me.L_Liter)
+        Me.GB_StationInfo.Controls.Add(Me.Label8)
+        Me.GB_StationInfo.Controls.Add(Me.Lebel_StationLine)
+        Me.GB_StationInfo.Controls.Add(Me.Label1)
+        Me.GB_StationInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.GB_StationInfo.Location = New System.Drawing.Point(604, 14)
+        Me.GB_StationInfo.Name = "GB_StationInfo"
+        Me.GB_StationInfo.Size = New System.Drawing.Size(493, 264)
+        Me.GB_StationInfo.TabIndex = 10
+        Me.GB_StationInfo.TabStop = False
+        Me.GB_StationInfo.Text = "Информация о ЛОТе и станции"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label3.Location = New System.Drawing.Point(47, 174)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(178, 20)
+        Me.Label3.TabIndex = 16
+        Me.Label3.Text = "Кол-во в групповой:"
+        '
+        'L_LOT
+        '
+        Me.L_LOT.AutoSize = True
+        Me.L_LOT.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.L_LOT.Location = New System.Drawing.Point(228, 133)
+        Me.L_LOT.Name = "L_LOT"
+        Me.L_LOT.Size = New System.Drawing.Size(42, 20)
+        Me.L_LOT.TabIndex = 16
+        Me.L_LOT.Text = "LOT"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label9.Location = New System.Drawing.Point(78, 133)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(147, 20)
+        Me.Label9.TabIndex = 16
+        Me.Label9.Text = "Название ЛОТа:"
+        '
+        'L_Liter
+        '
+        Me.L_Liter.AutoSize = True
+        Me.L_Liter.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.L_Liter.Location = New System.Drawing.Point(228, 111)
+        Me.L_Liter.Name = "L_Liter"
+        Me.L_Liter.Size = New System.Drawing.Size(45, 20)
+        Me.L_Liter.TabIndex = 16
+        Me.L_Liter.Text = "Liter"
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label8.Location = New System.Drawing.Point(148, 111)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(77, 20)
+        Me.Label8.TabIndex = 16
+        Me.Label8.Text = "Литера:"
+        '
+        'Lebel_StationLine
+        '
+        Me.Lebel_StationLine.AutoSize = True
+        Me.Lebel_StationLine.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Lebel_StationLine.Location = New System.Drawing.Point(228, 89)
+        Me.Lebel_StationLine.Name = "Lebel_StationLine"
+        Me.Lebel_StationLine.Size = New System.Drawing.Size(43, 20)
+        Me.Lebel_StationLine.TabIndex = 16
+        Me.Lebel_StationLine.Text = "Line"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label1.Location = New System.Drawing.Point(158, 89)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(67, 20)
+        Me.Label1.TabIndex = 16
+        Me.Label1.Text = "Линия:"
+        '
+        'WF_SberDevice
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1649, 869)
-        Me.Controls.Add(Me.GB_UserData)
+        Me.ClientSize = New System.Drawing.Size(2040, 899)
         Me.Controls.Add(Me.GB_NotVisible)
+        Me.Controls.Add(Me.GB_UserData)
+        Me.Controls.Add(Me.GB_Printers)
+        Me.Controls.Add(Me.GB_ManualPrint)
         Me.Controls.Add(Me.GB_WorkAria)
-        Me.Name = "WF_Rostelekom"
-        Me.Text = "WF_Rostelekom"
+        Me.Name = "WF_SberDevice"
+        Me.Text = "WF_SberDevice"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
-        Me.GB_UserData.ResumeLayout(False)
-        Me.GB_UserData.PerformLayout()
+        CType(Me.DG_SelectedBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GB_NotVisible.ResumeLayout(False)
         Me.GB_NotVisible.PerformLayout()
-        CType(Me.DG_SelectedBox, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DG_StepList, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DG_StartShiftCounter, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DG_NotFullBox, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1106,41 +1228,42 @@ Partial Class WF_Rostelekom
         CType(Me.DG_CheckSN, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DG_IsPacked, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DG_UserData, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GB_UserData.ResumeLayout(False)
+        Me.GB_UserData.PerformLayout()
+        CType(Me.Num_X, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.Num_Y, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GB_Printers.ResumeLayout(False)
+        Me.GB_Printers.PerformLayout()
         Me.GroupBox7.ResumeLayout(False)
         Me.GroupBox7.PerformLayout()
-        Me.GroupBox6.ResumeLayout(False)
-        Me.GroupBox6.PerformLayout()
         CType(Me.NumBox, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GB_ManualPrint.ResumeLayout(False)
+        Me.GB_ManualPrint.PerformLayout()
+        Me.GB_WorkAria.ResumeLayout(False)
+        Me.GB_WorkAria.PerformLayout()
         CType(Me.DG_Packing, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox8.ResumeLayout(False)
         Me.GroupBox8.PerformLayout()
-        Me.GB_WorkAria.ResumeLayout(False)
-        Me.GB_WorkAria.PerformLayout()
-        Me.GB_ManualPrint.ResumeLayout(False)
-        Me.GB_ManualPrint.PerformLayout()
         Me.GroupBox5.ResumeLayout(False)
         Me.GroupBox5.PerformLayout()
+        Me.GroupBox6.ResumeLayout(False)
+        Me.GroupBox6.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GB_StationInfo.ResumeLayout(False)
+        Me.GB_StationInfo.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
 
-    Friend WithEvents BoxNum As Label
-    Friend WithEvents SerialTextBox As TextBox
-    Friend WithEvents GB_UserData As GroupBox
     Friend WithEvents BT_LogInClose As Button
-    Friend WithEvents Label13 As Label
-    Friend WithEvents TB_RFIDIn As TextBox
-    Friend WithEvents GB_NotVisible As GroupBox
     Friend WithEvents DG_SelectedBox As DataGridView
     Friend WithEvents TextBox2 As TextBox
     Friend WithEvents Label20 As Label
+    Friend WithEvents GB_NotVisible As GroupBox
     Friend WithEvents DG_StepList As DataGridView
     Friend WithEvents DG_StartShiftCounter As DataGridView
     Friend WithEvents DG_NotFullBox As DataGridView
@@ -1155,32 +1278,10 @@ Partial Class WF_Rostelekom
     Friend WithEvents Label14 As Label
     Friend WithEvents Label12 As Label
     Friend WithEvents DG_UserData As DataGridView
-    Friend WithEvents BT_ClearSN As Button
-    Friend WithEvents GroupBox7 As GroupBox
-    Friend WithEvents NextBoxNum As Label
-    Friend WithEvents GroupBox6 As GroupBox
-    Friend WithEvents Label_ShiftCounter As Label
-    Friend WithEvents Controllabel As Label
-    Friend WithEvents Label2 As Label
-    Friend WithEvents CurrentTimeTimer As Timer
-    Friend WithEvents NumBox As NumericUpDown
-    Friend WithEvents CB_SN_or_Box As CheckBox
-    Friend WithEvents DataGridView1 As DataGridView
-    Friend WithEvents TB_ScanSN As TextBox
-    Friend WithEvents CB_ManualPrint As CheckBox
-    Friend WithEvents BT_Pause As Button
-    Friend WithEvents DG_Packing As DataGridView
-    Friend WithEvents GroupBox8 As GroupBox
-    Friend WithEvents LB_LOTCounter As Label
-    Friend WithEvents PrintSerialPort As IO.Ports.SerialPort
-    Friend WithEvents GB_WorkAria As GroupBox
-    Friend WithEvents GB_ManualPrint As GroupBox
-    Friend WithEvents BT_OpenSettings As Button
-    Friend WithEvents GroupBox5 As GroupBox
-    Friend WithEvents CurrrentTimeLabel As Label
-    Friend WithEvents GroupBox2 As GroupBox
-    Friend WithEvents PalletNum As Label
-    Friend WithEvents GroupBox4 As GroupBox
+    Friend WithEvents Label13 As Label
+    Friend WithEvents TB_RFIDIn As TextBox
+    Friend WithEvents LB_SW_Wers As Label
+    Friend WithEvents Label10 As Label
     Friend WithEvents LabelAppName As Label
     Friend WithEvents L_UserName As Label
     Friend WithEvents Label5 As Label
@@ -1190,14 +1291,51 @@ Partial Class WF_Rostelekom
     Friend WithEvents L_PalletCapacity As Label
     Friend WithEvents L_BoxCapacity As Label
     Friend WithEvents Label4 As Label
+    Friend WithEvents GB_UserData As GroupBox
+    Friend WithEvents Label21 As Label
+    Friend WithEvents Num_X As NumericUpDown
+    Friend WithEvents BT_Save_Coordinats As Button
+    Friend WithEvents Num_Y As NumericUpDown
+    Friend WithEvents Label22 As Label
+    Friend WithEvents CB_DefaultPrinter As ComboBox
+    Friend WithEvents GB_Printers As GroupBox
+    Friend WithEvents Label23 As Label
+    Friend WithEvents CurrentTimeTimer As Timer
     Friend WithEvents L_Model As Label
-    Friend WithEvents Label3 As Label
     Friend WithEvents Label11 As Label
+    Friend WithEvents NextBoxNum As Label
+    Friend WithEvents BT_ClearSN As Button
+    Friend WithEvents BT_OpenSettings As Button
+    Friend WithEvents GroupBox7 As GroupBox
+    Friend WithEvents NumBox As NumericUpDown
+    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents TB_ScanSN As TextBox
+    Friend WithEvents GB_ManualPrint As GroupBox
+    Friend WithEvents CB_SN_or_Box As CheckBox
+    Friend WithEvents BT_SetPrinter As Button
+    Friend WithEvents GB_WorkAria As GroupBox
+    Friend WithEvents CB_ManualPrint As CheckBox
+    Friend WithEvents BT_Pause As Button
+    Friend WithEvents DG_Packing As DataGridView
+    Friend WithEvents GroupBox8 As GroupBox
+    Friend WithEvents LB_LOTCounter As Label
+    Friend WithEvents GroupBox5 As GroupBox
+    Friend WithEvents CurrrentTimeLabel As Label
+    Friend WithEvents GroupBox6 As GroupBox
+    Friend WithEvents Label_ShiftCounter As Label
+    Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents PalletNum As Label
+    Friend WithEvents Controllabel As Label
+    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents BoxNum As Label
+    Friend WithEvents Label2 As Label
+    Friend WithEvents SerialTextBox As TextBox
+    Friend WithEvents GB_StationInfo As GroupBox
+    Friend WithEvents Label3 As Label
     Friend WithEvents L_LOT As Label
     Friend WithEvents Label9 As Label
     Friend WithEvents L_Liter As Label
     Friend WithEvents Label8 As Label
     Friend WithEvents Lebel_StationLine As Label
     Friend WithEvents Label1 As Label
-    Friend WithEvents GroupBox1 As GroupBox
 End Class

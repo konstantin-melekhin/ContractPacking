@@ -29,7 +29,7 @@ Public Class SettingsForm
                             "CT_ScanStep = " & PCInfo(7) & vbCrLf
         End If
         'загружаем список лотов в грид
-        GetLotList_ContractStation(DG_LotList, 4)
+        GetLotList_ContractStation(DG_LotList)
         GetLotList()
     End Sub 'Загрузка формы настроек
     Private Sub GetLotList()
@@ -148,10 +148,10 @@ Public Class SettingsForm
         'определяем LOTCode и LOTID
         If DG_LOTListPresent.Rows.Count <> 0 Then
             LOTID = DG_LOTListPresent.Item(3, selRowNum).Value
-            Dim WF As New WF_NS220(LOTID, IDApp)
-            'Dim WF As New WF_Rostelekom(LOTID, IDApp)
+            'Dim WF As New WF_NS220(LOTID, IDApp)
+            Dim WF As New WF_SberDevice(LOTID, IDApp)
             'Dim WF As New Aqarius_AQB365MC(LOTID, IDApp)
-            'Dim WF As New WF_PackWithOutPrint(LOTID, IDApp)
+            'Dim WF As New WF_PackWithOutPrint(LOTID, IDApp) 'текущая программа для упаковки контрактных плат
             'Dim WF As New WF_WihtOutLaser(LOTID, IDApp)
             WF.Controllabel.Text = ""
             WF.Show()
