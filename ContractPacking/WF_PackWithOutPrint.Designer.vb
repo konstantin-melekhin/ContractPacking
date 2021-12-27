@@ -49,9 +49,6 @@ Partial Class WF_PackWithOutPrint
         Me.BoxNum = New System.Windows.Forms.Label()
         Me.SerialTextBox = New System.Windows.Forms.TextBox()
         Me.GB_UserData = New System.Windows.Forms.GroupBox()
-        Me.BT_LogInClose = New System.Windows.Forms.Button()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.TB_RFIDIn = New System.Windows.Forms.TextBox()
         Me.GB_NotVisible = New System.Windows.Forms.GroupBox()
         Me.DG_SelectedBox = New System.Windows.Forms.DataGridView()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
@@ -77,6 +74,8 @@ Partial Class WF_PackWithOutPrint
         Me.Controllabel = New System.Windows.Forms.Label()
         Me.CurrentTimeTimer = New System.Windows.Forms.Timer(Me.components)
         Me.GB_WorkAria = New System.Windows.Forms.GroupBox()
+        Me.CB_Reprint = New System.Windows.Forms.CheckBox()
+        Me.BT_PrintSet = New System.Windows.Forms.Button()
         Me.BT_Pause = New System.Windows.Forms.Button()
         Me.BT_ClearSN = New System.Windows.Forms.Button()
         Me.DG_Packing = New System.Windows.Forms.DataGridView()
@@ -88,6 +87,8 @@ Partial Class WF_PackWithOutPrint
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.PalletNum = New System.Windows.Forms.Label()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.LB_SW_Wers = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
         Me.LabelAppName = New System.Windows.Forms.Label()
         Me.L_UserName = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -109,8 +110,22 @@ Partial Class WF_PackWithOutPrint
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.PrintSerialPort = New System.IO.Ports.SerialPort(Me.components)
-        Me.LB_SW_Wers = New System.Windows.Forms.Label()
-        Me.Label19 = New System.Windows.Forms.Label()
+        Me.GB_Printers = New System.Windows.Forms.GroupBox()
+        Me.CB_Technik_Reprint = New System.Windows.Forms.CheckBox()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.Num_X = New System.Windows.Forms.NumericUpDown()
+        Me.BT_Save_Coordinats = New System.Windows.Forms.Button()
+        Me.Num_Y = New System.Windows.Forms.NumericUpDown()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.CB_DefaultPrinter = New System.Windows.Forms.ComboBox()
+        Me.TB_RFIDIn = New System.Windows.Forms.TextBox()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.BT_LogInClose = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.TB_RFID_ReprintUser = New System.Windows.Forms.TextBox()
+        Me.GB_ReprinUser = New System.Windows.Forms.GroupBox()
         Me.GB_UserData.SuspendLayout()
         Me.GB_NotVisible.SuspendLayout()
         CType(Me.DG_SelectedBox, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -130,6 +145,10 @@ Partial Class WF_PackWithOutPrint
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        Me.GB_Printers.SuspendLayout()
+        CType(Me.Num_X, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.Num_Y, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GB_ReprinUser.SuspendLayout()
         Me.SuspendLayout()
         '
         'BoxNum
@@ -163,38 +182,6 @@ Partial Class WF_PackWithOutPrint
         Me.GB_UserData.TabIndex = 46
         Me.GB_UserData.TabStop = False
         Me.GB_UserData.Text = "Регистрация пользователя"
-        '
-        'BT_LogInClose
-        '
-        Me.BT_LogInClose.BackColor = System.Drawing.Color.Transparent
-        Me.BT_LogInClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.BT_LogInClose.FlatAppearance.BorderColor = System.Drawing.Color.White
-        Me.BT_LogInClose.FlatAppearance.BorderSize = 0
-        Me.BT_LogInClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.BT_LogInClose.ForeColor = System.Drawing.Color.Transparent
-        Me.BT_LogInClose.Image = Global.ContractPacking.My.Resources.Resources.close
-        Me.BT_LogInClose.Location = New System.Drawing.Point(362, 73)
-        Me.BT_LogInClose.Name = "BT_LogInClose"
-        Me.BT_LogInClose.Size = New System.Drawing.Size(47, 61)
-        Me.BT_LogInClose.TabIndex = 30
-        Me.BT_LogInClose.UseVisualStyleBackColor = False
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(7, 45)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(321, 25)
-        Me.Label13.TabIndex = 1
-        Me.Label13.Text = "Отсканируйте свой бэйджик"
-        '
-        'TB_RFIDIn
-        '
-        Me.TB_RFIDIn.Location = New System.Drawing.Point(11, 88)
-        Me.TB_RFIDIn.Name = "TB_RFIDIn"
-        Me.TB_RFIDIn.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.TB_RFIDIn.Size = New System.Drawing.Size(345, 31)
-        Me.TB_RFIDIn.TabIndex = 0
         '
         'GB_NotVisible
         '
@@ -626,6 +613,8 @@ Partial Class WF_PackWithOutPrint
         '
         'GB_WorkAria
         '
+        Me.GB_WorkAria.Controls.Add(Me.CB_Reprint)
+        Me.GB_WorkAria.Controls.Add(Me.BT_PrintSet)
         Me.GB_WorkAria.Controls.Add(Me.BT_Pause)
         Me.GB_WorkAria.Controls.Add(Me.BT_ClearSN)
         Me.GB_WorkAria.Controls.Add(Me.DG_Packing)
@@ -646,6 +635,28 @@ Partial Class WF_PackWithOutPrint
         Me.GB_WorkAria.TabIndex = 44
         Me.GB_WorkAria.TabStop = False
         Me.GB_WorkAria.Visible = False
+        '
+        'CB_Reprint
+        '
+        Me.CB_Reprint.AutoSize = True
+        Me.CB_Reprint.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.CB_Reprint.Location = New System.Drawing.Point(241, 294)
+        Me.CB_Reprint.Name = "CB_Reprint"
+        Me.CB_Reprint.Size = New System.Drawing.Size(211, 28)
+        Me.CB_Reprint.TabIndex = 41
+        Me.CB_Reprint.Text = "Повторная печать"
+        Me.CB_Reprint.UseVisualStyleBackColor = True
+        '
+        'BT_PrintSet
+        '
+        Me.BT_PrintSet.FlatAppearance.BorderSize = 0
+        Me.BT_PrintSet.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.BT_PrintSet.Image = Global.ContractPacking.My.Resources.Resources.Print_icon
+        Me.BT_PrintSet.Location = New System.Drawing.Point(928, 291)
+        Me.BT_PrintSet.Name = "BT_PrintSet"
+        Me.BT_PrintSet.Size = New System.Drawing.Size(75, 70)
+        Me.BT_PrintSet.TabIndex = 40
+        Me.BT_PrintSet.UseVisualStyleBackColor = True
         '
         'BT_Pause
         '
@@ -807,6 +818,26 @@ Partial Class WF_PackWithOutPrint
         Me.GroupBox4.TabIndex = 10
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Информация о ЛОТе и станции"
+        '
+        'LB_SW_Wers
+        '
+        Me.LB_SW_Wers.AutoSize = True
+        Me.LB_SW_Wers.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.LB_SW_Wers.Location = New System.Drawing.Point(228, 31)
+        Me.LB_SW_Wers.Name = "LB_SW_Wers"
+        Me.LB_SW_Wers.Size = New System.Drawing.Size(88, 20)
+        Me.LB_SW_Wers.TabIndex = 38
+        Me.LB_SW_Wers.Text = "SW_Wers"
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label19.Location = New System.Drawing.Point(42, 31)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(183, 20)
+        Me.Label19.TabIndex = 37
+        Me.Label19.Text = "Версия приложения:"
         '
         'LabelAppName
         '
@@ -1010,31 +1041,182 @@ Partial Class WF_PackWithOutPrint
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "Serial Number"
         '
-        'LB_SW_Wers
+        'GB_Printers
         '
-        Me.LB_SW_Wers.AutoSize = True
-        Me.LB_SW_Wers.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.LB_SW_Wers.Location = New System.Drawing.Point(228, 31)
-        Me.LB_SW_Wers.Name = "LB_SW_Wers"
-        Me.LB_SW_Wers.Size = New System.Drawing.Size(88, 20)
-        Me.LB_SW_Wers.TabIndex = 38
-        Me.LB_SW_Wers.Text = "SW_Wers"
+        Me.GB_Printers.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.GB_Printers.Controls.Add(Me.GB_ReprinUser)
+        Me.GB_Printers.Controls.Add(Me.CB_Technik_Reprint)
+        Me.GB_Printers.Controls.Add(Me.Label21)
+        Me.GB_Printers.Controls.Add(Me.Num_X)
+        Me.GB_Printers.Controls.Add(Me.BT_Save_Coordinats)
+        Me.GB_Printers.Controls.Add(Me.Num_Y)
+        Me.GB_Printers.Controls.Add(Me.Label22)
+        Me.GB_Printers.Controls.Add(Me.Label23)
+        Me.GB_Printers.Controls.Add(Me.CB_DefaultPrinter)
+        Me.GB_Printers.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.GB_Printers.Location = New System.Drawing.Point(1184, 748)
+        Me.GB_Printers.Name = "GB_Printers"
+        Me.GB_Printers.Size = New System.Drawing.Size(422, 260)
+        Me.GB_Printers.TabIndex = 75
+        Me.GB_Printers.TabStop = False
+        Me.GB_Printers.Text = "Настройка принтеров"
+        Me.GB_Printers.Visible = False
         '
-        'Label19
+        'CB_Technik_Reprint
         '
-        Me.Label19.AutoSize = True
-        Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label19.Location = New System.Drawing.Point(42, 31)
-        Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(183, 20)
-        Me.Label19.TabIndex = 37
-        Me.Label19.Text = "Версия приложения:"
+        Me.CB_Technik_Reprint.AutoSize = True
+        Me.CB_Technik_Reprint.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.CB_Technik_Reprint.Location = New System.Drawing.Point(267, 107)
+        Me.CB_Technik_Reprint.Name = "CB_Technik_Reprint"
+        Me.CB_Technik_Reprint.Size = New System.Drawing.Size(142, 52)
+        Me.CB_Technik_Reprint.TabIndex = 66
+        Me.CB_Technik_Reprint.Text = "Повторная " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "печать"
+        Me.CB_Technik_Reprint.UseVisualStyleBackColor = True
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Location = New System.Drawing.Point(6, 104)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(106, 20)
+        Me.Label21.TabIndex = 64
+        Me.Label21.Text = "Корекция X"
+        '
+        'Num_X
+        '
+        Me.Num_X.Location = New System.Drawing.Point(118, 101)
+        Me.Num_X.Minimum = New Decimal(New Integer() {100, 0, 0, -2147483648})
+        Me.Num_X.Name = "Num_X"
+        Me.Num_X.Size = New System.Drawing.Size(69, 26)
+        Me.Num_X.TabIndex = 62
+        '
+        'BT_Save_Coordinats
+        '
+        Me.BT_Save_Coordinats.FlatAppearance.BorderSize = 0
+        Me.BT_Save_Coordinats.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.BT_Save_Coordinats.Image = Global.ContractPacking.My.Resources.Resources._04
+        Me.BT_Save_Coordinats.Location = New System.Drawing.Point(193, 96)
+        Me.BT_Save_Coordinats.Name = "BT_Save_Coordinats"
+        Me.BT_Save_Coordinats.Size = New System.Drawing.Size(58, 63)
+        Me.BT_Save_Coordinats.TabIndex = 65
+        Me.BT_Save_Coordinats.UseVisualStyleBackColor = True
+        '
+        'Num_Y
+        '
+        Me.Num_Y.Location = New System.Drawing.Point(118, 126)
+        Me.Num_Y.Minimum = New Decimal(New Integer() {100, 0, 0, -2147483648})
+        Me.Num_Y.Name = "Num_Y"
+        Me.Num_Y.Size = New System.Drawing.Size(69, 26)
+        Me.Num_Y.TabIndex = 63
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = True
+        Me.Label22.Location = New System.Drawing.Point(6, 129)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(106, 20)
+        Me.Label22.TabIndex = 64
+        Me.Label22.Text = "Корекция Y"
+        '
+        'Label23
+        '
+        Me.Label23.AutoSize = True
+        Me.Label23.Location = New System.Drawing.Point(6, 34)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(271, 20)
+        Me.Label23.TabIndex = 48
+        Me.Label23.Text = "Выберите принтер для печати"
+        '
+        'CB_DefaultPrinter
+        '
+        Me.CB_DefaultPrinter.FormattingEnabled = True
+        Me.CB_DefaultPrinter.Location = New System.Drawing.Point(10, 57)
+        Me.CB_DefaultPrinter.Name = "CB_DefaultPrinter"
+        Me.CB_DefaultPrinter.Size = New System.Drawing.Size(406, 28)
+        Me.CB_DefaultPrinter.TabIndex = 47
+        '
+        'TB_RFIDIn
+        '
+        Me.TB_RFIDIn.Location = New System.Drawing.Point(11, 88)
+        Me.TB_RFIDIn.Name = "TB_RFIDIn"
+        Me.TB_RFIDIn.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.TB_RFIDIn.Size = New System.Drawing.Size(345, 31)
+        Me.TB_RFIDIn.TabIndex = 0
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(7, 45)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(321, 25)
+        Me.Label13.TabIndex = 1
+        Me.Label13.Text = "Отсканируйте свой бэйджик"
+        '
+        'BT_LogInClose
+        '
+        Me.BT_LogInClose.BackColor = System.Drawing.Color.Transparent
+        Me.BT_LogInClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.BT_LogInClose.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.BT_LogInClose.FlatAppearance.BorderSize = 0
+        Me.BT_LogInClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.BT_LogInClose.ForeColor = System.Drawing.Color.Transparent
+        Me.BT_LogInClose.Image = Global.ContractPacking.My.Resources.Resources.close
+        Me.BT_LogInClose.Location = New System.Drawing.Point(362, 73)
+        Me.BT_LogInClose.Name = "BT_LogInClose"
+        Me.BT_LogInClose.Size = New System.Drawing.Size(47, 61)
+        Me.BT_LogInClose.TabIndex = 30
+        Me.BT_LogInClose.UseVisualStyleBackColor = False
+        '
+        'Button1
+        '
+        Me.Button1.BackColor = System.Drawing.Color.Transparent
+        Me.Button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.Button1.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.Button1.FlatAppearance.BorderSize = 0
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button1.ForeColor = System.Drawing.Color.Transparent
+        Me.Button1.Image = Global.ContractPacking.My.Resources.Resources.close
+        Me.Button1.Location = New System.Drawing.Point(361, 30)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(47, 61)
+        Me.Button1.TabIndex = 69
+        Me.Button1.UseVisualStyleBackColor = False
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(6, 22)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(250, 20)
+        Me.Label10.TabIndex = 68
+        Me.Label10.Text = "Отсканируйте свой бэйджик"
+        '
+        'TB_RFID_ReprintUser
+        '
+        Me.TB_RFID_ReprintUser.Location = New System.Drawing.Point(10, 45)
+        Me.TB_RFID_ReprintUser.Name = "TB_RFID_ReprintUser"
+        Me.TB_RFID_ReprintUser.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.TB_RFID_ReprintUser.Size = New System.Drawing.Size(345, 26)
+        Me.TB_RFID_ReprintUser.TabIndex = 67
+        '
+        'GB_ReprinUser
+        '
+        Me.GB_ReprinUser.Controls.Add(Me.Label10)
+        Me.GB_ReprinUser.Controls.Add(Me.Button1)
+        Me.GB_ReprinUser.Controls.Add(Me.TB_RFID_ReprintUser)
+        Me.GB_ReprinUser.Location = New System.Drawing.Point(0, 171)
+        Me.GB_ReprinUser.Name = "GB_ReprinUser"
+        Me.GB_ReprinUser.Size = New System.Drawing.Size(429, 89)
+        Me.GB_ReprinUser.TabIndex = 76
+        Me.GB_ReprinUser.TabStop = False
+        Me.GB_ReprinUser.Visible = False
         '
         'WF_PackWithOutPrint
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1924, 928)
+        Me.ClientSize = New System.Drawing.Size(1924, 1055)
+        Me.Controls.Add(Me.GB_Printers)
         Me.Controls.Add(Me.GB_UserData)
         Me.Controls.Add(Me.GB_NotVisible)
         Me.Controls.Add(Me.GB_WorkAria)
@@ -1070,6 +1252,12 @@ Partial Class WF_PackWithOutPrint
         Me.GroupBox4.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GB_Printers.ResumeLayout(False)
+        Me.GB_Printers.PerformLayout()
+        CType(Me.Num_X, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.Num_Y, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GB_ReprinUser.ResumeLayout(False)
+        Me.GB_ReprinUser.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1077,9 +1265,6 @@ Partial Class WF_PackWithOutPrint
     Friend WithEvents BoxNum As Label
     Friend WithEvents SerialTextBox As TextBox
     Friend WithEvents GB_UserData As GroupBox
-    Friend WithEvents BT_LogInClose As Button
-    Friend WithEvents Label13 As Label
-    Friend WithEvents TB_RFIDIn As TextBox
     Friend WithEvents GB_NotVisible As GroupBox
     Friend WithEvents DG_SelectedBox As DataGridView
     Friend WithEvents TextBox2 As TextBox
@@ -1139,4 +1324,22 @@ Partial Class WF_PackWithOutPrint
     Friend WithEvents PrintSerialPort As IO.Ports.SerialPort
     Friend WithEvents LB_SW_Wers As Label
     Friend WithEvents Label19 As Label
+    Friend WithEvents GB_Printers As GroupBox
+    Friend WithEvents Label21 As Label
+    Friend WithEvents Num_X As NumericUpDown
+    Friend WithEvents BT_Save_Coordinats As Button
+    Friend WithEvents Num_Y As NumericUpDown
+    Friend WithEvents Label22 As Label
+    Friend WithEvents Label23 As Label
+    Friend WithEvents CB_DefaultPrinter As ComboBox
+    Friend WithEvents BT_PrintSet As Button
+    Friend WithEvents CB_Reprint As CheckBox
+    Friend WithEvents CB_Technik_Reprint As CheckBox
+    Friend WithEvents BT_LogInClose As Button
+    Friend WithEvents Label13 As Label
+    Friend WithEvents TB_RFIDIn As TextBox
+    Friend WithEvents GB_ReprinUser As GroupBox
+    Friend WithEvents Label10 As Label
+    Friend WithEvents Button1 As Button
+    Friend WithEvents TB_RFID_ReprintUser As TextBox
 End Class

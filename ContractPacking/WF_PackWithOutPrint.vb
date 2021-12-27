@@ -1,5 +1,7 @@
-﻿Imports Library3
-Imports System.Deployment.Application
+﻿Imports System.Deployment.Application
+Imports System.Drawing.Printing
+Imports System.IO
+Imports Library3
 
 Public Class WF_PackWithOutPrint
     Public Sub New(LOTID As Integer, IDApp As Integer)
@@ -20,6 +22,7 @@ Public Class WF_PackWithOutPrint
     Dim SNFormat As ArrayList
     Dim UserInfo As New ArrayList()
     Dim TableColumn As ArrayList
+    Dim PrinterInfo() As String
 #Region "Загрузка рабочей формы"
     Private Sub WF_PackWithOutPrint_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim myVersion As Version
@@ -27,7 +30,19 @@ Public Class WF_PackWithOutPrint
             myVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion
         End If
         LB_SW_Wers.Text = String.Concat("v", myVersion)
-
+#Region "Обнаружение принтеров и установка дефолтного принтера"
+        For Each item In PrinterSettings.InstalledPrinters
+            If InStr(item.ToString(), "ZDesigner") Then
+                CB_DefaultPrinter.Items.Add(item.ToString())
+            End If
+        Next
+        If CB_DefaultPrinter.Items.Count = 0 Then
+            PrintLabel(Controllabel, "Ни один принтер не подключен!", 12, 234, Color.Red)
+        Else
+            CB_DefaultPrinter.Text = CB_DefaultPrinter.Items(0)
+        End If
+        GetCoordinats()
+#End Region
         'получение данных о станции
         LoadGridFromDB(DG_StepList, "USE FAS SELECT [ID],[StepName],[Description] FROM [FAS].[dbo].[Ct_StepScan]")
         PCInfo = GetPCInfo(IDApp)
@@ -153,6 +168,8 @@ Public Class WF_PackWithOutPrint
 #End Region
 #Region "Очистка поля ввода номера"
     Private Sub BT_ClearSN_Click(sender As Object, e As EventArgs) Handles BT_ClearSN.Click
+        CB_Reprint.Checked = False
+        CB_Technik_Reprint.Checked = False
         SerialTextBox.Clear()
         SerialTextBox.Enabled = True
         SNBufer = New ArrayList()
@@ -208,51 +225,74 @@ Public Class WF_PackWithOutPrint
         If e.KeyCode = Keys.Enter Then 'And (SerialTextBox.TextLength = LenSN_SMT Or SerialTextBox.TextLength = LenSN_FAS) Then
             'определение формата номера
             If GetFTSN(LOTInfo(12)) = True Then
-                'проверка диапазона номера
-                If CheckRange(SNFormat) = True Then
-                    'проверка задвоения и наличия номера в базе
-                    If CheckDublicate(SerialTextBox.Text, GetPcbID(SNFormat)) = True Then
-                        Dim Mess As String
-                        If LOTInfo(12) = False Then ' если номер двойной
-                            If SNBufer.Count = 0 Then
+                If CB_Reprint.Checked = False And CB_Technik_Reprint.Checked = False Then
+                    'проверка диапазона номера
+                    If CheckRange(SNFormat) = True Then
+                        'проверка задвоения и наличия номера в базе
+                        If CheckDublicate(SerialTextBox.Text, GetPcbID(SNFormat)) = True Then
+                            Dim Mess As String
+                            If LOTInfo(12) = False Then ' если номер двойной
+                                If SNBufer.Count = 0 Then
+                                    Select Case SNFormat(1)
+                                        Case 1 ' запись в буфер СМТ номера
+                                            SNBufer = New ArrayList From {True, SerialTextBox.Text, False, ""}
+                                            Mess = "SMT номер " & SerialTextBox.Text & " определен!" & vbCrLf &
+                                               "Отсканируйте номер FAS!"
+                                        Case 2 'запись в буфер FAS номера
+                                            SNBufer = New ArrayList From {False, "", True, SerialTextBox.Text}
+                                            Mess = "FAS номер " & SerialTextBox.Text & " определен!" & vbCrLf &
+                                               "Отсканируйте номер SMT!"
+                                    End Select
+                                    'если в буфере имеется СМТ номер
+                                ElseIf SNBufer.Count <> 0 And SNBufer(0) = True And SNBufer(2) = False Then
+                                    'Запись в базу
+                                    WriteDB(SNBufer(1), SerialTextBox.Text)
+                                    Mess = "Номера определены и записаны в базу!"
+                                    'если в буфере имеется СМТ номер
+                                ElseIf SNBufer.Count <> 0 And SNBufer(0) = False And SNBufer(2) = True Then
+                                    'Запись в базу
+                                    WriteDB(SerialTextBox.Text, SNBufer(3))
+                                    Mess = "Номера определены и записаны в базу!"
+                                End If
+                            Else LOTInfo(12) = True  'SingleSN
                                 Select Case SNFormat(1)
-                                    Case 1 ' запись в буфер СМТ номера
-                                        SNBufer = New ArrayList From {True, SerialTextBox.Text, False, ""}
-                                        Mess = "SMT номер " & SerialTextBox.Text & " определен!" & vbCrLf &
-                                           "Отсканируйте номер FAS!"
-                                    Case 2 'запись в буфер FAS номера
-                                        SNBufer = New ArrayList From {False, "", True, SerialTextBox.Text}
-                                        Mess = "FAS номер " & SerialTextBox.Text & " определен!" & vbCrLf &
-                                           "Отсканируйте номер SMT!"
+                                    Case 1 ' одиночный СМТ номер
+                                        SNID = 0
+                                        WriteDB(SerialTextBox.Text, "")
+                                        Mess = "SMT номер " & SerialTextBox.Text & " определен и " & vbCrLf &
+                                            "записан в базу!"
+                                    Case 2 ' одиночный ФАС номер
+                                        PCBID = 0
+                                        WriteDB("", SerialTextBox.Text)
+                                        Mess = "FAS номер " & SerialTextBox.Text & " определен и" & vbCrLf &
+                                            "записан в базу!"
                                 End Select
-                                'если в буфере имеется СМТ номер
-                            ElseIf SNBufer.Count <> 0 And SNBufer(0) = True And SNBufer(2) = False Then
-                                'Запись в базу
-                                WriteDB(SNBufer(1), SerialTextBox.Text)
-                                Mess = "Номера определены и записаны в базу!"
-                                'если в буфере имеется СМТ номер
-                            ElseIf SNBufer.Count <> 0 And SNBufer(0) = False And SNBufer(2) = True Then
-                                'Запись в базу
-                                WriteDB(SerialTextBox.Text, SNBufer(3))
-                                Mess = "Номера определены и записаны в базу!"
                             End If
-                        Else LOTInfo(12) = True  'SingleSN
-                            Select Case SNFormat(1)
-                                Case 1 ' одиночный СМТ номер
-                                    SNID = 0
-                                    WriteDB(SerialTextBox.Text, "")
-                                    Mess = "SMT номер " & SerialTextBox.Text & " определен и " & vbCrLf &
-                                        "записан в базу!"
-                                Case 2 ' одиночный ФАС номер
-                                    PCBID = 0
-                                    WriteDB("", SerialTextBox.Text)
-                                    Mess = "FAS номер " & SerialTextBox.Text & " определен и" & vbCrLf &
-                                        "записан в базу!"
-                            End Select
+                            PrintLabel(Controllabel, Mess, 12, 193, Color.Green)
+                            SerialTextBox.Clear()
                         End If
-                        PrintLabel(Controllabel, Mess, 12, 193, Color.Green)
-                        SerialTextBox.Clear()
+
                     End If
+                ElseIf CB_Reprint.Checked = True Then
+                    Dim value As Boolean
+                    For i = 0 To DG_Packing.Rows.Count - 1
+                        If SerialTextBox.Text = DG_Packing.Item(1, i).Value Then
+                            value = True
+                            Exit For
+                        End If
+                    Next
+                    If value = True Then
+                        Print(SerialTextBox.Text, CB_DefaultPrinter.Text)
+                        CB_Reprint.Checked = False
+                        SerialTextBox.Clear()
+                    Else
+                        PrintLabel(Controllabel, $"Номер не найден в списке {vbCrLf}данной групповой коробки!", 12, 193, Color.Red)
+                        SerialTextBox.Enabled = False
+                    End If
+                ElseIf CB_Technik_Reprint.Checked = True Then
+                    Print(SerialTextBox.Text, CB_DefaultPrinter.Text)
+                    CB_Technik_Reprint.Checked = False
+                    SerialTextBox.Clear()
                 End If
             End If
         End If
@@ -453,6 +493,9 @@ Public Class WF_PackWithOutPrint
                 ({If(PCBID = 0, "Null", PCBID)},{If(SNID = 0, "Null", SNID)},{LOTID},{PCInfo(8)},{LOTInfo(17)},{PalletNumber},{BoxNumber},{UnitCounter},current_timestamp,{UserInfo(0)})
                 update [FAS].[dbo].[FAS_PackingCounter] set [PalletCounter] = {PalletNumber},[BoxCounter] = {BoxNumber},[UnitCounter] = {UnitCounter} 
                 where [LineID] = {PCInfo(2)} and [LOTID] = {LOTID}")
+        If LOTID = 20112 Or LOTID = 20130 Then
+            Print(SelectString($"select content from SMDCOMPONETS.dbo.LazerBase where IDLaser  = {PCBID}"), CB_DefaultPrinter.Text)
+        End If
         SNBufer = New ArrayList
         ShiftCounter(2)
         RunCommand($"insert into [FAS].[dbo].[Ct_OperLog] ([PCBID],[LOTID],[StepID],[TestResultID],[StepDate],
@@ -475,8 +518,106 @@ Public Class WF_PackWithOutPrint
         BT_Pause.Focus()
     End Sub
 #End Region
-End Class
+#Region "8. Печать SN Aquarius"
+    Private Sub BT_PrintSet_Click(sender As Object, e As EventArgs) Handles BT_PrintSet.Click
+        GB_Printers.Location = New Point(670, 370)
+        GB_Printers.Visible = True
+    End Sub
+    Private Sub GetCoordinats()
+        Try
+            PrinterInfo = File.ReadAllLines("C:\IP_TV_LabelSet\Coordinats_Gr.csv")
+        Catch ex As Exception
+            PrinterInfo = New String(0) {$"{CB_DefaultPrinter.Items(0)};0;0;"}
+            IO.Directory.CreateDirectory("C:\IP_TV_LabelSet\")
+            File.Create("C:\IP_TV_LabelSet\Coordinats_Gr.csv").Close()
+            File.WriteAllLines("C:\IP_TV_LabelSet\Coordinats_Gr.csv", PrinterInfo)
+        End Try
+        CB_DefaultPrinter.Text = PrinterInfo(0).Split(";")(0)
+        Num_X.Value = PrinterInfo(0).Split(";")(1)
+        Num_Y.Value = PrinterInfo(0).Split(";")(2)
+    End Sub
+    Private Sub BT_Save_Coordinats_Click(sender As Object, e As EventArgs) Handles BT_Save_Coordinats.Click
+        PrinterInfo(0) = $"{CB_DefaultPrinter.SelectedItem};{Num_X.Value};{Num_Y.Value}"
+        File.WriteAllLines("C:\IP_TV_LabelSet\Coordinats_Gr.csv", PrinterInfo)
+        GetCoordinats()
+        GB_Printers.Visible = False
+    End Sub
 
+    Private Function Print(SN As String, DefPrt As String)
+        If DefPrt <> "" Then
+            RawPrinterHelper.SendStringToPrinter(DefPrt, GetLabelContent(SN))
+            Return True
+        Else
+            MsgBox("Принтер не выбран или не подключен")
+            Return False
+        End If
+    End Function
+
+    Private Function GetLabelContent(SN As String)
+        Dim x = Num_X.Value, y = Num_Y.Value
+        Dim count As Integer
+        If CB_Reprint.Checked = False Then
+            count = 2
+        Else
+            count = 1
+        End If
+        Dim Str As String
+        If CInt(Mid(SN, 7, 6)) <= 5099 Then
+            Str = $"
+^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^JUS^LRN^CI0^XZ
+^XA
+^MMT
+^PW354
+^LL0150
+^LS0
+^BY2,3,57^FT{32 + x},{77 + y}^BCN,,Y,N
+^FD>:{Mid(SN, 1, 6)}>5{Mid(SN, 7)}^FS
+^PQ{count},0,1,Y^XZ
+"
+        ElseIf CInt(Mid(SN, 7, 6)) >= 5100 Then
+            Str = $"
+^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^JUS^LRN^CI0^XZ
+^XA
+^MMT
+^PW354
+^LL0150
+^LS0
+^BY2,3,57^FT{32 + x},{77 + y}^BCN,,Y,N
+^FD>:{Mid(SN, 1, 6)}>5{Mid(SN, 7)}^FS
+^FT{314 + x},{94 + y}^A0N,17,16^FH\^FD2^FS
+^PQ{count},0,1,Y^XZ
+"
+        End If
+        Return Str
+    End Function
+
+    Private Sub CB_Reprint_CheckedChanged(sender As Object, e As EventArgs) Handles CB_Reprint.CheckedChanged
+        SerialTextBox.Focus()
+    End Sub
+
+    Private Sub CB_Technik_Reprint_CheckedChanged(sender As Object, e As EventArgs) Handles CB_Technik_Reprint.CheckedChanged
+        GB_ReprinUser.Visible = True
+    End Sub
+
+    Private Sub TB_RFID_ReprintUser_KeyDown(sender As Object, e As KeyEventArgs) Handles TB_RFID_ReprintUser.KeyDown
+        If e.KeyCode = Keys.Enter And TB_RFIDIn.TextLength = 10 Then
+            Dim Usr As Integer = (SelectInt($"USE FAS SELECT [UsersGroupID] FROM [FAS].[dbo].[FAS_Users] where [RFID] = '{TB_RFID_ReprintUser.Text}' and IsActiv = 1"))
+            If Usr = 3 Or Usr = 1 Then
+                TB_RFID_ReprintUser.Clear()
+                GB_ReprinUser.Visible = False
+                GB_Printers.Visible = False
+                SerialTextBox.Focus()
+            Else
+                PrintLabel(Controllabel, $"Пользователь не является {vbCrLf}техником технологом!", 12, 193, Color.Red)
+                SerialTextBox.Enabled = False
+            End If
+        End If
+
+    End Sub
+
+
+#End Region
+End Class
 
 
 
