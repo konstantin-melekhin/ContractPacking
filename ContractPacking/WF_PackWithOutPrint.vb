@@ -291,7 +291,7 @@ Public Class WF_PackWithOutPrint
                     End If
                 ElseIf CB_Technik_Reprint.Checked = True Then
                     Print(SerialTextBox.Text, CB_DefaultPrinter.Text)
-                    CB_Technik_Reprint.Checked = False
+                    'CB_Technik_Reprint.Checked = False
                     SerialTextBox.Clear()
                 End If
             End If
@@ -493,7 +493,7 @@ Public Class WF_PackWithOutPrint
                 ({If(PCBID = 0, "Null", PCBID)},{If(SNID = 0, "Null", SNID)},{LOTID},{PCInfo(8)},{LOTInfo(17)},{PalletNumber},{BoxNumber},{UnitCounter},current_timestamp,{UserInfo(0)})
                 update [FAS].[dbo].[FAS_PackingCounter] set [PalletCounter] = {PalletNumber},[BoxCounter] = {BoxNumber},[UnitCounter] = {UnitCounter} 
                 where [LineID] = {PCInfo(2)} and [LOTID] = {LOTID}")
-        If LOTID = 20112 Or LOTID = 20130 Then
+        If LOTID = 20112 Or LOTID = 20130 Or LOTID = 20142 Then
             Print(SelectString($"select content from SMDCOMPONETS.dbo.LazerBase where IDLaser  = {PCBID}"), CB_DefaultPrinter.Text)
         End If
         SNBufer = New ArrayList
@@ -503,7 +503,7 @@ Public Class WF_PackWithOutPrint
                     ({If(PCBID = 0, "Null", PCBID)},{LOTID},6,2,CURRENT_TIMESTAMP,{UserInfo(0)},{PCInfo(2)},{If(SNID = 0, "Null", SNID)})")
     End Sub
 #End Region
-#Region "'6. 'Счетчик продукции"
+#Region "'6. Счетчик продукции"
     Private Sub ShiftCounter(StepRes As Integer)
         ShiftCounterInfo(1) += 1
         ShiftCounterInfo(2) += 1
@@ -512,13 +512,13 @@ Public Class WF_PackWithOutPrint
         ShiftCounterUpdateCT(PCInfo(4), PCInfo(0), ShiftCounterInfo(0), ShiftCounterInfo(1), ShiftCounterInfo(2))
     End Sub
 #End Region
-#Region "'7. деактивация ввода серийника"
+#Region "'7. Деактивация ввода серийника"
     Private Sub SNTBEnabled(Res As Boolean)
         SerialTextBox.Enabled = Res
         BT_Pause.Focus()
     End Sub
 #End Region
-#Region "8. Печать SN Aquarius"
+#Region "'8. Печать SN Aquarius"
     Private Sub BT_PrintSet_Click(sender As Object, e As EventArgs) Handles BT_PrintSet.Click
         GB_Printers.Location = New Point(670, 370)
         GB_Printers.Visible = True
@@ -556,14 +556,27 @@ Public Class WF_PackWithOutPrint
     Private Function GetLabelContent(SN As String)
         Dim x = Num_X.Value, y = Num_Y.Value
         Dim count As Integer
-        If CB_Reprint.Checked = False Then
+        If CB_Reprint.Checked = False And CB_Technik_Reprint.Checked = False Then
             count = 2
-        Else
-            count = 1
+        ElseIf CB_Technik_Reprint.Checked = True Or CB_Reprint.Checked = True Then
+            count = NumReprintCount.Value
         End If
         Dim Str As String
-        If CInt(Mid(SN, 7, 6)) <= 5099 Then
+        If LOTID = 20142 Then
             Str = $"
+^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^JUS^LRN^CI0^XZ
+^XA
+^MMT
+^PW354
+^LL0150
+^LS0
+^BY2,3,57^FT{21 + x},{77 + y}^BCN,,Y,N
+^FD>:{Mid(SN, 1, 7)}>5{Mid(SN, 8)}^FS
+^PQ{count},0,1,Y^XZ
+"
+        Else
+            If CInt(Mid(SN, 7, 6)) <= 5099 Then
+                Str = $"
 ^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^JUS^LRN^CI0^XZ
 ^XA
 ^MMT
@@ -574,8 +587,8 @@ Public Class WF_PackWithOutPrint
 ^FD>:{Mid(SN, 1, 6)}>5{Mid(SN, 7)}^FS
 ^PQ{count},0,1,Y^XZ
 "
-        ElseIf CInt(Mid(SN, 7, 6)) >= 5100 Then
-            Str = $"
+            ElseIf CInt(Mid(SN, 7, 6)) >= 5100 Then
+                Str = $"
 ^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^JUS^LRN^CI0^XZ
 ^XA
 ^MMT
@@ -587,6 +600,7 @@ Public Class WF_PackWithOutPrint
 ^FT{314 + x},{94 + y}^A0N,17,16^FH\^FD2^FS
 ^PQ{count},0,1,Y^XZ
 "
+            End If
         End If
         Return Str
     End Function

@@ -2,6 +2,7 @@
 Imports System.Deployment.Application
 Public Class SettingsForm
     ReadOnly IDApp As Integer = 11
+    Dim CustamerID As Integer = 4
     Dim PCInfo As New ArrayList() 'PCInfo = (App_ID, App_Caption, lineID, LineName, StationName,CT_ScanStep)
     Private Sub SettingsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim myVersion As Version
@@ -29,7 +30,7 @@ Public Class SettingsForm
                             "CT_ScanStep = " & PCInfo(7) & vbCrLf
         End If
         'загружаем список лотов в грид
-        GetLotList_ContractStation(DG_LotList, 4)
+        GetLotList_ContractStation(DG_LotList, CustamerID)
         GetLotList()
     End Sub 'Загрузка формы настроек
     Private Sub GetLotList()
@@ -150,8 +151,8 @@ Public Class SettingsForm
             LOTID = DG_LOTListPresent.Item(3, selRowNum).Value
             'Dim WF As New WF_NS220(LOTID, IDApp)
             'Dim WF As New WF_SberDevice(LOTID, IDApp)
-            'Dim WF As New Aqarius_AQB365MC(LOTID, IDApp)
-            Dim WF As New WF_PackWithOutPrint(LOTID, IDApp) 'текущая программа для упаковки контрактных плат
+            Dim WF As New Aqarius_AQB365MC(LOTID, IDApp)
+            'Dim WF As New WF_PackWithOutPrint(LOTID, IDApp) 'текущая программа для упаковки контрактных плат
             'Dim WF As New WF_WihtOutLaser(LOTID, IDApp)
             WF.Controllabel.Text = ""
             WF.Show()
