@@ -8,14 +8,14 @@
     <OutputType>WinExe</OutputType>
     <StartupObject>ContractPacking.My.MyApplication</StartupObject>
     <RootNamespace>ContractPacking</RootNamespace>
-    <AssemblyName>Aquarious_Packing_Station</AssemblyName>
+    <AssemblyName>PC_MainBoard_Packing</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>\\192.168.180.9\ProdSoft\Aqurius_Packing\IB365MC\</PublishUrl>
+    <PublishUrl>\\192.168.180.9\ProdSoft\PC_MainBoard_Packing\Монитор РДВ\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -25,8 +25,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <UpdateUrl>\\192.168.180.9\ProdSoft\Aqurius_Packing\IB365MC\</UpdateUrl>
-    <ApplicationRevision>42</ApplicationRevision>
+    <UpdateUrl>\\192.168.180.9\ProdSoft\PC_MainBoard_Packing\Монитор РДВ\</UpdateUrl>
+    <ApplicationRevision>54</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -39,7 +39,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>Aquarious_Packing_Station.xml</DocumentationFile>
+    <DocumentationFile>PC_MainBoard_Packing.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -49,7 +49,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>Aquarious_Packing_Station.xml</DocumentationFile>
+    <DocumentationFile>PC_MainBoard_Packing.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -77,8 +77,9 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Library3">
-      <HintPath>..\..\Library3\Library3\bin\Debug\Library3.dll</HintPath>
+    <Reference Include="Library3, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library3\Library3\bin\Debug\Library3.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -105,19 +106,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aqarius_AQB365MC.Designer.vb">
-      <DependentUpon>Aqarius_AQB365MC.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Aqarius_AQB365MC.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="CheckSNFormate2.vb" />
     <Compile Include="RawPrinterHelper.vb" />
-    <Compile Include="Repacking.Designer.vb">
-      <DependentUpon>Repacking.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Repacking.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="SettingsForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -148,38 +138,14 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Variable.vb" />
-    <Compile Include="WF_PackWithOutPrint.Designer.vb">
-      <DependentUpon>WF_PackWithOutPrint.vb</DependentUpon>
+    <Compile Include="WF_TabletPacking.Designer.vb">
+      <DependentUpon>WF_TabletPacking.vb</DependentUpon>
     </Compile>
-    <Compile Include="WF_PackWithOutPrint.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WF_SberDevice.Designer.vb">
-      <DependentUpon>WF_SberDevice.vb</DependentUpon>
-    </Compile>
-    <Compile Include="WF_SberDevice.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WF_WihtOutLaser.Designer.vb">
-      <DependentUpon>WF_WihtOutLaser.vb</DependentUpon>
-    </Compile>
-    <Compile Include="WF_WihtOutLaser.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WF_NS220.Designer.vb">
-      <DependentUpon>WF_NS220.vb</DependentUpon>
-    </Compile>
-    <Compile Include="WF_NS220.vb">
+    <Compile Include="WF_TabletPacking.vb">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Aqarius_AQB365MC.resx">
-      <DependentUpon>Aqarius_AQB365MC.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Repacking.resx">
-      <DependentUpon>Repacking.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -192,17 +158,8 @@
     <EmbeddedResource Include="TestForm.resx">
       <DependentUpon>TestForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WF_PackWithOutPrint.resx">
-      <DependentUpon>WF_PackWithOutPrint.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WF_SberDevice.resx">
-      <DependentUpon>WF_SberDevice.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WF_WihtOutLaser.resx">
-      <DependentUpon>WF_WihtOutLaser.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WF_NS220.resx">
-      <DependentUpon>WF_NS220.vb</DependentUpon>
+    <EmbeddedResource Include="WF_TabletPacking.resx">
+      <DependentUpon>WF_TabletPacking.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

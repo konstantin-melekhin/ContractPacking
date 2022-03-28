@@ -2,7 +2,7 @@
 Imports System.Deployment.Application
 Public Class SettingsForm
     ReadOnly IDApp As Integer = 11
-    Dim CustamerID As Integer = 4
+    Dim CustamerID As Integer = 37
     Dim PCInfo As New ArrayList() 'PCInfo = (App_ID, App_Caption, lineID, LineName, StationName,CT_ScanStep)
     Private Sub SettingsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim myVersion As Version
@@ -43,7 +43,7 @@ Public Class SettingsForm
     'Обновление списка лотов
     Private Sub BT_RefreshLOT_Click(sender As Object, e As EventArgs) Handles BT_RefreshLOT.Click
         DG_LOTListPresent.Rows.Clear()
-        GetLotList_ContractStation(DG_LotList, 4)
+        GetLotList_ContractStation(DG_LotList)
         GetLotList()
     End Sub 'Обновление списка лотов
     '_______________________________________________________________________________________________________________
@@ -149,11 +149,7 @@ Public Class SettingsForm
         'определяем LOTCode и LOTID
         If DG_LOTListPresent.Rows.Count <> 0 Then
             LOTID = DG_LOTListPresent.Item(3, selRowNum).Value
-            'Dim WF As New WF_NS220(LOTID, IDApp)
-            'Dim WF As New WF_SberDevice(LOTID, IDApp)
-            Dim WF As New Aqarius_AQB365MC(LOTID, IDApp)
-            'Dim WF As New WF_PackWithOutPrint(LOTID, IDApp) 'текущая программа для упаковки контрактных плат
-            'Dim WF As New WF_WihtOutLaser(LOTID, IDApp)
+            Dim WF As New WF_TabletPacking(LOTID, IDApp) 'текущая программа для упаковки контрактных плат
             WF.Controllabel.Text = ""
             WF.Show()
             Me.Close()
