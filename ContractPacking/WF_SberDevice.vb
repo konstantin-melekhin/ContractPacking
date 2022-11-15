@@ -5,7 +5,7 @@ Imports Library3
 
 Public Class WF_SberDevice
 #Region "Переменные"
-    Dim LOTID, IDApp, UnitCounter, PCBID, SNID, PalletNumber, BoxNumber As Integer
+    Dim LOTID, IDApp, UnitCounter, PCBID, SNID, PalletNumber, BoxNumber, LabelScenario As Integer
     Dim ds As New DataSet
     Dim LenSN_SMT, LenSN_FAS, StartStepID, PreStepID, NextStepID As Integer
     Dim StartStep, PreStep, NextStep, Litera As String
@@ -122,6 +122,11 @@ Public Class WF_SberDevice
         L_LOT.Text = LOTInfo(1)
         L_Model.Text = LOTInfo(0)
         L_BoxCapacity.Text = LOTInfo(15)
+        If LOTInfo(15) = 20 Then
+            LabelScenario = 1
+        ElseIf LOTInfo(15) = 18 Then
+            LabelScenario = 2
+        End If
         L_PalletCapacity.Text = LOTInfo(16)
         L_Liter.Text = If(LOTInfo(17) = 0, PCInfo(9), PCInfo(9) & " " & LOTInfo(17))
         'Запуск программы
@@ -203,7 +208,7 @@ Public Class WF_SberDevice
         End If
     End Sub 'регистрация пользователя
 #End Region
-#Region " условия для возврата в окно настроек"
+#Region "условия для возврата в окно настроек"
     Dim OpenSettings As Boolean
     Private Sub Button_Click(sender As Object, e As EventArgs) Handles BT_OpenSettings.Click, BT_LogInClose.Click
         OpenSettings = True
@@ -236,7 +241,7 @@ Public Class WF_SberDevice
                     _stepArr = New ArrayList(GetPreStep(SNID))
                     If _stepArr.Count = 0 Then
                         PrintLabel(Controllabel, SerialTextBox.Text & " не не был зарегистрирован на FAS Start!", 12, 234, Color.Red)
-                    ElseIf _stepArr.Count > 0 And (_stepArr(4) = 25 Or _stepArr(4) = 30) And _stepArr(5) = 2 Then ''_stepArr(4) = 37 - станция взвешивания
+                    ElseIf _stepArr.Count > 0 And _stepArr(4) = 37 And _stepArr(5) = 2 Then '' - станция взвешивания (_stepArr(4) = 25 Or _stepArr(4) = 30)
                         'проверка задвоения и наличия номера в базе
                         If CheckDublicate(_stepArr(2)) = True Then
                             WriteDB(_stepArr)
@@ -281,8 +286,6 @@ Public Class WF_SberDevice
                 SelectInt($"USE FAS SELECT [ID] FROM [FAS].[dbo].[Ct_FASSN_reg] where LOTID = {LOTID} and right (SN, 7) = '{CInt("&H" & Mid(SerialTextBox.Text, 7, 6))}'"))
         Return Res
     End Function
-
-
 #End Region
 #Region "2. проверка диапазона"
     Private Function CheckRange(SNFormat As ArrayList) As Boolean
@@ -455,7 +458,7 @@ Public Class WF_SberDevice
 
     Private Function Print(SNArray As ArrayList, DefPrt As String, x As Integer, y As Integer)
         If DefPrt <> "" Then
-            RawPrinterHelper.SendStringToPrinter(DefPrt, GetGroupLabel(SNArray, x, y))
+            RawPrinterHelper.SendStringToPrinter(DefPrt, GetGroupLabel(SNArray, x, y, LabelScenario))
             CB_ManualPrint.Checked = False
             Return True
         Else
@@ -482,7 +485,7 @@ Public Class WF_SberDevice
             If SearchSNList.Count <> 0 Then
                 SerchBoxForPrint(SearchSNList(1), SearchSNList(3), PCInfo(8), LOTInfo(17))
                 SNArray = GetSNFromGrid()
-                If SNArray.Count = 21 Then
+                If (LabelScenario = 1 And SNArray.Count = 21) Or (LabelScenario = 2 And SNArray.Count = 19) Then
                     Print(SNArray, CB_DefaultPrinter.Text, Num_X.Value, Num_Y.Value)
                     'GetGroupLabel(SNArray, PrinterInfo(0).Split(";")(1), PrinterInfo(0).Split(";")(2))
                     TB_ScanSN.Clear()
@@ -501,7 +504,7 @@ Public Class WF_SberDevice
             System.Threading.Thread.Sleep(1000)
             SerchBoxForPrint(LOTID, NumBox.Value, PCInfo(8), LOTInfo(17))
             SNArray = GetSNFromGrid()
-            If SNArray.Count = 21 Then
+            If (LabelScenario = 1 And SNArray.Count = 21) Or (LabelScenario = 2 And SNArray.Count = 19) Then
                 Print(SNArray, CB_DefaultPrinter.Text, Num_X.Value, Num_Y.Value)
                 NumBox.Value += 1
             Else
@@ -534,8 +537,10 @@ Public Class WF_SberDevice
     End Function
 #End Region
 #Region " 10. Групповая этикетка"
-    Private Function GetGroupLabel(sn As ArrayList, x As Integer, y As Integer)
-        Dim str As String = $"
+    Private Function GetGroupLabel(sn As ArrayList, x As Integer, y As Integer, w As Integer)
+        Dim str As String
+        If w = 1 Then
+            str = $"
 ^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^JUS^LRN^CI0^XZ
 ^XA
 ^MMT
@@ -597,6 +602,73 @@ eJztXc2PHMd1r+4WOYtdYkc+GOJhzRnIlwUVaJnbYGVv74GIrwpgwjkE0OSW4/pgmAkoTWcXiAgZIP+E
 ^FT364,106^A0B,29,28^FH\^FD{sn(0).Split(";")(1)}{LOTInfo(17)}^FS
 ^PQ1,0,1,Y^XZ
 "
+        ElseIf w = 2 Then
+            str = $"
+^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^JUS^LRN^CI0^XZ
+^XA
+^MMT
+^PW1181
+^LL1772
+^LS0
+^FO128,352^GFA,09216,09216,00032,:Z64:
+eJztl71qwzAUhRU0ZCn2G9iv0UHYr9JHkMlQD6E2dO8zORSaLc8g6F7avdSlYJMl95wQS3Ya9K1fuLrW74lSkUgkcrWk/Wncmf5Gx3fUF9jbvoW+6jvoNzviWzwDoX2zc7C/Zo/7z/ctrK/esJ6K/la4vx77clhfifv3DnpbOVjf2rC+/sK+HPoX5+cVf1/6DPXxd0J96uP5g/3Ndf4uXb/x/Enk5HyVw/pJGO2gt8rB/kL7re6gL8n+ZPOjf6CeTqJgf8w3wxYJ5Q0ZP0vw561fsNcHXH/1QebnicxvQXxGPCEd7hdx/3XEO+zrT+xt7WB/1hCfkfop6W+NfaGxz1a4v0Q9QD9ypfl36fEd83c5rmvKFvumg/VZPrLOibX/mOpr4k3VQZ+T9zFl7wd5n491Llu/mtTdEs+uz6bF/tFhvyHvpyXvj82JJ/eHxcNP9iNL5zfx/Sb3r698JsH8mN/Y90n4ym9x/U5z6+unSH5l/lryt+TH/C3u3wP+vjF/i3jK31Pzizh/Q34Rvaf8MtVLnJtf5P+32AfOL0vn39nGF/F0v4Tyhozv6/+9xFz3SyQSiUT+Ib8dB53k:EF98
+^FO320,160^GFA,01536,01536,00008,:Z64:
+eJzlkzEOwjAMRRNZIkvVMHaoFI7AioQoV0Fcgo0cLUfpETIyIFJUfw+tmhYGhBBeXqX8bzt2o9Tvhw7TXLLdmZSYNvmeJTFr5KnUPEUnPslj0rBOJkxKYYrPL9BBuQdvyNsOZRbHB/ACWRzK8vU+HAZ1LOjAGudVhgW4At3I7xb6//aeR3kI8xbqhDy5++dYgu/OQ6kj+g64h5D7qM+oc0Jf2zDLYgd/wzSOfSQ/5Cg2a2bkxevYsLxlPXnT+43nORu851dJnoS9XwfOpyPeUXowr9iXbaf7/IvoAILacDI=:C139
+^FO128,1088^GFA,10240,10240,00016,:Z64:
+eJztmk2u3DYMgGUYiDcBfIEA6hFygAK6VhYB7KIHq4NexEAX3Q7QjReGWYs/4o/fTNJm0deXEZB4vjfPFCWRlES+lP437T0/3/HzAz8Hfv4svNBzF17x0TXe6NGYPoyND3zkxoCPSRk7AOXaQW94w/+V66fRcO2gwMbcA8yneLjJQKF2ALAK16/ol6jl89UBQBBFZzga1w5U/Dny810jvsr+AjQIagX+MuJrB2DE1w6gac8aG/HYgWpLGlvxtQMrLjltSePtIY+u+yrPvz859VEf23/V1wwfx2M7yGF8Uxg/+Pk5xS12wEOY31Pc+U8FlvPzaDQGWj8R2FVZnWrc8/qLQFpqXVCyn/zA3m7J2+OKvShjz1Ow93LXH6K/0MjVn1jxxjww8cfor9Lep29vbvmSm0382ttftM+63vaFUtd3Vsb1Xpw4azAdsgrskXV9B2TtYERWA8qBqz2Y9T95ZacXdZb6w8b46qgjxK4HwxsqJQp3+KkLnNoAOnrTxB/saQrc7KEnTUuwn3yf00s8Hm+Lc+R78xHn7zq/yJPyinxvvWR9m0GG9Rf7aDxVTUe7n8zVKBujqU1qbzXU+P0G5mI42vcY7D/6Q/SX6F/kf6tyCf44hng8hHidQnxPxe8HxhleTfvscbTjzSns39s5RTbe7CnEmy7Em1/BxRf4HVx8gT8tA/Fq2C5Ix3yzfAye987Y51ZPKCaerPWXbXypJl4MVxO38aay858LL97fPKcLT09+MF/gHPS187O9+TbNyZ4PR4w1en6k479GUAx27TzKx/++MR3/2/kVDWpT++frQNt/+Tqg9la3o0PPz7hdHYNnMFcUtNbfAoPl2XJ3jia7+LqhSkvjG6o8t+GsOCQd3lKHvAfelGd3nWReAgvS+WWy23kypxHh2xvm1xXvnvHzm1rz53df4SHyfGV73qj3W8dr4Fvg7Su8Bz6+wvDk7+TO8+vyx+/l/k369wePnU8o8pFAm823pWk992TdwDq8L9kNDu9Ls8qCX8BsiDnclwrAH2A20BLuSxPNv8nfPmS5T22Oe8978rzZ/MCW633K5Avq/crcn9beM9637P0p+MOF02P+z/35tfGbji8/xPlh8Akjmx5LP6Xq43oA/piSy798Ih9tvFFMbgL3wAfN6cLYAfFqeHQ8I0v8qOf7/ALb/G0xXIdW4ItZz8q2nnXy4fk8/hdr7+eXkV3+EwyPgCnJf8Y3x90jHq7ce54x3j3gwfMSuWbjDK/Z5kvOzmrG1MRXXNzIbT67l9jkexOxyeeicSlPlU0Ks1RfNJwBE7aNR8CC4So8VFsy9QIsMNkNFW13Usah5jm5NgR+th+o+fJuGkI9d/D1NpeeELYSOrAvjGLy3MqMR6pZ+LTMycXDFeObxr/VVXDrYchW/AbOp4hArIyaAEyZnal10OGbg3aAYzEZFayfmIw8leq0pk2sc0R7iVRUPsrZlRX4lDiVzhWYz4mr34UUOqSUm6nuc7CCLKbuFtTTwHWgOnttnLgbkMI0zgFnD3sCqQvlC6+kEPa6iMKFeFYFmZuCM/2wuzArvHBiiRRWJgXxDyumvU0FhizkooyiZUZXDpMjl7yFB54a5S1RIq3jSdob39qSK8uSN54uPFOirpOpqQoq5wuvjknh+99HjvJL6J/1uae/Hd/mOIX5sNy3+RbTEjbzPe1Jiou6XtnwYdbv/L8oj1Tnbus/ir2wfWSqU85XplYgucJZCXXyWPdkv/Z1Unvv2tvQk5kUG0cwDjA3N2aFsnPj5r9FFOAviijA/i83V4kP8rcNI3ckfykg8aUH8c6d1Ra9NpFL8yD9UGTT+FZj55w1/mU+38u45Lwv477kF5i1vky8CLPAOTmB9j4OLv5f/v4i1ns7CPXdHPafZ/u37W9YSiGT:2DA2
+^FO256,896^GFA,13312,13312,00016,:Z64:
+eJztms1u3MgRgJuawMzB0OSYgzCU30BHLSDM7KPsI8jIhYsMNBNkAd9238D7Klzo4FvyBrtE9qBbTN1ogCHD+u2q0ox+bF8CpAHL+iRNdXV1dXVVkSn9b4xzR+XUOl4+wdW0d7x62zg+uw584T9/dvk4r74J81eRvfyTwKn0+j0c537+FPQpgj6l5+qnoM9HP185+dmKwcDJ/K/OuBvnL5eZpxHs2x7jYuo93515/vDaT317GvjHQ3yu/Pt77w/3o9//+8HzmyH4Q/1F/lDAeiMbf0A2/sCs8tHU1h9wK4w/bPzUqew9pzHw2u9HCvtTDp5Bvts/+HKtSK5gGPT/AqYRuHpwXjMv/xj0fe15d+ZlTSvPd56LD+BfS8/lz3vHy98az9Z/Z3nVpzz/3dW8/13maQD/Mfr1njfd7B/m/C7nqapwfpeLxvGrwCdF1hftWyTP6dmcojttA1eBl16VtGjDHxwSmOMJzr+YPJf5PNL5mBrPYf2rYK8H8TDY1zLYn5gcA/aH5BHD/tF8yEW3Fn2I25XXtzn16wG2621CPAMGly0bmq89I6464utL4k1P801zAEUePG/Xnusq8PK9TgrnpS5/9bwYHW8LzxsKLOovm3TjuGJ7CJfpVWa7/hTsk4L9Etm3oJ8Rz/ZfTp0y7E819cqwf5tpcHxj9AOujX6RQZ5lmI8ZB+jD8mhts248Hw5YD+tDA++YLtlRhJzjsXEo/tnPA1v5wG7+OZ6KPSTeWnsA2/U+xrf7wyzygNE/eL7bxulT3LZO3+K2d+sp7mxucSAeTevAfJ7EHttXZH+1xwntj7UH7J/dr2rh/SPu/1P+YnlervM34NOicf5YLvbOX6tp2lt/Brb+Diz2iDz5eFrIsuTzYj+RT3ye7XFK+ZHag+8z9W9m6/+QHykvW8yPLEN+pPaZPwv5kTt/l63zR2Cxh+RHao9Tyo/UHqc+PwLG/KjMv8fvmQeJr8zTPwL/2/893jc/q7wEYRDve8m5JH8SnnWz9z3ao/MM9/u3+SfIdeCbwLvG86bzXJpzgfqEeGA/QPr6+P0wMfTxOoX4zp/P8XuT/QnjN+8P/ArOm0wHv8LzxupAPgnxVNZX8v2q69fzxGNN/G34vQzIV5GnLB/kSc6P85v7YmB9rL9h/E7ZH2E963Tl1rtNa2cPex7OXsCQr1qGfNXyjusfYchXLd8x70gRzD8jg7ynmAfmqzZFxnzVsIZJTuR2HDaW7+gb2dfqI/2h5H82viKPPnBvtz7xrq+8/30mU3pZ9MqYr865i3BFq1ZGfYt/iX00XxWWfFV561jjKQ/2p9bx8jiTTnB2TKIM8fSVKeQgnq6W2Z4QT9eVj5/rau1Y8z+Op7VhiKey/jJRPK23mU8CQ6yre8PzsIz5Zr92vOm2gY2+sOa2d1zuczyh+NQEtvZ6nK3/ynmTIedNxu4s+Hs8D95NqT4M7PoVyrVnqpQLOb/SRIHzhvUu59t4bJB/Jf16YWp04HkzjP5rGMcTjPMTZ/sGLox/RzbfYD5yiOXHyN3e8aJrHJf3npf3rZN3+tbMz/Wy8hB4ZG7SIcZ8ZvXW8+lfGsdYb5iFwP2gXNP9IPw97NeQE7H/aP7l/V31e+/5o8ZjdCwTn4/zQX8DR7e8ee2ZGiGqDzdCMt95ZkePjCNyOsRycE54fnR06g9SvkKGUv/ji0VZ8gvxf7pYsD9o+0fYHzSM/UHkZYv842HGxDRRf5CYHPve+zv2By2/EZbCvQ4sihxhuR8lMcVlDjkxBTOgf2FiSmZC/2N/0X4DxQvsN1A/Yq3TUL8Cm4rcT2h1/ceZBvUbWlUU+g0oT/Zj3hCcb9dnBn3E32fG+r27Usb1tCaQDsftQ+PcMejDTP4468Py6H4r2zzfyP1sc/6wn73L9Rb2sze53qKksFE2yTnxpWd7/oRtvHpJ/FQekuNke+6Yb+uclG+b/ID6JSQPvqN+FPkDrJL8g34PX3E/S7ZPw/vN8nfS/+L5S863tec/fwBZGz0tylOe82yYT7hk/xDedbXv5+0vXf9nBGOb/lBnHybw+p4aL80XIi/DJGXjufCtHKsvDTR9laWgQDqPaAYUuLpOxj9mPvdMU0Uegr7ZdNhfUzf5ju4LdZPrxPn3SF+2UnGtiW9kg3G+MW3+Th+U5wHVP1uVD1xyD3ZifXgPUQr6z5j1B5bfC/PnlVk+rbdpdX605NBm/YDHNuvP8+v6WEleP9kbc2vTf8y9THbLAxyeeS1yzzn9OZn+Uk01hfRTQE3Y6epvhgcwM+XDi5HizxXVl5Tm7VqpLykNm3N9qfeQoX6xvJw876a95XIqHVf9Ym/lV+1if2Xq2yot9qwfMqyP9c/HfPLs+5nnzj5Y/xj7uXqn9vy9PG/j+gfyJ6h/uL7k/K2R+pLyp4vcP8L8CfpJVF9SvgT1D9UvyFj/XGU29Q9z4/gkMNY/X1ifav2YXsbxecomxJ5d7zmU3Xgt2vjRrjw3p0+ziYfIJh6iPBsP8RpGHU6yPrg1r7K+s0B5voHrmQVW3VrXi/3jLtsD+dPgePtXmvRP59wf2ZBS13xd1BtSut8KJ8/rrL9lTeuuPo9FnuwfpSWZ0R51ZrSHYbSHaQ7i/ttmYXqc5e+1v8TypN4XfxEWfxEWfcV/cT1DZnmeZRnuc8tw3zteNE4e9tfNfNjvM/pYxuejqXX2sQzrBXn2/GB/0bKJTTDi88T4vBH9l+JRjnfvQjz8mPv5UN/a/j7UtxKPgKG+lXgEDPWt2idRfWsZ+8NHWOpf5SHwSPWtZahvxZ5S36p9eP8sgz1cPBpeGo/yZ8ksmSkejWpfiUfc79L4w/0uZel3Sb0i/S5h6XeBPPSf9XH/gvxC+lugL+QXwrAeyC+kvyXxSJj+qJV+F+3/opV+F/F8X0u/i8w1ar9LWPpd2ZxN4KT8WD74HP46+awZBwWeKFI97+N3mh7nBw+y7qjrAfEdmV8EkvguLwJhPJ/vZ3kRCBie3zBTffxbw4W+ud/ux8yfWir0mfH5zRvjb/h+Rq3y7Psa6F+Gj73fUdj4ZVj8q3hgj8BNOsqk6FfmkI8U4fzb9Vh+Tj5i6zuwZ3w/wvY75D5xvPBs6k89/9K3l/MvfXu5X+TFFblfZGH4/g3Ux5yPwo+pfs4Lo/tkq2z0zf1B5twfJM79wVH/M/1m7Q8KS39Q+pkfvgLbfkTkZ/d/m3SIs+KWh/z38J/pnx5938PxwrN5v0frx8/lKO/QfFGfqC/5r6n3cY+x3tf4xfW+xi+u9zV+yZD4JfIlful8Er8WhiF+meffGL+wvWfiF/e7NH5tyZ81fnHip/Hrd/JCiV/p3Q/IEr9YvsavB8+bt71nSSyF29yPxrH/g2deb+BfND+j+wZvVbI/1hfXaM5J64sLOOb4vJfqiws5z1xfXMAxh/3n+uI6cTzg+gIKc8ofqL74RfyH64sic9YX89t1Zsx/zR1K+XFmyp8zU36d1L6UfxOLmV39MNfftr6w+THub86PKf8uW7Uv+s9Pns37vxyPk2Poacj7HVgfmPoCt/nS1xeYP5l83jLmW4Y135J8lccxlvvIyjP1ivbTrT62XpF+urWPqR/0frFs7Bv758f76Ty0ny71BffTtb7gfqn2O7ifvjH9dViPe54+HH+eDuY5+4os98FTvAv3h9or+fcRjrHa83F+MDDe5voN7Q32kufpGF9ne8rzdGCwt9QXsv+2voD9kvpC9reOfBV4G+qRbT4fGB/67I8YH/rsr6CPPE8Hf8b95+fp4O+4/51JrLDniOv7Tn7E9YXpDIDl3GtGON0+uXoBLy1kisel9pslXicfz+E9HvwNx/uqY+ZAVfXM/M7WbmCm+6QYb5jpvln0K2aSv+xWTv4Gwrq5b3ZJmOSjkZDpPqyV6b5U+/x/PGf8F9Sf1rk=:97A6
+^FT159,878^BQN,2,3
+^FH\^FDLA,{sn(1)}\0D\{sn(2)}\0D\{sn(3)}\0D\{sn(4)}\0D\{sn(5)}\0D\{sn(6)}\0D\{sn(7)}\0D\{sn(8)}\0D\{sn(9)}\0D\{sn(10)}\0D\{sn(11)}\0D\{sn(12)}\0D\{sn(13)}\0D\{sn(14)}\0D\{sn(15)}\0D\{sn(16)}\0D\{sn(17)}\0D\{sn(18)}^FS
+^FO437,33^GB0,1697,5^FS
+^BY2,3,84^FT570,1716^BCB,,Y,N
+^FD>:{Mid(sn(1), 1, 10)}>5{Mid(sn(1), 11)}^FS
+^BY2,3,84^FT570,1297^BCB,,Y,N
+^FD>:{Mid(sn(2), 1, 10)}>5{Mid(sn(2), 11)}^FS
+^BY2,3,84^FT570,879^BCB,,Y,N
+^FD>:{Mid(sn(3), 1, 10)}>5{Mid(sn(3), 11)}^FS
+^BY2,3,84^FT570,460^BCB,,Y,N
+^FD>:{Mid(sn(4), 1, 10)}>5{Mid(sn(4), 11)}^FS
+^BY2,3,84^FT695,1716^BCB,,Y,N
+^FD>:{Mid(sn(5), 1, 10)}>5{Mid(sn(5), 11)}^FS
+^BY2,3,84^FT695,1297^BCB,,Y,N
+^FD>:{Mid(sn(6), 1, 10)}>5{Mid(sn(6), 11)}^FS
+^BY2,3,84^FT695,879^BCB,,Y,N
+^FD>:{Mid(sn(7), 1, 10)}>5{Mid(sn(7), 11)}^FS
+^BY2,3,84^FT695,460^BCB,,Y,N
+^FD>:{Mid(sn(8), 1, 10)}>5{Mid(sn(8), 11)}^FS
+^BY2,3,84^FT820,1716^BCB,,Y,N
+^FD>:{Mid(sn(9), 1, 10)}>5{Mid(sn(9), 11)}^FS
+^BY2,3,84^FT820,1297^BCB,,Y,N
+^FD>:{Mid(sn(10), 1, 10)}>5{Mid(sn(10), 11)}^FS
+^BY2,3,84^FT820,879^BCB,,Y,N
+^FD>:{Mid(sn(11), 1, 10)}>5{Mid(sn(11), 11)}^FS
+^BY2,3,84^FT820,460^BCB,,Y,N
+^FD>:{Mid(sn(12), 1, 10)}>5{Mid(sn(12), 11)}^FS
+^BY2,3,84^FT945,1716^BCB,,Y,N
+^FD>:{Mid(sn(13), 1, 10)}>5{Mid(sn(13), 11)}^FS
+^BY2,3,84^FT945,1297^BCB,,Y,N
+^FD>:{Mid(sn(14), 1, 10)}>5{Mid(sn(14), 11)}^FS
+^BY2,3,84^FT945,879^BCB,,Y,N
+^FD>:{Mid(sn(15), 1, 10)}>5{Mid(sn(15), 11)}^FS
+^BY2,3,84^FT945,460^BCB,,Y,N
+^FD>:{Mid(sn(16), 1, 10)}>5{Mid(sn(16), 11)}^FS
+^BY2,3,84^FT1071,1716^BCB,,Y,N
+^FD>:{Mid(sn(17), 1, 10)}>5{Mid(sn(17), 11)}^FS
+^BY2,3,84^FT1071,1297^BCB,,Y,N
+^FD>:{Mid(sn(18), 1, 10)}>5{Mid(sn(18), 11)}^FS
+^BY3,3,181^FT336,321^BCB,,N,N
+^FD>;{Mid(Integer.Parse(sn(0).Split(";")(0)).ToString("00000"), 1, 4) & ">6" & Mid(Integer.Parse(sn(0).Split(";")(0)).ToString("00000"), 5)}^FS
+^FT364,180^A0B,29,28^FH\^FD{Integer.Parse(sn(0).Split(";")(0)).ToString("00000")}^FS
+^FT364,106^A0B,29,28^FH\^FD{sn(0).Split(";")(1)}{LOTInfo(17)}^FS
+^FT136,502^A0B,83,81^FH\^FDQTY: 18 PCS^FS
+^FT94,864^A0B,42,40^FH\^FDN.W.:^FS
+^FT146,864^A0B,42,40^FH\^FDG.W.:^FS
+^FT94,758^A0B,42,40^FH\^FD6,192 kg^FS
+^FT146,758^A0B,42,40^FH\^FD6,575 kg^FS
+^PQ1,0,1,Y^XZ
+"
+        End If
         Return str
     End Function
 #End Region

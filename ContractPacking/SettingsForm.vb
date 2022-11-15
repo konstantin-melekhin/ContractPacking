@@ -2,15 +2,15 @@
 Imports System.Deployment.Application
 Public Class SettingsForm
     ReadOnly IDApp As Integer = 11
-    Dim CustamerID As Integer = 4
+    'Dim CustamerID As Integer = 34
     Dim PCInfo As New ArrayList() 'PCInfo = (App_ID, App_Caption, lineID, LineName, StationName,CT_ScanStep)
+    Dim ds, ds2, ds3 As New DataSet
     Private Sub SettingsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim myVersion As Version
         If ApplicationDeployment.IsNetworkDeployed Then
             myVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion
         End If
         LB_SW_Wers.Text = String.Concat("v", myVersion)
-
         PCInfo = GetPCInfo(IDApp)
         If PCInfo.Count = 0 Then
             DG_LOTListPresent.Visible = False
@@ -30,9 +30,26 @@ Public Class SettingsForm
                             "CT_ScanStep = " & PCInfo(7) & vbCrLf
         End If
         'загружаем список лотов в грид
-        GetLotList_ContractStation(DG_LotList, CustamerID)
-        GetLotList()
+        LoadCombo(CB_Customers, $"use FAS  SELECT [СustomerName] FROM [FAS].[dbo].[CT_Сustomers]")
+
+
     End Sub 'Загрузка формы настроек
+
+#Region "Выбор заказчика"
+    Private Sub CB_Customers_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CB_Customers.SelectedIndexChanged
+        Get_LOT_Table(CB_Customers.Text)
+    End Sub
+#End Region
+#Region "Загрузка грида заказов для выбранного заказчика"
+    Private Sub Get_LOT_Table(Customer As String)
+        'ds.Clear()
+        ds = New DataSet
+        GetLotList_ContractStation(DG_LotList, SelectInt($"SELECT ID FROM [FAS].[dbo].[CT_Сustomers] 
+        where [СustomerName] ='{Customer}'"), ds)
+        DG_LOTListPresent.Rows.Clear()
+        GetLotList()
+    End Sub
+#End Region
     Private Sub GetLotList()
         For i = 0 To DG_LotList.RowCount - 1
             DG_LOTListPresent.Rows.Add(DG_LotList.Item(0, i).Value, DG_LotList.Item(1, i).Value,
@@ -43,7 +60,7 @@ Public Class SettingsForm
     'Обновление списка лотов
     Private Sub BT_RefreshLOT_Click(sender As Object, e As EventArgs) Handles BT_RefreshLOT.Click
         DG_LOTListPresent.Rows.Clear()
-        GetLotList_ContractStation(DG_LotList, 4)
+        GetLotList_ContractStation(DG_LotList)
         GetLotList()
     End Sub 'Обновление списка лотов
     '_______________________________________________________________________________________________________________
@@ -151,8 +168,8 @@ Public Class SettingsForm
             LOTID = DG_LOTListPresent.Item(3, selRowNum).Value
             'Dim WF As New WF_NS220(LOTID, IDApp)
             'Dim WF As New WF_SberDevice(LOTID, IDApp)
-            Dim WF As New Aqarius_AQB365MC(LOTID, IDApp)
-            'Dim WF As New WF_PackWithOutPrint(LOTID, IDApp) 'текущая программа для упаковки контрактных плат
+            'Dim WF As New Aqarius_AQB365MC(LOTID, IDApp)
+            Dim WF As New WF_PackWithOutPrint(LOTID, IDApp) 'текущая программа для упаковки контрактных плат
             'Dim WF As New WF_WihtOutLaser(LOTID, IDApp)
             WF.Controllabel.Text = ""
             WF.Show()

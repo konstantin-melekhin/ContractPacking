@@ -306,8 +306,8 @@ Public Class Aqarius_AQB365MC
         Private Function GetFTSN(SingleSN As Boolean) As Boolean
             Dim col As Color, Mess As String, Res As Boolean
             SNFormat = New ArrayList()
-            SNFormat = GetSNFormat(LOTInfo(3), LOTInfo(8), SerialTextBox.Text, LOTInfo(18), LOTInfo(2), LOTInfo(7))
-            Res = SNFormat(0)
+        SNFormat = CheckSNFormate.GetSNFormat(LOTInfo(3), LOTInfo(8), SerialTextBox.Text, LOTInfo(18), LOTInfo(2), LOTInfo(7))
+        Res = SNFormat(0)
             Mess = SNFormat(3)
             'SNFormat(0) ' Результат проверки True/False
             'SNFormat(1) ' 1 - SMT/ 2 - FAS / 3 - Неопределен
@@ -615,7 +615,6 @@ Public Class Aqarius_AQB365MC
 
 
 #End Region
-
 #Region "8. печать групповой"
     Private Function PrintGR(SNArray As ArrayList, DefPrt As String, x As Integer, y As Integer)
         If DefPrt <> "" Then
@@ -639,6 +638,14 @@ Public Class Aqarius_AQB365MC
                 left join dbo.FAS_Liter as Lit On Lit.ID = P.LiterID
                 where p.lotid ={LotID} and literid = {LiterID}  And LiterIndex = {LitInx} and BoxNum = {BoxNum} order by UnitNum
                 " 'and LiterName= '" & LitName & "'
+        'SQL = $"use fas
+        '        SELECT  [UnitNum] as '№',l.Content AS 'Серийный номер платы',Lit.LiterName as 'Литера' ,[BoxNum]as 'Номер коробки' 
+        '        FROM [FAS].[dbo].[Ct_PackingTable] as P
+        '        left join [SMDCOMPONETS].[dbo].[LazerBase] as L On l.IDLaser = PCBID
+        '        left join dbo.Ct_FASSN_reg as F On F.ID =P.SNID
+        '        left join dbo.FAS_Liter as Lit On Lit.ID = P.LiterID
+        '        where p.lotid ={LotID} and  LiterIndex = {LitInx} and BoxNum = {BoxNum} order by UnitNum
+        '        " 'and LiterName= '" & LitName & "'
         LoadGridFromDB(DG_SelectedBox, SQL)
     End Sub
 
@@ -736,10 +743,7 @@ eJzt1k9u2zgUBvBHcMHd8AID8RpdeKwrZamigkXBixxjjlIGWfQaNLLwbsKgi3AAQez3KDv6UyNpUq9m
         Return Content
     End Function
 #End Region
-
-
-
-    '8. Ручная печать групповой
+#Region "9. Ручная печать групповой"
     Private Sub CB_ManualPrint_CheckedChanged(sender As Object, e As EventArgs) Handles CB_ManualPrint.CheckedChanged
         GB_ManualPrint.Location = New Point(18, 362)
         If CB_ManualPrint.Checked = True Then
@@ -784,5 +788,5 @@ eJzt1k9u2zgUBvBHcMHd8AID8RpdeKwrZamigkXBixxjjlIGWfQaNLLwbsKgi3AAQez3KDv6UyNpUq9m
         Return SelectListString(SQL) 'IB365MC001409
     End Function
 
-
+#End Region
 End Class

@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class SettingsForm
     Inherits System.Windows.Forms.Form
 
     'Форма переопределяет dispose для очистки списка компонентов.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class SettingsForm
     'Примечание: следующая процедура является обязательной для конструктора форм Windows Forms
     'Для ее изменения используйте конструктор форм Windows Form.  
     'Не изменяйте ее в редакторе исходного кода.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -62,6 +62,8 @@ Partial Class SettingsForm
         Me.L_Result = New System.Windows.Forms.Label()
         Me.BT_RefreshLOT = New System.Windows.Forms.Button()
         Me.BT_SelectLot = New System.Windows.Forms.Button()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.CB_Customers = New System.Windows.Forms.ComboBox()
         CType(Me.DG_AppList, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GB_LineSettings.SuspendLayout()
         Me.GB_SelectLine.SuspendLayout()
@@ -175,7 +177,7 @@ Partial Class SettingsForm
         Me.GB_SelectLine.Controls.Add(Me.DG_AppList)
         Me.GB_SelectLine.Controls.Add(Me.Label9)
         Me.GB_SelectLine.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.GB_SelectLine.Location = New System.Drawing.Point(1, 299)
+        Me.GB_SelectLine.Location = New System.Drawing.Point(1128, 315)
         Me.GB_SelectLine.Name = "GB_SelectLine"
         Me.GB_SelectLine.Size = New System.Drawing.Size(881, 530)
         Me.GB_SelectLine.TabIndex = 55
@@ -328,7 +330,7 @@ Partial Class SettingsForm
         Me.DG_LOTListPresent.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.DG_LOTListPresent.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DG_LOTListPresent.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.FullLOTCode, Me.LOT, Me.ModelName, Me.LOT_ID})
-        Me.DG_LOTListPresent.Location = New System.Drawing.Point(13, 13)
+        Me.DG_LOTListPresent.Location = New System.Drawing.Point(10, 90)
         Me.DG_LOTListPresent.Margin = New System.Windows.Forms.Padding(4)
         Me.DG_LOTListPresent.Name = "DG_LOTListPresent"
         Me.DG_LOTListPresent.ReadOnly = True
@@ -488,6 +490,26 @@ Partial Class SettingsForm
         Me.BT_SelectLot.TabIndex = 54
         Me.BT_SelectLot.UseVisualStyleBackColor = True
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label2.Location = New System.Drawing.Point(9, 9)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(174, 20)
+        Me.Label2.TabIndex = 57
+        Me.Label2.Text = "Выбрать заказчика"
+        '
+        'CB_Customers
+        '
+        Me.CB_Customers.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.CB_Customers.FormattingEnabled = True
+        Me.CB_Customers.Items.AddRange(New Object() {""})
+        Me.CB_Customers.Location = New System.Drawing.Point(10, 43)
+        Me.CB_Customers.Name = "CB_Customers"
+        Me.CB_Customers.Size = New System.Drawing.Size(502, 28)
+        Me.CB_Customers.TabIndex = 56
+        '
         'SettingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -500,6 +522,8 @@ Partial Class SettingsForm
         Me.Controls.Add(Me.DG_LOTListPresent)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.L_Result)
+        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.CB_Customers)
         Me.Name = "SettingsForm"
         Me.Text = "Form1"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
@@ -558,4 +582,6 @@ Partial Class SettingsForm
     Friend WithEvents L_Result As Label
     Friend WithEvents LB_SW_Wers As Label
     Friend WithEvents Label15 As Label
+    Friend WithEvents Label2 As Label
+    Friend WithEvents CB_Customers As ComboBox
 End Class
