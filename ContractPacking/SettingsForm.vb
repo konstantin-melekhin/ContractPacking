@@ -4,7 +4,7 @@ Public Class SettingsForm
     ReadOnly IDApp As Integer = 11
     'Dim CustamerID As Integer = 34
     Dim PCInfo As New ArrayList() 'PCInfo = (App_ID, App_Caption, lineID, LineName, StationName,CT_ScanStep)
-    Dim ds, ds2, ds3 As New DataSet
+    Dim ds As New DataSet
     Private Sub SettingsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim myVersion As Version
         If ApplicationDeployment.IsNetworkDeployed Then
@@ -164,14 +164,21 @@ Public Class SettingsForm
     'Обработка кнопки запуск
     Private Sub BT_SelectLot_Click(sender As Object, e As EventArgs) Handles BT_SelectLot.Click
         'определяем LOTCode и LOTID
+        Dim WF As New Form
         If DG_LOTListPresent.Rows.Count <> 0 Then
             LOTID = DG_LOTListPresent.Item(3, selRowNum).Value
+            Dim lotinfo As New ArrayList(SelectListString($"use FAS  select [СustomersID],(SELECT[ErrorGroupId] FROM [FAS].[dbo].[FAS_Models]M where M.[ModelID] = L.[ModelID]) FROM [FAS].[dbo].[Contract_LOT]L where ID ={LOTID}"))
+
+            If lotinfo(0) = 34 Or (lotinfo(0) = 44 And lotinfo(1) = 4) Then '34
+                WF = New WF_SberDevice(LOTID, IDApp)
+            Else
+                WF = New WF_PackWithOutPrint(LOTID, IDApp) 'текущая программа для упаковки контрактных плат
+            End If
             'Dim WF As New WF_NS220(LOTID, IDApp)
-            'Dim WF As New WF_SberDevice(LOTID, IDApp)
+
             'Dim WF As New Aqarius_AQB365MC(LOTID, IDApp)
-            Dim WF As New WF_PackWithOutPrint(LOTID, IDApp) 'текущая программа для упаковки контрактных плат
+            '
             'Dim WF As New WF_WihtOutLaser(LOTID, IDApp)
-            WF.Controllabel.Text = ""
             WF.Show()
             Me.Close()
         Else

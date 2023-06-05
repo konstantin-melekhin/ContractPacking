@@ -77,7 +77,13 @@ Partial Class WF_PackWithOutPrint
         Me.Controllabel = New System.Windows.Forms.Label()
         Me.CurrentTimeTimer = New System.Windows.Forms.Timer(Me.components)
         Me.GB_WorkAria = New System.Windows.Forms.GroupBox()
+        Me.CB_ManualPrint = New System.Windows.Forms.CheckBox()
         Me.CB_TestRes = New System.Windows.Forms.CheckBox()
+        Me.GB_ManualPrint = New System.Windows.Forms.GroupBox()
+        Me.NumBox = New System.Windows.Forms.NumericUpDown()
+        Me.CB_SN_or_Box = New System.Windows.Forms.CheckBox()
+        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.TB_ScanSN = New System.Windows.Forms.TextBox()
         Me.CB_Reprint = New System.Windows.Forms.CheckBox()
         Me.BT_PrintSet = New System.Windows.Forms.Button()
         Me.BT_Pause = New System.Windows.Forms.Button()
@@ -129,6 +135,7 @@ Partial Class WF_PackWithOutPrint
         Me.Label22 = New System.Windows.Forms.Label()
         Me.Label23 = New System.Windows.Forms.Label()
         Me.CB_DefaultPrinter = New System.Windows.Forms.ComboBox()
+        Me.Label25 = New System.Windows.Forms.Label()
         Me.GB_UserData.SuspendLayout()
         Me.GB_NotVisible.SuspendLayout()
         CType(Me.DG_SelectedBox, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -142,6 +149,9 @@ Partial Class WF_PackWithOutPrint
         Me.GroupBox7.SuspendLayout()
         Me.GroupBox6.SuspendLayout()
         Me.GB_WorkAria.SuspendLayout()
+        Me.GB_ManualPrint.SuspendLayout()
+        CType(Me.NumBox, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DG_Packing, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox8.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
@@ -649,7 +659,9 @@ Partial Class WF_PackWithOutPrint
         '
         'GB_WorkAria
         '
+        Me.GB_WorkAria.Controls.Add(Me.CB_ManualPrint)
         Me.GB_WorkAria.Controls.Add(Me.CB_TestRes)
+        Me.GB_WorkAria.Controls.Add(Me.GB_ManualPrint)
         Me.GB_WorkAria.Controls.Add(Me.CB_Reprint)
         Me.GB_WorkAria.Controls.Add(Me.BT_PrintSet)
         Me.GB_WorkAria.Controls.Add(Me.BT_Pause)
@@ -673,6 +685,17 @@ Partial Class WF_PackWithOutPrint
         Me.GB_WorkAria.TabStop = False
         Me.GB_WorkAria.Visible = False
         '
+        'CB_ManualPrint
+        '
+        Me.CB_ManualPrint.AutoSize = True
+        Me.CB_ManualPrint.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.CB_ManualPrint.Location = New System.Drawing.Point(741, 279)
+        Me.CB_ManualPrint.Name = "CB_ManualPrint"
+        Me.CB_ManualPrint.Size = New System.Drawing.Size(235, 24)
+        Me.CB_ManualPrint.TabIndex = 76
+        Me.CB_ManualPrint.Text = "Ручная печать этикетки"
+        Me.CB_ManualPrint.UseVisualStyleBackColor = True
+        '
         'CB_TestRes
         '
         Me.CB_TestRes.AutoSize = True
@@ -683,6 +706,61 @@ Partial Class WF_PackWithOutPrint
         Me.CB_TestRes.Text = "TestResult"
         Me.CB_TestRes.UseVisualStyleBackColor = True
         Me.CB_TestRes.Visible = False
+        '
+        'GB_ManualPrint
+        '
+        Me.GB_ManualPrint.Controls.Add(Me.NumBox)
+        Me.GB_ManualPrint.Controls.Add(Me.CB_SN_or_Box)
+        Me.GB_ManualPrint.Controls.Add(Me.DataGridView1)
+        Me.GB_ManualPrint.Controls.Add(Me.TB_ScanSN)
+        Me.GB_ManualPrint.Location = New System.Drawing.Point(17, 363)
+        Me.GB_ManualPrint.Name = "GB_ManualPrint"
+        Me.GB_ManualPrint.Size = New System.Drawing.Size(1091, 484)
+        Me.GB_ManualPrint.TabIndex = 77
+        Me.GB_ManualPrint.TabStop = False
+        Me.GB_ManualPrint.Text = "Ручная печать этикетки"
+        Me.GB_ManualPrint.Visible = False
+        '
+        'NumBox
+        '
+        Me.NumBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.NumBox.Location = New System.Drawing.Point(9, 114)
+        Me.NumBox.Maximum = New Decimal(New Integer() {10000, 0, 0, 0})
+        Me.NumBox.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumBox.Name = "NumBox"
+        Me.NumBox.Size = New System.Drawing.Size(159, 26)
+        Me.NumBox.TabIndex = 49
+        Me.NumBox.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'CB_SN_or_Box
+        '
+        Me.CB_SN_or_Box.AutoSize = True
+        Me.CB_SN_or_Box.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.CB_SN_or_Box.Location = New System.Drawing.Point(9, 23)
+        Me.CB_SN_or_Box.Name = "CB_SN_or_Box"
+        Me.CB_SN_or_Box.Size = New System.Drawing.Size(290, 24)
+        Me.CB_SN_or_Box.TabIndex = 48
+        Me.CB_SN_or_Box.Text = "Отсканируйте серийный номер"
+        Me.CB_SN_or_Box.UseVisualStyleBackColor = True
+        '
+        'DataGridView1
+        '
+        Me.DataGridView1.AllowUserToAddRows = False
+        Me.DataGridView1.AllowUserToDeleteRows = False
+        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridView1.Location = New System.Drawing.Point(6, 167)
+        Me.DataGridView1.Name = "DataGridView1"
+        Me.DataGridView1.ReadOnly = True
+        Me.DataGridView1.Size = New System.Drawing.Size(736, 210)
+        Me.DataGridView1.TabIndex = 47
+        '
+        'TB_ScanSN
+        '
+        Me.TB_ScanSN.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.TB_ScanSN.Location = New System.Drawing.Point(9, 57)
+        Me.TB_ScanSN.Name = "TB_ScanSN"
+        Me.TB_ScanSN.Size = New System.Drawing.Size(342, 26)
+        Me.TB_ScanSN.TabIndex = 46
         '
         'CB_Reprint
         '
@@ -839,6 +917,7 @@ Partial Class WF_PackWithOutPrint
         '
         'GroupBox4
         '
+        Me.GroupBox4.Controls.Add(Me.Label25)
         Me.GroupBox4.Controls.Add(Me.LB_SW_Wers)
         Me.GroupBox4.Controls.Add(Me.Label19)
         Me.GroupBox4.Controls.Add(Me.LabelAppName)
@@ -1247,6 +1326,19 @@ Partial Class WF_PackWithOutPrint
         Me.CB_DefaultPrinter.Size = New System.Drawing.Size(421, 28)
         Me.CB_DefaultPrinter.TabIndex = 47
         '
+        'Label25
+        '
+        Me.Label25.AutoSize = True
+        Me.Label25.BackColor = System.Drawing.SystemColors.ButtonFace
+        Me.Label25.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label25.ForeColor = System.Drawing.SystemColors.AppWorkspace
+        Me.Label25.Location = New System.Drawing.Point(379, 12)
+        Me.Label25.Name = "Label25"
+        Me.Label25.Size = New System.Drawing.Size(45, 13)
+        Me.Label25.TabIndex = 39
+        Me.Label25.Text = "Label25"
+        Me.Label25.Visible = False
+        '
         'WF_PackWithOutPrint
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1277,6 +1369,10 @@ Partial Class WF_PackWithOutPrint
         Me.GroupBox6.PerformLayout()
         Me.GB_WorkAria.ResumeLayout(False)
         Me.GB_WorkAria.PerformLayout()
+        Me.GB_ManualPrint.ResumeLayout(False)
+        Me.GB_ManualPrint.PerformLayout()
+        CType(Me.NumBox, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DG_Packing, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox8.ResumeLayout(False)
         Me.GroupBox8.PerformLayout()
@@ -1382,4 +1478,11 @@ Partial Class WF_PackWithOutPrint
     Friend WithEvents Label24 As Label
     Friend WithEvents NumReprintCount As NumericUpDown
     Friend WithEvents CB_TestRes As CheckBox
+    Friend WithEvents CB_ManualPrint As CheckBox
+    Friend WithEvents GB_ManualPrint As GroupBox
+    Friend WithEvents NumBox As NumericUpDown
+    Friend WithEvents CB_SN_or_Box As CheckBox
+    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents TB_ScanSN As TextBox
+    Friend WithEvents Label25 As Label
 End Class
