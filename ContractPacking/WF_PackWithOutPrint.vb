@@ -473,10 +473,10 @@ Public Class WF_PackWithOutPrint
                 where  tt.num = 1"))
                     If PCBStepRes.Count <> 0 Then
                         If PalletNumber = 1 And BoxNumber = 1 And DG_Packing.RowCount = 0 Then
-                            Res = If((PCBStepRes(0) = 62), True, False)
+                            Res = If((PCBStepRes(0) = 62 Or (PCBStepRes(0) = 40)), True, False)
                             Mess = If(Res = False, $"Первая плата {SerialTextBox.Text & vbCrLf}не прошла контроль в ОТК!", "")
                         Else
-                            If ((PCBStepRes(0) = PreStepID) Or (PCBStepRes(0) = 62)) And PCBStepRes(1) = 2 Then
+                            If ((PCBStepRes(0) = PreStepID) Or (PCBStepRes(0) = 62) Or (PCBStepRes(0) = 40)) And PCBStepRes(1) = 2 Then
                                 Res = True
                             ElseIf PCBStepRes(0) = 6 And PCBStepRes(1) = 2 Then
                                 Res = True
@@ -486,11 +486,37 @@ Public Class WF_PackWithOutPrint
                                 Mess = $"Плата {SerialTextBox.Text & vbCrLf}имеет не верный предыдущий шаг! Верните на тест!"
                             End If
                         End If
+                    ElseIf PCBStepRes.Count = 0 And LOTID = 20424 Then
+                        Res = True
+                        Mess = ""
                     ElseIf PCBStepRes.Count = 0 Then
                         Mess = $"У платы {SerialTextBox.Text & vbCrLf}не найден предыдущий шаг!"
                     End If
                 Case 1
-                    Res = True
+                    'Res = True
+                    Dim PCBStepRes As New ArrayList(SelectListString($"Use FAS
+                select 
+                tt.StepID,tt.TestResultID, tt.StepDate ,tt.SNID
+                from  (SELECT *, ROW_NUMBER() over(partition by pcbid order by ID desc) num 
+                FROM [FAS].[dbo].[Ct_OperLog] 
+                where SNID  ={GetPCB_SNID(1)}) tt
+                where  tt.num = 1"))
+                    If PCBStepRes.Count <> 0 Then
+                        If ((PCBStepRes(0) = PreStepID) Or (PCBStepRes(0) = 62) Or (PCBStepRes(0) = 40)) And PCBStepRes(1) = 2 Then
+                            Res = True
+                        ElseIf PCBStepRes(0) = 6 And PCBStepRes(1) = 2 Then
+                            Res = True
+                            Mess = ""
+                        Else
+                            Res = False
+                            Mess = $"Плата {SerialTextBox.Text & vbCrLf}имеет не верный предыдущий шаг! Верните на тест!"
+                        End If
+                    ElseIf StartstepID = PCInfo(6) And LOTInfo(12) = True Then
+                        Res = True
+                    ElseIf LOTInfo(12) = False Then
+                        Res = True
+                    End If
+                    'Mess = $"У платы {SerialTextBox.Text & vbCrLf}не найден предыдущий шаг!"
             End Select
             'проверка задвоения в базе
             If Res = True Then
@@ -543,7 +569,6 @@ Public Class WF_PackWithOutPrint
                             "Литера - " & PackedSN(2) & " Паллет - " & PackedSN(3) & " Групповая - " & PackedSN(4) & " № - " & PackedSN(5) & vbCrLf &
                             "Дата - " & PackedSN(6)
                         End If
-
                         'Mess = If(PackedSN.Count <> 0, "Плата " & SerialTextBox.Text & " уже упакована!" & vbCrLf &
                         '    "Литера - " & PackedSN(2) & " Паллет - " & PackedSN(3) & " Групповая - " & PackedSN(4) & " № - " & PackedSN(5) & vbCrLf &
                         '    "Дата - " & PackedSN(6), "")
@@ -600,7 +625,7 @@ Public Class WF_PackWithOutPrint
         SNBufer = New ArrayList
         ShiftCounter(2)
         'печать групповой этикетки 
-        If UnitCounter = LOTInfo(15) And (LOTInfo(20) = 8 And LOTID = 20258 Or LOTID = 20263) Then '
+        If UnitCounter = LOTInfo(15) And (LOTInfo(20) = 8) Then '- -And LOTID = 20258 Or LOTID = 20263
             SerchBoxForPrint(LOTID, BoxNumber, PCInfo(8), LOTInfo(17))
             SNArray = GetSNFromGrid()
             Print(SNArray, CB_DefaultPrinter.Text, Num_X.Value, Num_Y.Value, LOTInfo(15))
