@@ -13,7 +13,7 @@ Public Class WF_PackWithOutPrint
     Dim LOTID, IDApp, UnitCounter, PCBID, SNID, PalletNumber, BoxNumber As Integer
     Dim ds As New DataSet
     Dim LenSN_SMT, LenSN_FAS, StartStepID, PreStepID, NextStepID As Integer
-    Dim StartStep, PreStep, NextStep, Litera As String
+    Dim StartStep, PreStep, NextStep, Litera, WNetto, WBrutto As String
     Dim PCInfo As New ArrayList() 'PCInfo = (App_ID, App_Caption, lineID, LineName, StationName,CT_ScanStep)
     Dim LOTInfo As New ArrayList() 'LOTInfo = (Model,LOT,SMTRangeChecked,SMTStartRange,SMTEndRange,ParseLog)
     Dim ShiftCounterInfo As New ArrayList() 'ShiftCounterInfo = (ShiftCounterID,ShiftCounter,LOTCounter)
@@ -137,6 +137,7 @@ Public Class WF_PackWithOutPrint
         L_Liter.Text = If(LOTInfo(17) = 0, PCInfo(9), PCInfo(9) & " " & LOTInfo(17))
         'Запуск программы
         '___________________________________________________________
+        GetWeight()
         GB_UserData.Location = New Point(10, 12)
         TB_RFIDIn.Focus()
         'запуск счетчика продукции за день
@@ -182,6 +183,27 @@ Public Class WF_PackWithOutPrint
         'определение стартовых данных для упаковки
         PalletNumber = PalletNum.Text
         BoxNumber = BoxNum.Text
+    End Sub
+
+    Private Function GetWeight()
+        Dim weight As String = SelectString($"SELECT  Weight FROM [FAS].[dbo].[FAS_Models]where [ModelName] = '{LOTInfo(0)}'")
+        If weight = "" Then
+            GB_GetWeight.Location = New Point(10, 12)
+            GB_GetWeight.Visible = True
+            TB_Netto.Focus()
+        Else
+            WNetto = weight.Split(";")(0)
+            WBrutto = weight.Split(";")(1)
+        End If
+    End Function
+    Private Sub BT_SeveWeight_Click(sender As Object, e As EventArgs) Handles BT_SeveWeight.Click
+        If TB_Netto.Text <> "" And TB_Brutto.Text Then
+            RunCommand($"USE FAS update [FAS].[dbo].[FAS_Models] set Weight = '{TB_Netto.Text};{TB_Brutto.Text};' where ModelName  ='{LOTInfo(0)}'")
+            GB_GetWeight.Visible = False
+            GetWeight()
+        Else
+            MsgBox("Не заполнены поля ввода массы! Заполните и повторите сохранение!")
+        End If
     End Sub
 #End Region
 #Region "Очистка поля ввода номера"
@@ -497,7 +519,7 @@ Public Class WF_PackWithOutPrint
                     Dim PCBStepRes As New ArrayList(SelectListString($"Use FAS
                 select 
                 tt.StepID,tt.TestResultID, tt.StepDate ,tt.SNID
-                from  (SELECT *, ROW_NUMBER() over(partition by pcbid order by ID desc) num 
+                from  (SELECT *, ROW_NUMBER() over(partition by snid order by ID desc) num 
                 FROM [FAS].[dbo].[Ct_OperLog] 
                 where SNID  ={GetPCB_SNID(1)}) tt
                 where  tt.num = 1"))
@@ -690,8 +712,19 @@ Public Class WF_PackWithOutPrint
 #End Region
 #Region "'8. Печать SN Aquarius"
     Private Sub BT_PrintSet_Click(sender As Object, e As EventArgs) Handles BT_PrintSet.Click
-        GB_Printers.Location = New Point(670, 370)
-        GB_Printers.Visible = True
+        'GB_Printers.Location = New Point(670, 370)
+        'GB_Printers.Visible = True
+        If GB_Printers.Visible = False Then
+            GB_GetWeight.Location = New Point(10, 12)
+            GB_GetWeight.Visible = True
+            TB_Netto.Focus()
+            GB_Printers.Visible = True
+            GB_Printers.Location = New Point(650, 60)
+            GB_StationInfo.Visible = False
+        Else
+            GB_Printers.Visible = False
+            GB_StationInfo.Visible = True
+        End If
     End Sub
     Private Sub GetCoordinats()
         Try
@@ -894,38 +927,38 @@ eJztl0FuxCAMRZ1mwTI3qK/QE4Sr9CBRmKPlKDlCllRF0C5G9kcCdTIJ0lTKX71FwAZ/AyE6LJfSrcTp
 eJzt00EOgyAQBdAxLrrkAk28SBOOBjerR+EYLAxTbCzzMRIDrakL/+olBhxnHKIrWR5gUzDbfZfO3ttLS+k4xh5nIuXkbf/38d/7XRRcNCx+31/rypqHE/mUM4KzCmzE/cbo5uAugI24j7XJSfYL55pHMImfYq/Fo3gicQCzAwdwdn8yaWb38Y05pAem8F0d9lmDsT/Yt6yf2OdShkKjq/fFUps9/Ku/cmw52OMutO7FahbFIZmdfq59ZTMvN0hSpA==:61AD
 ^FT85,1329^A0B,50,50^FH\^FDDPB560T^FS
 ^BY2,3,83^FT190,588^BCB,,N,N
-^FD>:SP54_F_0>50001^FS
-^FT248,581^A0B,50,50^FH\^FDSP54_F_00001^FS
-^FT48,266^BQN,2,4
-^FDLA,1118152376\0D\0A1118152339\0D\0A1118152340\0D\0A1118152341\0D\0A1118152392\0D\0A1118152342\0D\0A1118152343\0D\0A1118152374\0D\0A1118152313\0D\0A1118152312\0D\0A1118152311\0D\0A1118152310\0D\0A1118152376\0D\0A1118152339\0D\0A1118152340\0D\0A1118152341\0D\0A1118152392\0D\0A1118152342\0D\0A1118152343\0D\0A1118152374\0D\0A1118152313\0D\0A1118152312\0D\0A1118152311\0D\0A1118152310^FS
+^FD>:{sn(0).Split(";")(0) & Mid(Integer.Parse(sn(0).Split(";")(1)).ToString("00000"), 1, 1)}>5{Mid(Integer.Parse(sn(0).Split(";")(1)).ToString("00000"), 2)}^FS
+^FT248,581^A0B,50,50^FH\^FD{sn(0).Split(";")(0) & Integer.Parse(sn(0).Split(";")(1)).ToString("00000")}^FS
+^FT48,269^BQN,2,5
+^FH\^FDLA,{sn(1)}\0D\ {sn(2)}\0D\ {sn(3)}\0D\ {sn(4)}\0D\ {sn(5)}\0D\ {sn(6)}\0D\ {sn(7)}\0D\ {sn(8)}\0D\ {sn(9)}\0D\ {sn(10)}\0D\ {sn(11)}\0D\ {sn(12)}^FS
 ^BY4,3,44^FT573,1719^BCB,,Y,N
-^FD>;1118152376^FS
+^FD>;{sn(1)}^FS
 ^BY4,3,44^FT681,1719^BCB,,Y,N
-^FD>;1118152339^FS
+^FD>;{sn(2)}^FS
 ^BY4,3,44^FT789,1719^BCB,,Y,N
-^FD>;1118152340^FS
+^FD>;{sn(3)}^FS
 ^BY4,3,44^FT573,1259^BCB,,Y,N
-^FD>;1118152343^FS
+^FD>;{sn(4)}^FS
 ^BY4,3,44^FT681,1259^BCB,,Y,N
-^FD>;1118152374^FS
+^FD>;{sn(5)}^FS
 ^BY4,3,44^FT789,1259^BCB,,Y,N
-^FD>;1118152313^FS
+^FD>;{sn(6)}^FS
 ^BY4,3,44^FT573,841^BCB,,Y,N
-^FD>;1118152343^FS
+^FD>;{sn(7)}^FS
 ^BY4,3,44^FT681,841^BCB,,Y,N
-^FD>;1118152374^FS
+^FD>;{sn(8)}^FS
 ^BY4,3,44^FT789,841^BCB,,Y,N
-^FD>;1118152313^FS
+^FD>;{sn(9)}^FS
 ^BY4,3,44^FT573,422^BCB,,Y,N
-^FD>;1118152343^FS
+^FD>;{sn(10)}^FS
 ^BY4,3,44^FT681,422^BCB,,Y,N
-^FD>;1118152374^FS
+^FD>;{sn(11)}^FS
 ^BY4,3,44^FT789,422^BCB,,Y,N
-^FD>;1118152313^FS
+^FD>;{sn(12)}^FS
 ^FO273,42^GB167,355,3^FS
-^FT325,204^A0B,33,33^FH\^FD12^FS
-^FT372,204^A0B,33,33^FH\^FD5.832^FS
-^FT420,204^A0B,33,33^FH\^FD4.300^FS
+^FT325,204^A0B,33,33^FH\^FD{LOTInfo(15)}^FS
+^FT372,204^A0B,33,33^FH\^FD{WNetto}^FS
+^FT420,204^A0B,33,33^FH\^FD{WBrutto}^FS
 ^FT85,973^A0B,50,50^FH\^FD469535.026^FS
 ^PQ1,0,1,Y^XZ
 

@@ -96,7 +96,8 @@ Partial Class WF_PackWithOutPrint
         Me.CurrrentTimeLabel = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.PalletNum = New System.Windows.Forms.Label()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.GB_StationInfo = New System.Windows.Forms.GroupBox()
+        Me.Label25 = New System.Windows.Forms.Label()
         Me.LB_SW_Wers = New System.Windows.Forms.Label()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.LabelAppName = New System.Windows.Forms.Label()
@@ -135,7 +136,12 @@ Partial Class WF_PackWithOutPrint
         Me.Label22 = New System.Windows.Forms.Label()
         Me.Label23 = New System.Windows.Forms.Label()
         Me.CB_DefaultPrinter = New System.Windows.Forms.ComboBox()
-        Me.Label25 = New System.Windows.Forms.Label()
+        Me.GB_GetWeight = New System.Windows.Forms.GroupBox()
+        Me.TB_Brutto = New System.Windows.Forms.TextBox()
+        Me.TB_Netto = New System.Windows.Forms.TextBox()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.BT_SeveWeight = New System.Windows.Forms.Button()
+        Me.Label27 = New System.Windows.Forms.Label()
         Me.GB_UserData.SuspendLayout()
         Me.GB_NotVisible.SuspendLayout()
         CType(Me.DG_SelectedBox, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -156,13 +162,14 @@ Partial Class WF_PackWithOutPrint
         Me.GroupBox8.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
+        Me.GB_StationInfo.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GB_Printers.SuspendLayout()
         CType(Me.NumReprintCount, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GB_ReprinUser.SuspendLayout()
         CType(Me.Num_X, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Num_Y, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GB_GetWeight.SuspendLayout()
         Me.SuspendLayout()
         '
         'BoxNum
@@ -674,7 +681,7 @@ Partial Class WF_PackWithOutPrint
         Me.GB_WorkAria.Controls.Add(Me.GroupBox6)
         Me.GB_WorkAria.Controls.Add(Me.GroupBox2)
         Me.GB_WorkAria.Controls.Add(Me.Controllabel)
-        Me.GB_WorkAria.Controls.Add(Me.GroupBox4)
+        Me.GB_WorkAria.Controls.Add(Me.GB_StationInfo)
         Me.GB_WorkAria.Controls.Add(Me.GroupBox1)
         Me.GB_WorkAria.Controls.Add(Me.Label2)
         Me.GB_WorkAria.Controls.Add(Me.SerialTextBox)
@@ -915,36 +922,49 @@ Partial Class WF_PackWithOutPrint
         Me.PalletNum.TabIndex = 0
         Me.PalletNum.Text = "999"
         '
-        'GroupBox4
+        'GB_StationInfo
         '
-        Me.GroupBox4.Controls.Add(Me.Label25)
-        Me.GroupBox4.Controls.Add(Me.LB_SW_Wers)
-        Me.GroupBox4.Controls.Add(Me.Label19)
-        Me.GroupBox4.Controls.Add(Me.LabelAppName)
-        Me.GroupBox4.Controls.Add(Me.L_UserName)
-        Me.GroupBox4.Controls.Add(Me.Label5)
-        Me.GroupBox4.Controls.Add(Me.Label6)
-        Me.GroupBox4.Controls.Add(Me.Label_StationName)
-        Me.GroupBox4.Controls.Add(Me.Label7)
-        Me.GroupBox4.Controls.Add(Me.L_PalletCapacity)
-        Me.GroupBox4.Controls.Add(Me.L_BoxCapacity)
-        Me.GroupBox4.Controls.Add(Me.Label4)
-        Me.GroupBox4.Controls.Add(Me.L_Model)
-        Me.GroupBox4.Controls.Add(Me.Label3)
-        Me.GroupBox4.Controls.Add(Me.Label11)
-        Me.GroupBox4.Controls.Add(Me.L_LOT)
-        Me.GroupBox4.Controls.Add(Me.Label9)
-        Me.GroupBox4.Controls.Add(Me.L_Liter)
-        Me.GroupBox4.Controls.Add(Me.Label8)
-        Me.GroupBox4.Controls.Add(Me.Lebel_StationLine)
-        Me.GroupBox4.Controls.Add(Me.Label1)
-        Me.GroupBox4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.GroupBox4.Location = New System.Drawing.Point(585, 14)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(493, 264)
-        Me.GroupBox4.TabIndex = 10
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Информация о ЛОТе и станции"
+        Me.GB_StationInfo.Controls.Add(Me.Label25)
+        Me.GB_StationInfo.Controls.Add(Me.LB_SW_Wers)
+        Me.GB_StationInfo.Controls.Add(Me.Label19)
+        Me.GB_StationInfo.Controls.Add(Me.LabelAppName)
+        Me.GB_StationInfo.Controls.Add(Me.L_UserName)
+        Me.GB_StationInfo.Controls.Add(Me.Label5)
+        Me.GB_StationInfo.Controls.Add(Me.Label6)
+        Me.GB_StationInfo.Controls.Add(Me.Label_StationName)
+        Me.GB_StationInfo.Controls.Add(Me.Label7)
+        Me.GB_StationInfo.Controls.Add(Me.L_PalletCapacity)
+        Me.GB_StationInfo.Controls.Add(Me.L_BoxCapacity)
+        Me.GB_StationInfo.Controls.Add(Me.Label4)
+        Me.GB_StationInfo.Controls.Add(Me.L_Model)
+        Me.GB_StationInfo.Controls.Add(Me.Label3)
+        Me.GB_StationInfo.Controls.Add(Me.Label11)
+        Me.GB_StationInfo.Controls.Add(Me.L_LOT)
+        Me.GB_StationInfo.Controls.Add(Me.Label9)
+        Me.GB_StationInfo.Controls.Add(Me.L_Liter)
+        Me.GB_StationInfo.Controls.Add(Me.Label8)
+        Me.GB_StationInfo.Controls.Add(Me.Lebel_StationLine)
+        Me.GB_StationInfo.Controls.Add(Me.Label1)
+        Me.GB_StationInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.GB_StationInfo.Location = New System.Drawing.Point(585, 14)
+        Me.GB_StationInfo.Name = "GB_StationInfo"
+        Me.GB_StationInfo.Size = New System.Drawing.Size(493, 264)
+        Me.GB_StationInfo.TabIndex = 10
+        Me.GB_StationInfo.TabStop = False
+        Me.GB_StationInfo.Text = "Информация о ЛОТе и станции"
+        '
+        'Label25
+        '
+        Me.Label25.AutoSize = True
+        Me.Label25.BackColor = System.Drawing.SystemColors.ButtonFace
+        Me.Label25.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Label25.ForeColor = System.Drawing.SystemColors.AppWorkspace
+        Me.Label25.Location = New System.Drawing.Point(379, 12)
+        Me.Label25.Name = "Label25"
+        Me.Label25.Size = New System.Drawing.Size(45, 13)
+        Me.Label25.TabIndex = 39
+        Me.Label25.Text = "Label25"
+        Me.Label25.Visible = False
         '
         'LB_SW_Wers
         '
@@ -1326,24 +1346,72 @@ Partial Class WF_PackWithOutPrint
         Me.CB_DefaultPrinter.Size = New System.Drawing.Size(421, 28)
         Me.CB_DefaultPrinter.TabIndex = 47
         '
-        'Label25
+        'GB_GetWeight
         '
-        Me.Label25.AutoSize = True
-        Me.Label25.BackColor = System.Drawing.SystemColors.ButtonFace
-        Me.Label25.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Label25.ForeColor = System.Drawing.SystemColors.AppWorkspace
-        Me.Label25.Location = New System.Drawing.Point(379, 12)
-        Me.Label25.Name = "Label25"
-        Me.Label25.Size = New System.Drawing.Size(45, 13)
-        Me.Label25.TabIndex = 39
-        Me.Label25.Text = "Label25"
-        Me.Label25.Visible = False
+        Me.GB_GetWeight.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.GB_GetWeight.Controls.Add(Me.TB_Brutto)
+        Me.GB_GetWeight.Controls.Add(Me.TB_Netto)
+        Me.GB_GetWeight.Controls.Add(Me.Label26)
+        Me.GB_GetWeight.Controls.Add(Me.BT_SeveWeight)
+        Me.GB_GetWeight.Controls.Add(Me.Label27)
+        Me.GB_GetWeight.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.GB_GetWeight.Location = New System.Drawing.Point(1635, 14)
+        Me.GB_GetWeight.Name = "GB_GetWeight"
+        Me.GB_GetWeight.Size = New System.Drawing.Size(428, 175)
+        Me.GB_GetWeight.TabIndex = 76
+        Me.GB_GetWeight.TabStop = False
+        Me.GB_GetWeight.Text = "Установка массы упаковки"
+        Me.GB_GetWeight.Visible = False
+        '
+        'TB_Brutto
+        '
+        Me.TB_Brutto.Location = New System.Drawing.Point(166, 60)
+        Me.TB_Brutto.Name = "TB_Brutto"
+        Me.TB_Brutto.Size = New System.Drawing.Size(137, 26)
+        Me.TB_Brutto.TabIndex = 66
+        '
+        'TB_Netto
+        '
+        Me.TB_Netto.Location = New System.Drawing.Point(166, 29)
+        Me.TB_Netto.Name = "TB_Netto"
+        Me.TB_Netto.Size = New System.Drawing.Size(137, 26)
+        Me.TB_Netto.TabIndex = 66
+        '
+        'Label26
+        '
+        Me.Label26.AutoSize = True
+        Me.Label26.Location = New System.Drawing.Point(6, 32)
+        Me.Label26.Name = "Label26"
+        Me.Label26.Size = New System.Drawing.Size(143, 20)
+        Me.Label26.TabIndex = 64
+        Me.Label26.Text = "Масса нетто, кг"
+        '
+        'BT_SeveWeight
+        '
+        Me.BT_SeveWeight.FlatAppearance.BorderSize = 0
+        Me.BT_SeveWeight.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.BT_SeveWeight.Image = Global.ContractPacking.My.Resources.Resources._04
+        Me.BT_SeveWeight.Location = New System.Drawing.Point(193, 96)
+        Me.BT_SeveWeight.Name = "BT_SeveWeight"
+        Me.BT_SeveWeight.Size = New System.Drawing.Size(58, 63)
+        Me.BT_SeveWeight.TabIndex = 65
+        Me.BT_SeveWeight.UseVisualStyleBackColor = True
+        '
+        'Label27
+        '
+        Me.Label27.AutoSize = True
+        Me.Label27.Location = New System.Drawing.Point(6, 63)
+        Me.Label27.Name = "Label27"
+        Me.Label27.Size = New System.Drawing.Size(151, 20)
+        Me.Label27.TabIndex = 64
+        Me.Label27.Text = "Масса брутто, кг"
         '
         'WF_PackWithOutPrint
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1924, 1055)
+        Me.ClientSize = New System.Drawing.Size(2337, 1055)
+        Me.Controls.Add(Me.GB_GetWeight)
         Me.Controls.Add(Me.GB_Printers)
         Me.Controls.Add(Me.GB_UserData)
         Me.Controls.Add(Me.GB_NotVisible)
@@ -1380,8 +1448,8 @@ Partial Class WF_PackWithOutPrint
         Me.GroupBox5.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
+        Me.GB_StationInfo.ResumeLayout(False)
+        Me.GB_StationInfo.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.GB_Printers.ResumeLayout(False)
@@ -1391,6 +1459,8 @@ Partial Class WF_PackWithOutPrint
         Me.GB_ReprinUser.PerformLayout()
         CType(Me.Num_X, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.Num_Y, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GB_GetWeight.ResumeLayout(False)
+        Me.GB_GetWeight.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1433,7 +1503,7 @@ Partial Class WF_PackWithOutPrint
     Friend WithEvents CurrrentTimeLabel As Label
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents PalletNum As Label
-    Friend WithEvents GroupBox4 As GroupBox
+    Friend WithEvents GB_StationInfo As GroupBox
     Friend WithEvents LabelAppName As Label
     Friend WithEvents L_UserName As Label
     Friend WithEvents Label5 As Label
@@ -1485,4 +1555,10 @@ Partial Class WF_PackWithOutPrint
     Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents TB_ScanSN As TextBox
     Friend WithEvents Label25 As Label
+    Friend WithEvents GB_GetWeight As GroupBox
+    Friend WithEvents TB_Brutto As TextBox
+    Friend WithEvents TB_Netto As TextBox
+    Friend WithEvents Label26 As Label
+    Friend WithEvents BT_SeveWeight As Button
+    Friend WithEvents Label27 As Label
 End Class
