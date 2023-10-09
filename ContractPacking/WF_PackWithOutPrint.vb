@@ -675,7 +675,7 @@ Public Class WF_PackWithOutPrint
     Private Function GetSNFromGrid()
         Dim SNArrayTemp As New ArrayList
         If DG_SelectedBox.Rows.Count > 0 Then
-            SNArrayTemp.Add(Mid(LOTInfo(1), 1, 4) & "_" & DG_SelectedBox.Item(2, 0).Value & "_;" & DG_SelectedBox.Item(3, 0).Value)
+            SNArrayTemp.Add(Mid(LOTInfo(1), 1, 5) & "_" & DG_SelectedBox.Item(2, 0).Value & "_;" & DG_SelectedBox.Item(3, 0).Value)
             For i = 0 To DG_SelectedBox.Rows.Count - 1
                 SNArrayTemp.Add(DG_SelectedBox.Item(1, i).Value)
             Next
@@ -888,6 +888,15 @@ Public Class WF_PackWithOutPrint
 #Region " 10. Групповая этикетка"
     Private Function GetGroupLabel(sn As ArrayList, x As Integer, y As Integer, CountInBox As Integer)
         Dim str As String
+        Dim snp As New ArrayList
+        For i = 0 To sn.Count - 1
+            If i = 0 Then
+                snp.Add(sn(0))
+            Else
+                snp.Add(SelectString($" SELECT [SN] FROM [FAS].[dbo].[Depo_SN_MAC] where [MAC1] = '{sn(i)}'"))
+            End If
+        Next
+
         Select Case CountInBox
             Case 12
                 str = $"
@@ -926,35 +935,35 @@ eJztl0FuxCAMRZ1mwTI3qK/QE4Sr9CBRmKPlKDlCllRF0C5G9kcCdTIJ0lTKX71FwAZ/AyE6LJfSrcTp
 ^FO0,960^GFA,02304,02304,00012,:Z64:
 eJzt00EOgyAQBdAxLrrkAk28SBOOBjerR+EYLAxTbCzzMRIDrakL/+olBhxnHKIrWR5gUzDbfZfO3ttLS+k4xh5nIuXkbf/38d/7XRRcNCx+31/rypqHE/mUM4KzCmzE/cbo5uAugI24j7XJSfYL55pHMImfYq/Fo3gicQCzAwdwdn8yaWb38Y05pAem8F0d9lmDsT/Yt6yf2OdShkKjq/fFUps9/Ku/cmw52OMutO7FahbFIZmdfq59ZTMvN0hSpA==:61AD
 ^FT85,1329^A0B,50,50^FH\^FDDPB560T^FS
-^BY2,3,83^FT190,588^BCB,,N,N
-^FD>:{sn(0).Split(";")(0) & Mid(Integer.Parse(sn(0).Split(";")(1)).ToString("00000"), 1, 1)}>5{Mid(Integer.Parse(sn(0).Split(";")(1)).ToString("00000"), 2)}^FS
-^FT248,581^A0B,50,50^FH\^FD{sn(0).Split(";")(0) & Integer.Parse(sn(0).Split(";")(1)).ToString("00000")}^FS
-^FT48,269^BQN,2,5
-^FH\^FDLA,{sn(1)}\0D\ {sn(2)}\0D\ {sn(3)}\0D\ {sn(4)}\0D\ {sn(5)}\0D\ {sn(6)}\0D\ {sn(7)}\0D\ {sn(8)}\0D\ {sn(9)}\0D\ {sn(10)}\0D\ {sn(11)}\0D\ {sn(12)}^FS
+^BY2,3,83^FT190,630^BCB,,N,N
+^FD>:{snp(0).Split(";")(0) & Mid(Integer.Parse(snp(0).Split(";")(1)).ToString("00000"), 1, 1)}>5{Mid(Integer.Parse(snp(0).Split(";")(1)).ToString("00000"), 2)}^FS
+^FT248,630^A0B,50,50^FH\^FD{sn(0).Split(";")(0) & Integer.Parse(sn(0).Split(";")(1)).ToString("00000")}^FS
+^FT48,290^BQN,2,5
+^FH\^FDLA,{ snp(1)}\0D\ {snp(2)}\0D\ {snp(3)}\0D\ {snp(4)}\0D\ {snp(5)}\0D\ {snp(6)}\0D\ {snp(7)}\0D\ {snp(8)}\0D\ {snp(9)}\0D\ {snp(10)}\0D\ {snp(11)}\0D\ {snp(12)}^FS
 ^BY4,3,44^FT573,1719^BCB,,Y,N
-^FD>;{sn(1)}^FS
+^FD>;{snp(1)}^FS
 ^BY4,3,44^FT681,1719^BCB,,Y,N
-^FD>;{sn(2)}^FS
+^FD>;{snp(2)}^FS
 ^BY4,3,44^FT789,1719^BCB,,Y,N
-^FD>;{sn(3)}^FS
+^FD>;{snp(3)}^FS
 ^BY4,3,44^FT573,1259^BCB,,Y,N
-^FD>;{sn(4)}^FS
+^FD>;{snp(4)}^FS
 ^BY4,3,44^FT681,1259^BCB,,Y,N
-^FD>;{sn(5)}^FS
+^FD>;{snp(5)}^FS
 ^BY4,3,44^FT789,1259^BCB,,Y,N
-^FD>;{sn(6)}^FS
+^FD>;{snp(6)}^FS
 ^BY4,3,44^FT573,841^BCB,,Y,N
-^FD>;{sn(7)}^FS
+^FD>;{snp(7)}^FS
 ^BY4,3,44^FT681,841^BCB,,Y,N
-^FD>;{sn(8)}^FS
+^FD>;{snp(8)}^FS
 ^BY4,3,44^FT789,841^BCB,,Y,N
-^FD>;{sn(9)}^FS
+^FD>;{snp(9)}^FS
 ^BY4,3,44^FT573,422^BCB,,Y,N
-^FD>;{sn(10)}^FS
+^FD>;{snp(10)}^FS
 ^BY4,3,44^FT681,422^BCB,,Y,N
-^FD>;{sn(11)}^FS
+^FD>;{snp(11)}^FS
 ^BY4,3,44^FT789,422^BCB,,Y,N
-^FD>;{sn(12)}^FS
+^FD>;{snp(12)}^FS
 ^FO273,42^GB167,355,3^FS
 ^FT325,204^A0B,33,33^FH\^FD{LOTInfo(15)}^FS
 ^FT372,204^A0B,33,33^FH\^FD{WNetto}^FS
