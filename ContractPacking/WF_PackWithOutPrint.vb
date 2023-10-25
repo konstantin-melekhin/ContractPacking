@@ -893,12 +893,15 @@ Public Class WF_PackWithOutPrint
             If i = 0 Then
                 snp.Add(sn(0))
             Else
-                snp.Add(SelectString($" SELECT [SN] FROM [FAS].[dbo].[Depo_SN_MAC] where [MAC1] = '{sn(i)}'"))
+                snp.Add(SelectString($" SELECT [SN] FROM [FAS].[dbo].[Depo_SN_MAC] where [MAC1] = '{sn(i)}' or [MAC2] = '{sn(i)}'"))
             End If
         Next
+        Dim ComModel As String = SelectString($"
+            select [Commercial_Name] FROM [FAS].[dbo].[FAS_Models] where [ModelName] = '{LOTInfo(0)}'")
 
         Select Case CountInBox
-            Case 12
+
+            Case 12 'Редактируемая модель и ДАЦН
                 str = $"
 ^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^JUS^LRN^CI0^XZ
 ^XA
@@ -934,7 +937,7 @@ eJxjYBgigI9Mmv//f7w0LsDBwAimeRj4IeoZ7CF0A1T/QSj9+Q+YZv79AKLxfwOErocaJA+l2SlzD40A
 eJztl0FuxCAMRZ1mwTI3qK/QE4Sr9CBRmKPlKDlCllRF0C5G9kcCdTIJ0lTKX71FwAZ/AyE6LJfSrcTpJPassR5jGUrBLsAb5BzL+X8r268y8+aEh9UKm8VoYOqACbksyMEAM7CtcH3/g0wfp1E4TO/CfuIayzx+RNb1equxJmROVOJ50D3/MMrUa55EGz2rs/xWY5oh2EncPOdD0rrzabktMjs4gNIKDHZw8P2QvHCX1FcE3qO+wvBNn/eXxk0bsA6FsIQ7m+V8YE9MVq8B+AFhG8U3nSVaYQa2UXvc5SxxHfR7yHp/Hwc4K6ZRc3CjU4b9t3AmM5hgADaZB1Zh0imrCg24df+2yLmmT+qFZ9J6BWLk27McyRbZQfHcon6oeaPuE/WGgV7OfKLLOqQmdcf5V2UH5w9Dvxs4NjpYLzmoNty/2QBq69u9urz3orrepXeV36XXnbJDl5fu2veP81/8gE/y/C3tgWOFU5HzF7cF5gr/pd8/B1l7E4bb+iW48XovHdIPLfrUFw==:0528
 ^FO0,960^GFA,02304,02304,00012,:Z64:
 eJzt00EOgyAQBdAxLrrkAk28SBOOBjerR+EYLAxTbCzzMRIDrakL/+olBhxnHKIrWR5gUzDbfZfO3ttLS+k4xh5nIuXkbf/38d/7XRRcNCx+31/rypqHE/mUM4KzCmzE/cbo5uAugI24j7XJSfYL55pHMImfYq/Fo3gicQCzAwdwdn8yaWb38Y05pAem8F0d9lmDsT/Yt6yf2OdShkKjq/fFUps9/Ku/cmw52OMutO7FahbFIZmdfq59ZTMvN0hSpA==:61AD
-^FT85,1329^A0B,50,50^FH\^FDDPB560T^FS
+^FT85,1329^A0B,50,50^FH\^FD{LOTInfo(0)}^FS
 ^BY2,3,83^FT190,630^BCB,,N,N
 ^FD>:{snp(0).Split(";")(0) & Mid(Integer.Parse(snp(0).Split(";")(1)).ToString("00000"), 1, 1)}>5{Mid(Integer.Parse(snp(0).Split(";")(1)).ToString("00000"), 2)}^FS
 ^FT248,630^A0B,50,50^FH\^FD{sn(0).Split(";")(0) & Integer.Parse(sn(0).Split(";")(1)).ToString("00000")}^FS
@@ -966,9 +969,9 @@ eJzt00EOgyAQBdAxLrrkAk28SBOOBjerR+EYLAxTbCzzMRIDrakL/+olBhxnHKIrWR5gUzDbfZfO3ttL
 ^FD>;{snp(12)}^FS
 ^FO273,42^GB167,355,3^FS
 ^FT325,204^A0B,33,33^FH\^FD{LOTInfo(15)}^FS
-^FT372,204^A0B,33,33^FH\^FD{WNetto}^FS
-^FT420,204^A0B,33,33^FH\^FD{WBrutto}^FS
-^FT85,973^A0B,50,50^FH\^FD469535.026^FS
+^FT372,204^A0B,33,33^FH\^FD{WBrutto}^FS
+^FT420,204^A0B,33,33^FH\^FD{WNetto}^FS
+^FT85,973^A0B,50,50^FH\^FD{ComModel}^FS
 ^PQ1,0,1,Y^XZ
 
 "
