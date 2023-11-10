@@ -267,7 +267,8 @@ Public Class WF_PackWithOutPrint
             'определение формата номера
 
             If GetFTSN(LOTInfo(12)) = True Then
-                If SNFormat(1) = 1 Then
+                'If SNFormat(1) = 1 Then 'была проверка по бумажному коду, теперь по номеру платы pcbid
+                If SNFormat(1) = 2 Then
                     If CheckTestRes(SerialTextBox.Text) = False Then
                         PrintLabel(Controllabel, $"Серийный {SerialTextBox.Text} номер не прошел тестирование!{vbCrLf}Повторите тест!", 12, 193, Color.Red)
                         SerialTextBox.Enabled = False
@@ -390,11 +391,17 @@ Public Class WF_PackWithOutPrint
     Private Function CheckTestRes(Sn As String) As Boolean
         If CB_TestRes.Checked = True Then
             Dim res As Boolean
-            If SelectListString($"use fas   select top 1 [Result] FROM [FAS].[dbo].[Pc_Testing_Results] where Result = 1 and MAC = '{Sn}'").Count = 1 Then
+            If SelectListString($"use fas   select top 1 [Result] FROM [FAS].[dbo].[Pc_Testing_Results] where Result = 1 And [PCBID] = 
+                                        (select IDLaser from SMDCOMPONETS.dbo.LazerBase where content ='{Sn}')").Count = 1 Then
                 res = True
-            ElseIf Selectstring($"use fas select СustomersID  from Contract_LOT where id = {lotid}") = 8 Then
+            ElseIf SelectListString($"use fas   select top 1 [Result] FROM [FAS].[dbo].[Pc_Testing_Results] where Result = 1 And MAC = '{Sn}'").Count = 1 Then
+                res = True
+            ElseIf SelectString($"use fas select СustomersID  from Contract_LOT where id = {LOTID}") = 8 Then
+                'If SelectListString($"use fas   select top 1 [Result] FROM [FAS].[dbo].[Pc_Testing_Results] where Result = 1 and MAC = 
+                '    '{SelectString($"use fas select MAC1 from Depo_SN_MAC where SN = '{Sn}'")}'").Count = 1 Then
                 If SelectListString($"use fas   select top 1 [Result] FROM [FAS].[dbo].[Pc_Testing_Results] where Result = 1 and MAC = 
-                    '{SelectString($"use fas select MAC1 from Depo_SN_MAC where SN = '{Sn}'")}'").Count = 1 Then
+                    '{SelectString($"use fas select ID from Ct_FASSN_reg where SN = '
+                    {SelectString($"use fas select SN from Depo_SN_MAC where MAC1 = '{Sn}' or MAC1 = '{Sn}' ")}")}'").Count = 1 Then
                     res = True
                 End If
             Else
@@ -473,6 +480,17 @@ Public Class WF_PackWithOutPrint
                 Res.Add(SNFormat(1))
                 Mess = If(SNID = 0, "FAS номер " & SerialTextBox.Text & vbCrLf & "не зарегистрирован в базе Ct_FASSN_reg!", "")
         End Select
+        Try
+            If LOTID = 20428 And SelectString($"Select [Resistor] FROM [QA].[dbo].[TempDepoSP65_resistors] where [PCBSN] = '{SerialTextBox.Text}'") = False Then
+                'If PCBID > 26577196 And PCBID < 27199354 Then
+                Res(0) = False
+                Mess = $"Плата не прошла замену резистора!{vbCrLf}Заблокировать плату!"
+            End If
+        Catch ex As Exception
+
+        End Try
+
+
         Col = If(Res(0) = False, Color.Red, Color.Green)
         PrintLabel(Controllabel, Mess, 12, 193, Col)
         SNTBEnabled(Res(0))
