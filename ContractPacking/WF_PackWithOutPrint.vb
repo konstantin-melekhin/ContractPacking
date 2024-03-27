@@ -357,9 +357,21 @@ Public Class WF_PackWithOutPrint
 
         Dim col As Color, Mess As String, Res As Boolean
         SNFormat = New ArrayList()
-        SNFormat = CheckSNFormate2.GetSNFormat2(LOTInfo(19), LOTInfo(8), SerialTextBox.Text, LOTInfo(18), LOTInfo(2), LOTInfo(7))
-        Res = SNFormat(0)
-        Mess = SNFormat(3)
+        If LOTInfo(3) = 1 Then
+            Dim sh As Integer = InStr(SerialTextBox.Text, Mid(LOTInfo(8), 1, 6))
+            If sh > 0 Then
+                SNFormat.Add(True)
+                SNFormat.Add(2)
+                SNFormat.Add(Mid((SerialTextBox.Text), 1, InStr(SerialTextBox.Text, Mid(LOTInfo(8), 1, 6)) - 1))
+                SNFormat.Add("Номер соответствует SMT")
+                Return True
+            End If
+        Else
+            SNFormat = CheckSNFormate2.GetSNFormat2(LOTInfo(19), LOTInfo(8), SerialTextBox.Text, LOTInfo(18), LOTInfo(2), LOTInfo(7))
+            Res = SNFormat(0)
+            Mess = SNFormat(3)
+        End If
+
         'SNFormat(0) ' Результат проверки True/False
         'SNFormat(1) ' 1 - SMT/ 2 - FAS / 3 - Неопределен
         'SNFormat(2) ' Переменный номер
@@ -394,21 +406,23 @@ Public Class WF_PackWithOutPrint
             If SelectListString($"use fas   select top 1 [Result] FROM [FAS].[dbo].[Pc_Testing_Results] where Result = 1 And [PCBID] = 
                                         (select IDLaser from SMDCOMPONETS.dbo.LazerBase where content ='{Sn}')").Count = 1 Then
                 res = True
-            ElseIf SelectListString($"use fas   select top 1 [Result] FROM [FAS].[dbo].[Pc_Testing_Results] where Result = 1 And MAC = '{Sn}'").Count = 1 Then
-                res = True
-            ElseIf SelectString($"use fas select СustomersID  from Contract_LOT where id = {LOTID}") = 8 Then
-                'If SelectListString($"use fas   select top 1 [Result] FROM [FAS].[dbo].[Pc_Testing_Results] where Result = 1 and MAC = 
-                '    '{SelectString($"use fas select MAC1 from Depo_SN_MAC where SN = '{Sn}'")}'").Count = 1 Then
-                If SelectListString($"use fas   select top 1 [Result] FROM [FAS].[dbo].[Pc_Testing_Results] where Result = 1 and MAC = 
-                    '{SelectString($"use fas select ID from Ct_FASSN_reg where SN = '
-                    {SelectString($"use fas select SN from Depo_SN_MAC where MAC1 = '{Sn}' or MAC1 = '{Sn}' ")}")}'").Count = 1 Then
-                    res = True
-                End If
+                'ElseIf SelectListString($"use fas   select top 1 [Result] FROM [FAS].[dbo].[Pc_Testing_Results] where Result = 1 And MAC = '{Sn}'").Count = 1 Then
+                '    res = True
+                'ElseIf SelectString($"use fas select СustomersID  from Contract_LOT where id = {LOTID}") = 8 Then
+                '    'If SelectListString($"use fas   select top 1 [Result] FROM [FAS].[dbo].[Pc_Testing_Results] where Result = 1 and MAC = 
+                '    '    '{SelectString($"use fas select MAC1 from Depo_SN_MAC where SN = '{Sn}'")}'").Count = 1 Then
+                '    If SelectListString($"use fas   select top 1 [Result] FROM [FAS].[dbo].[Pc_Testing_Results] where Result = 1 and MAC = 
+                '        '{SelectString($"use fas select ID from Ct_FASSN_reg where SN = '
+                '        {SelectString($"use fas select SN from Depo_SN_MAC where MAC1 = '{Sn}' or MAC1 = '{Sn}' ")}")}'").Count = 1 Then
+                '        res = True
+                '    End If
+                'Else
+                '    res = SelectListString($"use fas select ResultFileName from  [FAS].[dbo].[Fas_Depo_Test_Result] where SN = 
+                '                            (SELECT CONVERT(INT, CONVERT(VARBINARY, '0x00000000' + 
+                '                             SUBSTRING((select MAC1 from Depo_SN_MAC where SN = '{Sn}'),7,6), 1)))").Count = 1
             Else
-                res = SelectListString($"use fas select ResultFileName from  [FAS].[dbo].[Fas_Depo_Test_Result] where SN = 
-                                        (SELECT CONVERT(INT, CONVERT(VARBINARY, '0x00000000' + 
-                                         SUBSTRING((select MAC1 from Depo_SN_MAC where SN = '{Sn}'),7,6), 1)))").Count = 1
-
+                PrintLabel(Controllabel, $"Номер {SerialTextBox.Text} не прошел тестировние! {vbCrLf}Проверьте номерар в HV Верните плату на тест!", 12, 193, Color.Red)
+                SerialTextBox.Enabled = False
             End If
             Return res
         Else

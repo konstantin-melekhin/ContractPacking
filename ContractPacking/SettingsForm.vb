@@ -169,7 +169,7 @@ Public Class SettingsForm
             LOTID = DG_LOTListPresent.Item(3, selRowNum).Value
             Dim lotinfo As New ArrayList(SelectListString($"use FAS  select [СustomersID],(SELECT[ErrorGroupId] FROM [FAS].[dbo].[FAS_Models]M where M.[ModelID] = L.[ModelID]) FROM [FAS].[dbo].[Contract_LOT]L where ID ={LOTID}"))
 
-            If lotinfo(0) = 34 Or (lotinfo(0) = 44 And lotinfo(1) = 4) Then '34
+            If lotinfo(0) = 34 Or (lotinfo(0) = 44 And lotinfo(1) = 4) Or (lotinfo(0) = 50 And lotinfo(1) = 4) Then '34
                 WF = New WF_SberDevice(LOTID, IDApp)
             Else
                 WF = New WF_PackWithOutPrint(LOTID, IDApp) 'текущая программа для упаковки контрактных плат

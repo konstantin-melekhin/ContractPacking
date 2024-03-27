@@ -275,7 +275,7 @@ Public Class WF_SberDevice
                         'проверка задвоения и наличия номера в базе
                         If CheckDublicate(_stepArr(2)) = True Then
                             WriteDB(_stepArr)
-                            PrintLabel(Controllabel, $"Приемник {SerialTextBox.Text} { vbCrLf}определен и записан в базу!", 12, 193, Color.Green)
+                            PrintLabel(Controllabel, $"Серийный номер {SerialTextBox.Text} { vbCrLf}определен и записан в базу!", 12, 193, Color.Green)
                             SerialTextBox.Clear()
                         End If
                     ElseIf _stepArr.Count > 0 And _stepArr(4) = 6 And _stepArr(5) = 2 Then
@@ -305,15 +305,21 @@ Public Class WF_SberDevice
     Public Function GetFTSN() As Boolean
         Dim col As Color, Mess As String, Res As Boolean
         SNFormat = New ArrayList()
-        SNFormat = GetSNFormat(LOTInfo(3), LOTInfo(8), "", SerialTextBox.Text, LOTInfo(18), LOTInfo(2), LOTInfo(7))
+        SNID = New Integer
+        SNFormat = GetSNFormat(LOTInfo(3), LOTInfo(8), LOTInfo(19).Split(";")(2), SerialTextBox.Text, LOTInfo(18), LOTInfo(2), LOTInfo(7))
         Res = SNFormat(0)
         Mess = SNFormat(3)
         col = If(Res = False, Color.Red, Color.Green)
         PrintLabel(Controllabel, Mess, 12, 193, col)
         SerialTextBox.Enabled = Res
-        SNID = If(SNFormat(1) = 2,
-                SelectInt($"USE FAS Select [ID] FROM [FAS].[dbo].[Ct_FASSN_reg] where SN = '{SerialTextBox.Text}'"),
-                SelectInt($"USE FAS SELECT [ID] FROM [FAS].[dbo].[Ct_FASSN_reg] where LOTID = {LOTID} and right (SN, 7) = '{CInt("&H" & Mid(SerialTextBox.Text, 7, 6))}'"))
+        'SNID = If(SNFormat(1) = 2,
+        '        SelectInt($"USE FAS Select [ID] FROM [FAS].[dbo].[Ct_FASSN_reg] where SN = '{SerialTextBox.Text}'"),
+        '        SelectInt($"USE FAS SELECT [ID] FROM [FAS].[dbo].[Ct_FASSN_reg] where LOTID = {LOTID} and right (SN, 7) = '{CInt("&H" & Mid(SerialTextBox.Text, 7, 6))}'"))
+        SNID = SelectInt($"USE FAS 
+                        select id FROM [FAS].[dbo].[Ct_FASSN_reg] 
+                        where sn = (select top (1) sn  FROM [FAS].[dbo].[CT_Aquarius] 
+                        where IMEI = '{SerialTextBox.Text}' or IMEI2 = '{SerialTextBox.Text}' or SN = '{SerialTextBox.Text}')")
+
         Return Res
     End Function
 #End Region
@@ -568,7 +574,7 @@ Public Class WF_SberDevice
             tt.SNID, 
             (select SN from Ct_FASSN_reg Rg where ID =  tt.SNID),
             tt.StepID,tt.TestResultID, tt.StepDate 
-            from  (SELECT *, ROW_NUMBER() over(partition by snid order by stepdate desc) num FROM [FAS].[dbo].[Ct_OperLog] where LOTID = {LOTID} and  SNID  = {_snid}) tt
+            from  (SELECT *, ROW_NUMBER() over(partition by snid order by stepdate desc) num FROM [FAS].[dbo].[Ct_OperLog] where SNID  = {_snid}) tt
             where  tt.num = 1 "))
         Return newArr
     End Function

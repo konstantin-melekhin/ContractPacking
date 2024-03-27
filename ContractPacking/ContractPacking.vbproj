@@ -15,7 +15,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>\\192.168.180.9\ProdSoft\PC_MainBoard_Packing\</PublishUrl>
+    <PublishUrl>\\192.168.180.9\ProdSoft\ServicePacking\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -25,8 +25,9 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <UpdateUrl>\\192.168.180.9\ProdSoft\PC_MainBoard_Packing\</UpdateUrl>
-    <ApplicationRevision>130</ApplicationRevision>
+    <InstallUrl>\\192.168.180.9\ProdSoft\ServicePacking\</InstallUrl>
+    <UpdateUrl>\\192.168.180.9\ProdSoft\ServicePacking\</UpdateUrl>
+    <ApplicationRevision>133</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
